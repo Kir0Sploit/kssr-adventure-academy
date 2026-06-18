@@ -2,7 +2,7 @@
 import { useMemo, useState } from "react";
 import type { Challenge } from "@kssr/shared";
 import { audio } from "@/lib/audio";
-import { optionLabel, promptText, shuffle, type GameModeProps } from "@/lib/gameUtils";
+import { getQuestions, optionLabel, promptText, shuffle, type GameModeProps } from "@/lib/gameUtils";
 
 interface Card {
   key: string;
@@ -20,10 +20,9 @@ function clip(s: string, n = 46): string {
 
 export default function MemoryGame({ topic, locale, accent, onAnswer, onReward, onComplete, onBack }: GameModeProps) {
   const isMs = locale === "ms";
-  const pairs = Math.min(MAX_PAIRS, topic.challenges.length);
 
   const cards = useMemo<Card[]>(() => {
-    const chosen = shuffle(topic.challenges).slice(0, pairs);
+    const chosen = getQuestions(topic, MAX_PAIRS);
     const list: Card[] = [];
     chosen.forEach((c, i) => {
       const correct = c.options.find((o) => o.correct)!;
@@ -33,6 +32,8 @@ export default function MemoryGame({ topic, locale, accent, onAnswer, onReward, 
     return shuffle(list);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [topic, locale]);
+
+  const pairs = cards.length / 2;
 
   const [flipped, setFlipped] = useState<string[]>([]);
   const [matched, setMatched] = useState<number[]>([]);

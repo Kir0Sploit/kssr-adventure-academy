@@ -2,7 +2,7 @@
 import { useEffect, useRef } from "react";
 import type { RunnerHandle } from "@kssr/game-engine";
 import { audio } from "@/lib/audio";
-import type { GameModeProps } from "@/lib/gameUtils";
+import { getQuestions, type GameModeProps } from "@/lib/gameUtils";
 
 export default function GameCanvas({
   topic,
@@ -23,31 +23,30 @@ export default function GameCanvas({
     if (!host) return;
 
     (async () => {
-      // Client-only imports: Phaser must not be evaluated during SSR.
-      const [{ mountRunner }, curriculum] = await Promise.all([
-        import("@kssr/game-engine"),
-        import("@kssr/curriculum"),
-      ]);
+      // Client-only import: Phaser must not be evaluated during SSR.
+      const { mountRunner } = await import("@kssr/game-engine");
       if (disposed) return;
 
-      const seen = new Set<string>();
-      let mastery = initialMastery;
-
-      audio.unlock();
-      audio.startMusic();
+      // A fresh, large, shuffled pool of generated questions for this run.
+      let pool = getQuestions(topic, 30);
+      let pi = 0;
+      const provider = () => {
+        if (pi >= pool.length) {
+          pool = getQuestions(topic, 30);
+          pi = 0;
+        }
+        return pool[pi++]!;
+      };
 
       handleRef.current = mountRunner({
         parent: host,
         locale,
         gates: 8,
         accent,
-        nextChallenge: () => curriculum.nextChallenge(topic, { mastery, seenCorrect: seen }),
+        nextChallenge: provider,
         callbacks: {
           onAnswer: ({ challenge, correct }) => {
-            const alpha = 0.3;
-            mastery = mastery * (1 - alpha) + (correct ? 1 : 0) * alpha;
             if (correct) {
-              seen.add(challenge.id);
               audio.correct();
               audio.coin();
             } else {

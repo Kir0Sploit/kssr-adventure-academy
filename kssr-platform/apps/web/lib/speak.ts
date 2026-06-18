@@ -28,15 +28,30 @@ const PREFERENCES: Record<Locale, string[]> = {
   en: ["en-us", "en-gb", "en-au", "en"],
 };
 
+/** Heuristic quality score so we prefer natural/neural voices over robotic ones. */
+function quality(v: SpeechSynthesisVoice): number {
+  const n = (v.name + " " + v.voiceURI).toLowerCase();
+  let s = 0;
+  if (/natural|neural/.test(n)) s += 6;
+  if (/google/.test(n)) s += 4;
+  if (/online|cloud|premium|enhanced/.test(n)) s += 3;
+  if (/microsoft/.test(n)) s += 2;
+  if (v.localService === false) s += 2; // network voices are usually nicer
+  if (/espeak|compact|robosoft/.test(n)) s -= 5; // known robotic engines
+  return s;
+}
+
 function pickVoice(locale: Locale): SpeechSynthesisVoice | undefined {
   if (!voices.length) refreshVoices();
   for (const tag of PREFERENCES[locale]) {
-    const v = voices.find((vc) => vc.lang?.toLowerCase().replace("_", "-").startsWith(tag));
-    if (v) return v;
+    const matches = voices.filter((vc) => vc.lang?.toLowerCase().replace("_", "-").startsWith(tag));
+    if (matches.length) {
+      // best-sounding voice for this language tag
+      return matches.slice().sort((a, b) => quality(b) - quality(a))[0];
+    }
   }
-  // Last resort: any voice whose name hints Malay/Indonesian, else the default.
   return (
-    voices.find((vc) => /malay|melayu|indonesia/i.test(vc.name)) ?? voices[0]
+    voices.find((vc) => /malay|melayu|indonesia/i.test(vc.name)) ?? voices.slice().sort((a, b) => quality(b) - quality(a))[0]
   );
 }
 
@@ -52,8 +67,8 @@ export function speak(text: string, locale: Locale): void {
     } else {
       u.lang = locale === "ms" ? "ms-MY" : "en-US";
     }
-    u.rate = 0.92;
-    u.pitch = 1.08;
+    u.rate = 0.95;
+    u.pitch = 1.0;
     window.speechSynthesis.cancel();
     window.speechSynthesis.speak(u);
   } catch {

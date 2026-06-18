@@ -2,14 +2,14 @@
 import { useEffect, useMemo, useState } from "react";
 import { PRAISE, ENCOURAGE } from "@kssr/shared";
 import { audio } from "@/lib/audio";
-import { buildQuestionSet, optionLabel, promptText, rewardFor, shuffle, type GameModeProps } from "@/lib/gameUtils";
+import { getQuestions, optionLabel, promptText, rewardFor, shuffle, type GameModeProps } from "@/lib/gameUtils";
 
 const TOTAL = 8;
 const BUBBLE_COLORS = ["#8b5cf6", "#3b82f6", "#06b6d4", "#ec4899", "#f59e0b"];
 
 export default function BubbleGame({ topic, locale, accent, onAnswer, onReward, onComplete, onBack }: GameModeProps) {
   const isMs = locale === "ms";
-  const questions = useMemo(() => buildQuestionSet(topic, TOTAL), [topic]);
+  const questions = useMemo(() => getQuestions(topic, TOTAL), [topic]);
   const [round, setRound] = useState(0);
   const [nonce, setNonce] = useState(0);
   const [popped, setPopped] = useState<string[]>([]);

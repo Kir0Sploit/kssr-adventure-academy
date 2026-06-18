@@ -3,12 +3,12 @@ import { useMemo, useState } from "react";
 import { PRAISE, ENCOURAGE } from "@kssr/shared";
 import type { ChallengeOption } from "@kssr/shared";
 import { audio } from "@/lib/audio";
-import { buildQuestionSet, optionLabel, promptText, rewardFor, shuffle, type GameModeProps } from "@/lib/gameUtils";
+import { getQuestions, optionLabel, promptText, rewardFor, shuffle, type GameModeProps } from "@/lib/gameUtils";
 
 const TOTAL = 8;
 
 export default function QuizGame({ topic, locale, accent, onAnswer, onReward, onComplete, onBack }: GameModeProps) {
-  const questions = useMemo(() => buildQuestionSet(topic, TOTAL), [topic]);
+  const questions = useMemo(() => getQuestions(topic, TOTAL), [topic]);
   const [idx, setIdx] = useState(0);
   const [opts, setOpts] = useState<ChallengeOption[]>(() => shuffle(questions[0]?.options ?? []));
   const [picked, setPicked] = useState<string | null>(null);

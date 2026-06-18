@@ -6,7 +6,7 @@
  * difficulty so children stay in flow (not too easy, not too hard).
  */
 import type { Challenge, Difficulty, SubjectId, Topic, TopicMastery, Year } from "@kssr/shared";
-import { getSubjectCurriculum } from "./registry.js";
+import { getSubjectCurriculum } from "./content.js";
 
 const DIFF_ORDER: Difficulty[] = ["intro", "core", "stretch"];
 

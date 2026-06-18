@@ -3,6 +3,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import type { Catalog } from "@/lib/catalog";
 import { useProgress } from "@/lib/store";
 import { audio } from "@/lib/audio";
+import { confetti } from "@/lib/confetti";
 import type { SubjectId, Topic, Year } from "@kssr/shared";
 import Hud from "./Hud";
 import LearnMode from "./LearnMode";
@@ -121,6 +122,7 @@ export default function Academy({ catalog }: { catalog: Catalog }) {
     if (subject === "bm") s.unlock("bm_champion");
     if (subject === "english") s.unlock("english_master");
     audio.victory();
+    confetti(40);
     setSummary(sum);
     setScreen("summary");
   };

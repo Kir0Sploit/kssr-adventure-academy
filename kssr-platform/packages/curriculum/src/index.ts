@@ -1,21 +1,16 @@
 /**
- * @kssr/curriculum — public API (browser-safe core).
+ * @kssr/curriculum — public API (browser-safe, pure TS).
  *
- * Data-driven KSSR content for the KSSR Adventure Academy platform.
- * Game logic depends only on this surface, never on raw JSON paths.
- *
- * Populate the registry first via one of the loaders:
- *   - browser: import { loadBundledCurriculum } from "@kssr/curriculum/static"
- *   - node:    import { loadAllFromDisk }       from "@kssr/curriculum/node"
+ * Content is generated from topic descriptors + a question generator, so it
+ * provides 100+ topics and effectively unlimited, non-repeating questions.
  */
 export {
   COVERAGE,
   isAvailable,
   listAvailable,
   getSubjectCurriculum,
-  registerSlice,
   clearCache,
-} from "./registry.js";
+} from "./content.js";
 
 export {
   nextChallenge,
@@ -25,12 +20,12 @@ export {
   type SelectionContext,
 } from "./selector.js";
 
-export {
-  validateSubjectCurriculum,
-  CurriculumValidationError,
-} from "./validate.js";
+export { validateSubjectCurriculum, CurriculumValidationError } from "./validate.js";
 
-import { getSubjectCurriculum } from "./registry.js";
+export { generate, isGeneratable, type GenQ } from "./generators.js";
+export { getTopicMetas, buildTopic, allYearSubjects, TOPIC_COUNT, type TopicMeta } from "./topics.js";
+
+import { getSubjectCurriculum } from "./content.js";
 import type { SubjectId, Topic, Year, Flashcard, Challenge } from "@kssr/shared";
 
 /** Look up a single topic by id within a (year, subject) slice. */

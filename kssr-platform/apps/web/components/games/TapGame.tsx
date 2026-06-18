@@ -3,15 +3,16 @@ import { useEffect, useMemo, useState } from "react";
 import { PRAISE, ENCOURAGE } from "@kssr/shared";
 import type { ChallengeOption } from "@kssr/shared";
 import { audio } from "@/lib/audio";
+import { confetti } from "@/lib/confetti";
 import { speak, stopSpeaking } from "@/lib/speak";
-import { buildQuestionSet, optionLabel, promptText, rewardFor, shuffle, type GameModeProps } from "@/lib/gameUtils";
+import { getQuestions, optionLabel, promptText, rewardFor, shuffle, type GameModeProps } from "@/lib/gameUtils";
 
 const TOTAL = 6; // shorter for little learners
 const TILE = ["🟦", "🟩", "🟧", "🟪"];
 
 export default function TapGame({ topic, locale, accent, onAnswer, onReward, onComplete, onBack }: GameModeProps) {
   const isMs = locale === "ms";
-  const questions = useMemo(() => buildQuestionSet(topic, TOTAL), [topic]);
+  const questions = useMemo(() => getQuestions(topic, TOTAL), [topic]);
   const [idx, setIdx] = useState(0);
   const [opts, setOpts] = useState<ChallengeOption[]>(() => shuffle(questions[0]?.options ?? []));
   const [done, setDone] = useState(false);
@@ -49,6 +50,7 @@ export default function TapGame({ topic, locale, accent, onAnswer, onReward, onC
       setDone(true);
       audio.correct();
       audio.coin();
+      confetti(16);
       const nc = correctCount + 1;
       setCorrectCount(nc);
       onReward(rewardFor(wrongIds.length));

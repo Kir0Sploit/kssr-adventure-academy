@@ -1,27 +1,16 @@
 /**
- * Server-side curriculum catalog.
- *
- * Runs only in server components / build. It loads JSON via the Node loader
- * and exposes a fully serializable catalog that is handed to client
- * components as props — so the browser bundle never imports Node `fs`.
+ * Curriculum catalog. Content is now generated (pure TS), so this works on the
+ * server (build/SSR) and the data is serialized to the client. The client then
+ * regenerates fresh questions per play via the generator (see gameUtils).
  */
-import { loadAllFromDisk } from "@kssr/curriculum/node";
 import { listAvailable, getTopics } from "@kssr/curriculum";
 import { SUBJECTS, YEARS } from "@kssr/shared";
 import type { SubjectMeta, Topic, Year } from "@kssr/shared";
 
-let loaded = false;
-function ensureLoaded(): void {
-  if (!loaded) {
-    loadAllFromDisk();
-    loaded = true;
-  }
-}
-
 export interface Catalog {
   years: Year[];
   subjects: SubjectMeta[];
-  /** Available (year, subject) keys -> ordered topics (with flashcards & challenges). */
+  /** "year:subject" -> ordered topics (with skill + a small baked question set). */
   topicsByKey: Record<string, Topic[]>;
   available: Array<{ year: Year; subject: string }>;
 }
@@ -31,7 +20,6 @@ export function key(year: number, subject: string): string {
 }
 
 export function getCatalog(): Catalog {
-  ensureLoaded();
   const available = listAvailable();
   const topicsByKey: Record<string, Topic[]> = {};
   for (const { year, subject } of available) {

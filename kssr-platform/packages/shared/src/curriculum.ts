@@ -96,6 +96,8 @@ export interface Topic {
   order: number;
   /** Icon token (emoji) for menus. */
   icon: string;
+  /** Optional generator skill key — enables unlimited fresh questions. */
+  skill?: string;
   flashcards: Flashcard[];
   challenges: Challenge[];
 }

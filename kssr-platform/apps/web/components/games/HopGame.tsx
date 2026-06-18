@@ -3,14 +3,15 @@ import { useEffect, useMemo, useState } from "react";
 import { PRAISE, ENCOURAGE } from "@kssr/shared";
 import type { ChallengeOption } from "@kssr/shared";
 import { audio } from "@/lib/audio";
+import { confetti } from "@/lib/confetti";
 import { speak, stopSpeaking } from "@/lib/speak";
-import { buildQuestionSet, optionLabel, promptText, rewardFor, shuffle, type GameModeProps } from "@/lib/gameUtils";
+import { getQuestions, optionLabel, promptText, rewardFor, shuffle, type GameModeProps } from "@/lib/gameUtils";
 
 const STEPS = 5;
 
 export default function HopGame({ topic, locale, accent, onAnswer, onReward, onComplete, onBack }: GameModeProps) {
   const isMs = locale === "ms";
-  const questions = useMemo(() => buildQuestionSet(topic, STEPS), [topic]);
+  const questions = useMemo(() => getQuestions(topic, STEPS), [topic]);
   const [pos, setPos] = useState(0); // current star index (0..STEPS)
   const [opts, setOpts] = useState<ChallengeOption[]>(() => shuffle(questions[0]?.options ?? []));
   const [wrongIds, setWrongIds] = useState<string[]>([]);
@@ -32,6 +33,7 @@ export default function HopGame({ topic, locale, accent, onAnswer, onReward, onC
     if (o.correct) {
       audio.correct();
       audio.coin();
+      confetti(16);
       onReward(rewardFor(wrongIds.length));
       const line = PRAISE[locale][Math.floor(Math.random() * PRAISE[locale].length)]!;
       setMsg(line);
