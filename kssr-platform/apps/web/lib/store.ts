@@ -34,6 +34,9 @@ export interface ProgressState {
   knowledgePoints: number;
   timePlayedSec: number;
   audioOn: boolean;
+  streak: number;
+  bestStreak: number;
+  lastActiveDate: string | null;
   stats: Record<SubjectId, SubjectStat>;
   mastery: Record<string, number>; // topicId -> 0..1
   achievements: string[];
@@ -45,6 +48,7 @@ export interface ProgressState {
   addReward: (r: { xp?: number; coins?: number; stars?: number; knowledgePoints?: number }) => void;
   recordAnswer: (subject: SubjectId, topicId: string, correct: boolean) => void;
   addTime: (sec: number) => void;
+  touchStreak: () => void;
   unlock: (id: string) => void;
   grantCertificate: (subject: SubjectId, year: Year, level: "Bronze" | "Silver" | "Gold") => void;
   rank: () => string;
@@ -70,6 +74,9 @@ export const useProgress = create<ProgressState>()(
       knowledgePoints: 0,
       timePlayedSec: 0,
       audioOn: true,
+      streak: 0,
+      bestStreak: 0,
+      lastActiveDate: null,
       stats: emptyStats(),
       mastery: {},
       achievements: [],
@@ -108,6 +115,15 @@ export const useProgress = create<ProgressState>()(
         }),
 
       addTime: (sec) => set((s) => ({ timePlayedSec: s.timePlayedSec + sec })),
+
+      touchStreak: () =>
+        set((s) => {
+          const today = new Date().toISOString().slice(0, 10);
+          if (s.lastActiveDate === today) return s;
+          const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+          const streak = s.lastActiveDate === yesterday ? s.streak + 1 : 1;
+          return { streak, bestStreak: Math.max(s.bestStreak, streak), lastActiveDate: today };
+        }),
 
       unlock: (id) => set((s) => (s.achievements.includes(id) ? s : { achievements: [...s.achievements, id] })),
 

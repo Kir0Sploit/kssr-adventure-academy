@@ -3,7 +3,7 @@ import { useProgress } from "@/lib/store";
 import { audio } from "@/lib/audio";
 import { xpForLevel } from "@kssr/shared";
 
-export default function Hud({ onParent }: { onParent: () => void }) {
+export default function Hud({ onParent, onHome }: { onParent: () => void; onHome: () => void }) {
   const s = useProgress();
   const pct = Math.min(100, (s.xp / xpForLevel(s.level)) * 100);
 
@@ -23,6 +23,7 @@ export default function Hud({ onParent }: { onParent: () => void }) {
           <span className="text-lg">{s.avatar}</span>
           <span className="font-display">{s.name}</span>
         </span>
+        {s.streak > 0 && <span className="chip px-2.5 py-1.5 text-orange-500">🔥 {s.streak}</span>}
         <span className="chip px-2.5 py-1.5 text-amber-600">⭐ {s.stars}</span>
         <span className="chip px-2.5 py-1.5 text-amber-700">🪙 {s.coins}</span>
         <span className="chip px-2.5 py-1.5 text-sky-700 hidden sm:inline">🧠 {s.knowledgePoints}</span>
@@ -32,7 +33,10 @@ export default function Hud({ onParent }: { onParent: () => void }) {
             <div className="h-full rounded-full" style={{ width: `${pct}%`, background: "linear-gradient(90deg,#5ad06a,#58b6ff)" }} />
           </div>
         </div>
-        <button className="btn !min-h-0 rounded-2xl px-3 py-2 btn-primary ml-auto" onClick={onParent} aria-label="Parent dashboard">
+        <button className="btn !min-h-0 rounded-2xl px-3 py-2 ml-auto" onClick={onHome} aria-label="Home">
+          🏠
+        </button>
+        <button className="btn !min-h-0 rounded-2xl px-3 py-2 btn-primary" onClick={onParent} aria-label="Parent dashboard">
           📊
         </button>
         <button className="btn !min-h-0 rounded-2xl px-3 py-2" onClick={toggleAudio} aria-label="Toggle sound">

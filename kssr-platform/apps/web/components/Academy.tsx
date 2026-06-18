@@ -6,6 +6,7 @@ import { audio } from "@/lib/audio";
 import { confetti } from "@/lib/confetti";
 import type { SubjectId, Topic, Year } from "@kssr/shared";
 import Hud from "./Hud";
+import Landing from "./Landing";
 import LearnMode from "./LearnMode";
 import GameSelect from "./GameSelect";
 import ParentDashboard from "./ParentDashboard";
@@ -13,7 +14,7 @@ import { getMode } from "@/lib/games";
 import type { GameSummary } from "@/lib/gameUtils";
 
 const AVATARS = ["🦸", "🦸‍♀️", "🧒", "👧", "🧑‍🚀", "🥷", "🧝", "🦹"];
-type Screen = "onboard" | "select" | "choose" | "learn" | "play" | "summary";
+type Screen = "home" | "onboard" | "select" | "choose" | "learn" | "play" | "summary";
 
 function Mascot({ size = 84 }: { size?: number }) {
   return (
@@ -26,7 +27,7 @@ function Mascot({ size = 84 }: { size?: number }) {
 export default function Academy({ catalog }: { catalog: Catalog }) {
   const s = useProgress();
   const [mounted, setMounted] = useState(false);
-  const [screen, setScreen] = useState<Screen>("select");
+  const [screen, setScreen] = useState<Screen>("home");
   const [subject, setSubject] = useState<SubjectId>("math");
   const [topicId, setTopicId] = useState<string | null>(null);
   const [modeId, setModeId] = useState<string>("quiz");
@@ -36,7 +37,6 @@ export default function Academy({ catalog }: { catalog: Catalog }) {
 
   useEffect(() => {
     setMounted(true);
-    if (useProgress.getState().name === "Hero") setScreen("onboard");
     const unlock = () => {
       audio.unlock();
       if (useProgress.getState().audioOn) audio.startMusic();
@@ -59,6 +59,11 @@ export default function Academy({ catalog }: { catalog: Catalog }) {
 
   if (!mounted) {
     return <div className="min-h-screen grid place-items-center text-2xl font-display animate-bobble">🦧 …</div>;
+  }
+
+  /* ---------- Landing ---------- */
+  if (screen === "home") {
+    return <Landing onStart={() => setScreen(useProgress.getState().name === "Hero" ? "onboard" : "select")} />;
   }
 
   /* ---------- Onboarding ---------- */
@@ -116,6 +121,7 @@ export default function Academy({ catalog }: { catalog: Catalog }) {
   const handleComplete = (sum: GameSummary) => {
     s.addTime(Math.round((Date.now() - playStart.current) / 1000));
     s.unlock("first-play");
+    s.touchStreak();
     const level = sum.accuracy >= 0.9 ? "Gold" : sum.accuracy >= 0.7 ? "Silver" : "Bronze";
     s.grantCertificate(subject, s.year, level);
     if (subject === "math") s.unlock("math_hero");
@@ -129,7 +135,7 @@ export default function Academy({ catalog }: { catalog: Catalog }) {
 
   return (
     <main className="min-h-screen flex flex-col">
-      <Hud onParent={() => { click(); setParentOpen(true); }} />
+      <Hud onParent={() => { click(); setParentOpen(true); }} onHome={() => { click(); setScreen("home"); }} />
 
       {/* ---------- Topic selection ---------- */}
       {screen === "select" && (

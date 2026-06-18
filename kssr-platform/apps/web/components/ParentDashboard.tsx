@@ -11,8 +11,14 @@ export default function ParentDashboard({ onClose }: { onClose: () => void }) {
   const totalCorrect = stats.reduce((a, b) => a + b.correct, 0);
   const overall = totalAttempts ? Math.round((totalCorrect / totalAttempts) * 100) : 0;
   const mins = Math.floor(s.timePlayedSec / 60);
-  const mastered = Object.values(s.mastery).filter((m) => m >= 0.7).length;
   const isMs = s.locale === "ms";
+
+  const BADGES: Record<string, { en: string; ms: string; icon: string }> = {
+    "first-play": { en: "First Game", ms: "Main Pertama", icon: "🎮" },
+    math_hero: { en: "Math Hero", ms: "Wira Matematik", icon: "🔢" },
+    bm_champion: { en: "BM Champion", ms: "Juara BM", icon: "📘" },
+    english_master: { en: "English Master", ms: "Penguasa English", icon: "📗" },
+  };
 
   const printCert = (subject: SubjectId, year: number, level: string, date: string) => {
     const w = window.open("", "_blank", "width=900,height=650");
@@ -46,7 +52,7 @@ export default function ParentDashboard({ onClose }: { onClose: () => void }) {
           {[
             ["⏱️", isMs ? "Masa" : "Time", `${mins}m`, "#3b82f6"],
             ["🎯", isMs ? "Ketepatan" : "Accuracy", `${overall}%`, "#22c55e"],
-            ["🧠", isMs ? "Dikuasai" : "Mastered", `${mastered}`, "#06b6d4"],
+            ["🔥", isMs ? "Streak" : "Streak", `${s.streak}`, "#f97316"],
             ["🏅", isMs ? "Lencana" : "Badges", `${s.achievements.length}`, "#f59e0b"],
           ].map(([icon, label, val, c]) => (
             <div key={label} className="panel rounded-2xl p-3 text-center">
@@ -55,6 +61,25 @@ export default function ParentDashboard({ onClose }: { onClose: () => void }) {
               <div className="text-xs text-soft">{label}</div>
             </div>
           ))}
+        </div>
+
+        <div className="panel rounded-2xl p-4 mb-4">
+          <h3 className="font-display mb-2">🏅 {isMs ? "Lencana Diperoleh" : "Badges Earned"}</h3>
+          {s.achievements.length === 0 ? (
+            <p className="text-sm text-soft">{isMs ? "Main untuk membuka lencana!" : "Play to unlock badges!"}</p>
+          ) : (
+            <div className="flex flex-wrap gap-2">
+              {s.achievements.map((id) => {
+                const b = BADGES[id];
+                return (
+                  <span key={id} className="chip px-3 py-2 text-sm flex items-center gap-1">
+                    <span className="text-lg">{b?.icon ?? "🏆"}</span>
+                    {b ? b[s.locale] : id}
+                  </span>
+                );
+              })}
+            </div>
+          )}
         </div>
 
         <div className="panel rounded-2xl p-4 mb-4">
