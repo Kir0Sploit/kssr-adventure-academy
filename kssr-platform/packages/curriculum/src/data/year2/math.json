@@ -4,59 +4,43 @@
   "schemaVersion": 1,
   "topics": [
     {
-      "id": "y2-math-add-sub-100",
+      "id": "y2-math-addsub-100",
       "subject": "math",
       "year": 2,
       "order": 1,
-      "icon": "➕",
+      "icon": "➗",
       "title": { "en": "Add & Subtract to 100", "ms": "Tambah & Tolak hingga 100" },
-      "description": { "en": "Add and subtract numbers within 100.", "ms": "Menambah dan menolak nombor dalam lingkungan 100." },
+      "description": { "en": "Add and subtract within 100.", "ms": "Menambah dan menolak dalam 100." },
       "flashcards": [
-        {
-          "id": "y2-math-fc-addsub",
-          "topicId": "y2-math-add-sub-100",
-          "title": { "en": "Subtraction", "ms": "Penolakan" },
-          "definition": { "en": "Subtraction means taking some away to find what is left.", "ms": "Penolakan bermaksud mengambil sebahagian untuk cari bakinya." },
-          "example": { "en": "10 − 4 = 6", "ms": "10 − 4 = 6" },
-          "illustration": "🪙",
-          "hint": { "en": "Count back from the bigger number.", "ms": "Kira undur dari nombor besar." },
-          "funFact": { "en": "Subtraction is the opposite of addition.", "ms": "Penolakan lawan kepada penambahan." }
-        }
+        { "id": "y2-math-fc-sub", "topicId": "y2-math-addsub-100", "title": { "en": "Subtraction", "ms": "Penolakan" }, "definition": { "en": "Taking away to find what is left.", "ms": "Mengambil untuk cari baki." }, "example": { "en": "10 − 4 = 6", "ms": "10 − 4 = 6" }, "illustration": "🪙", "hint": { "en": "Count back.", "ms": "Kira undur." }, "funFact": { "en": "Subtraction undoes addition.", "ms": "Penolakan membatalkan penambahan." } }
       ],
       "challenges": [
-        {
-          "id": "y2-math-c1",
-          "topicId": "y2-math-add-sub-100",
-          "subject": "math",
-          "year": 2,
-          "difficulty": "core",
-          "mechanic": "gate-pass",
-          "prompt": { "en": "You have 24 coins and spend 9. How many left?", "ms": "Anda ada 24 syiling dan belanja 9. Berapa baki?" },
-          "options": [
-            { "id": "a", "label": "15", "correct": true },
-            { "id": "b", "label": "16", "correct": false },
-            { "id": "c", "label": "14", "correct": false }
-          ],
-          "hint": { "en": "Count back 9 from 24.", "ms": "Kira undur 9 dari 24." },
-          "skills": ["subtraction"]
-        },
-        {
-          "id": "y2-math-c2",
-          "topicId": "y2-math-add-sub-100",
-          "subject": "math",
-          "year": 2,
-          "difficulty": "stretch",
-          "mechanic": "lane-select",
-          "prompt": { "en": "3 baskets with 4 fruits each. Total?", "ms": "3 bakul, 4 buah setiap satu. Jumlah?" },
-          "options": [
-            { "id": "a", "label": "12", "correct": true },
-            { "id": "b", "label": "7", "correct": false },
-            { "id": "c", "label": "9", "correct": false }
-          ],
-          "hint": { "en": "Add 4 three times.", "ms": "Tambah 4 sebanyak tiga kali." },
-          "explanation": { "en": "4 + 4 + 4 = 12.", "ms": "4 + 4 + 4 = 12." },
-          "skills": ["multiplication"]
-        }
+        { "id": "y2-m1-1", "topicId": "y2-math-addsub-100", "subject": "math", "year": 2, "difficulty": "intro", "mechanic": "gate-pass", "prompt": { "en": "23 + 14 = ?", "ms": "23 + 14 = ?" }, "options": [{ "id": "a", "label": "37", "correct": true }, { "id": "b", "label": "36", "correct": false }, { "id": "c", "label": "47", "correct": false }], "hint": { "en": "Add tens then ones.", "ms": "Tambah puluh kemudian sa." }, "skills": ["addition"] },
+        { "id": "y2-m1-2", "topicId": "y2-math-addsub-100", "subject": "math", "year": 2, "difficulty": "core", "mechanic": "gate-pass", "prompt": { "en": "You have 24 coins, spend 9. Left?", "ms": "Ada 24 syiling, belanja 9. Baki?" }, "options": [{ "id": "a", "label": "15", "correct": true }, { "id": "b", "label": "16", "correct": false }, { "id": "c", "label": "14", "correct": false }], "hint": { "en": "Count back 9.", "ms": "Kira undur 9." }, "skills": ["subtraction"] },
+        { "id": "y2-m1-3", "topicId": "y2-math-addsub-100", "subject": "math", "year": 2, "difficulty": "core", "mechanic": "gate-pass", "prompt": { "en": "40 + 35 = ?", "ms": "40 + 35 = ?" }, "options": [{ "id": "a", "label": "75", "correct": true }, { "id": "b", "label": "65", "correct": false }, { "id": "c", "label": "85", "correct": false }], "hint": { "en": "Add the tens.", "ms": "Tambah puluh." }, "skills": ["addition"] },
+        { "id": "y2-m1-4", "topicId": "y2-math-addsub-100", "subject": "math", "year": 2, "difficulty": "core", "mechanic": "gate-pass", "prompt": { "en": "58 − 20 = ?", "ms": "58 − 20 = ?" }, "options": [{ "id": "a", "label": "38", "correct": true }, { "id": "b", "label": "48", "correct": false }, { "id": "c", "label": "28", "correct": false }], "hint": { "en": "Take 2 tens.", "ms": "Tolak 2 puluh." }, "skills": ["subtraction"] },
+        { "id": "y2-m1-5", "topicId": "y2-math-addsub-100", "subject": "math", "year": 2, "difficulty": "stretch", "mechanic": "lane-select", "prompt": { "en": "A box has 30 pens, 12 are taken. Left?", "ms": "Kotak ada 30 pen, 12 diambil. Baki?" }, "options": [{ "id": "a", "label": "18", "correct": true }, { "id": "b", "label": "22", "correct": false }, { "id": "c", "label": "17", "correct": false }], "hint": { "en": "30 minus 12.", "ms": "30 tolak 12." }, "skills": ["subtraction", "word-problem"] },
+        { "id": "y2-m1-6", "topicId": "y2-math-addsub-100", "subject": "math", "year": 2, "difficulty": "stretch", "mechanic": "gate-pass", "prompt": { "en": "47 + 28 = ?", "ms": "47 + 28 = ?" }, "options": [{ "id": "a", "label": "75", "correct": true }, { "id": "b", "label": "65", "correct": false }, { "id": "c", "label": "85", "correct": false }], "hint": { "en": "Regroup the ones.", "ms": "Kumpul semula sa." }, "skills": ["addition"] }
+      ]
+    },
+    {
+      "id": "y2-math-times",
+      "subject": "math",
+      "year": 2,
+      "order": 2,
+      "icon": "✖️",
+      "title": { "en": "Times 2, 5 and 10", "ms": "Sifir 2, 5 dan 10" },
+      "description": { "en": "Multiply using groups of 2, 5 and 10.", "ms": "Mendarab kumpulan 2, 5 dan 10." },
+      "flashcards": [
+        { "id": "y2-math-fc-times", "topicId": "y2-math-times", "title": { "en": "Multiplication", "ms": "Pendaraban" }, "definition": { "en": "Repeated adding of equal groups.", "ms": "Penambahan berulang kumpulan sama." }, "example": { "en": "3 × 4 = 4+4+4 = 12", "ms": "3 × 4 = 4+4+4 = 12" }, "illustration": "✖️", "hint": { "en": "Skip-count.", "ms": "Kira lompat." }, "funFact": { "en": "× 10 just adds a zero.", "ms": "× 10 hanya tambah sifar." } }
+      ],
+      "challenges": [
+        { "id": "y2-m2-1", "topicId": "y2-math-times", "subject": "math", "year": 2, "difficulty": "intro", "mechanic": "gate-pass", "prompt": { "en": "2 × 5 = ?", "ms": "2 × 5 = ?" }, "options": [{ "id": "a", "label": "10", "correct": true }, { "id": "b", "label": "7", "correct": false }, { "id": "c", "label": "12", "correct": false }], "hint": { "en": "5 + 5.", "ms": "5 + 5." }, "skills": ["multiplication"] },
+        { "id": "y2-m2-2", "topicId": "y2-math-times", "subject": "math", "year": 2, "difficulty": "core", "mechanic": "gate-pass", "prompt": { "en": "5 × 4 = ?", "ms": "5 × 4 = ?" }, "options": [{ "id": "a", "label": "20", "correct": true }, { "id": "b", "label": "15", "correct": false }, { "id": "c", "label": "25", "correct": false }], "hint": { "en": "Count in 5s 4 times.", "ms": "Kira 5 sebanyak 4 kali." }, "skills": ["multiplication"] },
+        { "id": "y2-m2-3", "topicId": "y2-math-times", "subject": "math", "year": 2, "difficulty": "core", "mechanic": "gate-pass", "prompt": { "en": "10 × 3 = ?", "ms": "10 × 3 = ?" }, "options": [{ "id": "a", "label": "30", "correct": true }, { "id": "b", "label": "13", "correct": false }, { "id": "c", "label": "20", "correct": false }], "hint": { "en": "Add a zero to 3.", "ms": "Tambah sifar pada 3." }, "skills": ["multiplication"] },
+        { "id": "y2-m2-4", "topicId": "y2-math-times", "subject": "math", "year": 2, "difficulty": "core", "mechanic": "lane-select", "prompt": { "en": "3 baskets, 4 fruits each. Total?", "ms": "3 bakul, 4 buah setiap satu. Jumlah?" }, "options": [{ "id": "a", "label": "12", "correct": true }, { "id": "b", "label": "7", "correct": false }, { "id": "c", "label": "9", "correct": false }], "hint": { "en": "4 three times.", "ms": "4 sebanyak tiga kali." }, "skills": ["multiplication"] },
+        { "id": "y2-m2-5", "topicId": "y2-math-times", "subject": "math", "year": 2, "difficulty": "stretch", "mechanic": "gate-pass", "prompt": { "en": "2 × 8 = ?", "ms": "2 × 8 = ?" }, "options": [{ "id": "a", "label": "16", "correct": true }, { "id": "b", "label": "10", "correct": false }, { "id": "c", "label": "14", "correct": false }], "hint": { "en": "Double 8.", "ms": "Gandakan 8." }, "skills": ["multiplication"] },
+        { "id": "y2-m2-6", "topicId": "y2-math-times", "subject": "math", "year": 2, "difficulty": "stretch", "mechanic": "gate-pass", "prompt": { "en": "5 × 6 = ?", "ms": "5 × 6 = ?" }, "options": [{ "id": "a", "label": "30", "correct": true }, { "id": "b", "label": "35", "correct": false }, { "id": "c", "label": "25", "correct": false }], "hint": { "en": "5,10,15,20,25,30.", "ms": "5,10,15,20,25,30." }, "skills": ["multiplication"] }
       ]
     }
   ]

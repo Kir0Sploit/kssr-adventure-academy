@@ -10,52 +10,37 @@
       "order": 1,
       "icon": "🧩",
       "title": { "en": "Prefixes (Imbuhan)", "ms": "Imbuhan Awalan" },
-      "description": { "en": "Add prefixes like 'me-' to base words.", "ms": "Menambah imbuhan seperti 'me-' pada kata dasar." },
+      "description": { "en": "Add prefixes like me- and ber- to words.", "ms": "Menambah imbuhan me- dan ber- pada kata." },
       "flashcards": [
-        {
-          "id": "y2-bm-fc-imbuhan",
-          "topicId": "y2-bm-imbuhan",
-          "title": { "en": "The prefix 'me-'", "ms": "Imbuhan 'me-'" },
-          "definition": { "en": "'me-' turns a base word into an action.", "ms": "'me-' menjadikan kata dasar sebagai perbuatan." },
-          "example": { "en": "makan → memakan", "ms": "makan → memakan" },
-          "illustration": "🧩",
-          "hint": { "en": "Put the prefix in front of the base word.", "ms": "Letak imbuhan di hadapan kata dasar." },
-          "funFact": { "en": "Imbuhan can change a word's meaning.", "ms": "Imbuhan boleh menukar maksud perkataan." }
-        }
+        { "id": "y2-bm-fc-imbuhan", "topicId": "y2-bm-imbuhan", "title": { "en": "Prefix 'me-'", "ms": "Imbuhan 'me-'" }, "definition": { "en": "'me-' turns a base word into an action.", "ms": "'me-' menjadikan kata dasar perbuatan." }, "example": { "en": "baca → membaca", "ms": "baca → membaca" }, "illustration": "🧩", "pronunciation": { "text": "membaca", "locale": "ms" }, "hint": { "en": "Add prefix in front.", "ms": "Letak imbuhan di hadapan." }, "funFact": { "en": "Imbuhan can change meaning.", "ms": "Imbuhan boleh tukar maksud." } }
       ],
       "challenges": [
-        {
-          "id": "y2-bm-c1",
-          "topicId": "y2-bm-imbuhan",
-          "subject": "bm",
-          "year": 2,
-          "difficulty": "core",
-          "mechanic": "build",
-          "prompt": { "en": "Add 'me-' to 'baca'.", "ms": "Tambah 'me-' pada 'baca'." },
-          "options": [
-            { "id": "a", "label": "membaca", "correct": true },
-            { "id": "b", "label": "mebaca", "correct": false },
-            { "id": "c", "label": "berbaca", "correct": false }
-          ],
-          "hint": { "en": "'me-' before 'b' becomes 'mem-'.", "ms": "'me-' sebelum 'b' menjadi 'mem-'." },
-          "skills": ["imbuhan"]
-        },
-        {
-          "id": "y2-bm-c2",
-          "topicId": "y2-bm-imbuhan",
-          "subject": "bm",
-          "year": 2,
-          "difficulty": "core",
-          "mechanic": "lane-select",
-          "prompt": { "en": "Complete: Saya ___ ke sekolah.", "ms": "Lengkapkan: Saya ___ ke sekolah." },
-          "options": [
-            { "id": "a", "label": "pergi", "correct": true },
-            { "id": "b", "label": "makan", "correct": false },
-            { "id": "c", "label": "tidur", "correct": false }
-          ],
-          "hint": { "en": "How do you travel to school?", "ms": "Bagaimana anda ke sekolah?" },
-          "skills": ["sentence"]
-        }
+        { "id": "y2-bm1-1", "topicId": "y2-bm-imbuhan", "subject": "bm", "year": 2, "difficulty": "intro", "mechanic": "build", "prompt": { "en": "Add 'me-' to 'baca'.", "ms": "Tambah 'me-' pada 'baca'." }, "options": [{ "id": "a", "label": "membaca", "correct": true }, { "id": "b", "label": "mebaca", "correct": false }, { "id": "c", "label": "berbaca", "correct": false }], "hint": { "en": "me- before b → mem-.", "ms": "me- sebelum b → mem-." }, "skills": ["imbuhan"] },
+        { "id": "y2-bm1-2", "topicId": "y2-bm-imbuhan", "subject": "bm", "year": 2, "difficulty": "core", "mechanic": "build", "prompt": { "en": "Add 'ber-' to 'lari'.", "ms": "Tambah 'ber-' pada 'lari'." }, "options": [{ "id": "a", "label": "berlari", "correct": true }, { "id": "b", "label": "melari", "correct": false }, { "id": "c", "label": "berlarian", "correct": false }], "hint": { "en": "ber- + lari.", "ms": "ber- + lari." }, "skills": ["imbuhan"] },
+        { "id": "y2-bm1-3", "topicId": "y2-bm-imbuhan", "subject": "bm", "year": 2, "difficulty": "core", "mechanic": "lane-select", "prompt": { "en": "Complete: Saya ___ ke sekolah.", "ms": "Lengkapkan: Saya ___ ke sekolah." }, "options": [{ "id": "a", "label": "pergi", "correct": true }, { "id": "b", "label": "makan", "correct": false }, { "id": "c", "label": "tidur", "correct": false }], "hint": { "en": "How you travel.", "ms": "Cara anda bergerak." }, "skills": ["sentence"] },
+        { "id": "y2-bm1-4", "topicId": "y2-bm-imbuhan", "subject": "bm", "year": 2, "difficulty": "core", "mechanic": "build", "prompt": { "en": "Add 'me-' to 'tulis'.", "ms": "Tambah 'me-' pada 'tulis'." }, "options": [{ "id": "a", "label": "menulis", "correct": true }, { "id": "b", "label": "metulis", "correct": false }, { "id": "c", "label": "bertulis", "correct": false }], "hint": { "en": "me- before t → men-.", "ms": "me- sebelum t → men-." }, "skills": ["imbuhan"] },
+        { "id": "y2-bm1-5", "topicId": "y2-bm-imbuhan", "subject": "bm", "year": 2, "difficulty": "stretch", "mechanic": "lane-select", "prompt": { "en": "Complete: Ayah ___ kereta.", "ms": "Lengkapkan: Ayah ___ kereta." }, "options": [{ "id": "a", "label": "memandu", "correct": true }, { "id": "b", "label": "memasak", "correct": false }, { "id": "c", "label": "membaca", "correct": false }], "hint": { "en": "Driving a car.", "ms": "Memandu kereta." }, "skills": ["sentence"] },
+        { "id": "y2-bm1-6", "topicId": "y2-bm-imbuhan", "subject": "bm", "year": 2, "difficulty": "stretch", "mechanic": "build", "prompt": { "en": "Add 'me-' to 'masak'.", "ms": "Tambah 'me-' pada 'masak'." }, "options": [{ "id": "a", "label": "memasak", "correct": true }, { "id": "b", "label": "bermasak", "correct": false }, { "id": "c", "label": "memmasak", "correct": false }], "hint": { "en": "me- before m → me-.", "ms": "me- sebelum m → me-." }, "skills": ["imbuhan"] }
+      ]
+    },
+    {
+      "id": "y2-bm-sinonim-antonim",
+      "subject": "bm",
+      "year": 2,
+      "order": 2,
+      "icon": "🔁",
+      "title": { "en": "Synonyms & Antonyms", "ms": "Sinonim & Antonim" },
+      "description": { "en": "Words with same or opposite meanings.", "ms": "Perkataan sama atau berlawanan maksud." },
+      "flashcards": [
+        { "id": "y2-bm-fc-syn", "topicId": "y2-bm-sinonim-antonim", "title": { "en": "Synonyms", "ms": "Sinonim" }, "definition": { "en": "Words that mean the same.", "ms": "Perkataan yang sama maksud." }, "example": { "en": "pandai = bijak", "ms": "pandai = bijak" }, "illustration": "🔁", "hint": { "en": "Find a word with same meaning.", "ms": "Cari perkataan sama maksud." }, "funFact": { "en": "Antonim means opposite.", "ms": "Antonim bermaksud berlawanan." } }
+      ],
+      "challenges": [
+        { "id": "y2-bm2-1", "topicId": "y2-bm-sinonim-antonim", "subject": "bm", "year": 2, "difficulty": "intro", "mechanic": "gate-pass", "prompt": { "en": "Synonym of 'pandai'?", "ms": "Sinonim bagi 'pandai'?" }, "options": [{ "id": "a", "label": "bijak", "correct": true }, { "id": "b", "label": "malas", "correct": false }, { "id": "c", "label": "sedih", "correct": false }], "hint": { "en": "Means clever.", "ms": "Bermaksud cerdik." }, "skills": ["synonym"] },
+        { "id": "y2-bm2-2", "topicId": "y2-bm-sinonim-antonim", "subject": "bm", "year": 2, "difficulty": "core", "mechanic": "gate-pass", "prompt": { "en": "Antonym of 'gembira'?", "ms": "Antonim bagi 'gembira'?" }, "options": [{ "id": "a", "label": "sedih", "correct": true }, { "id": "b", "label": "riang", "correct": false }, { "id": "c", "label": "suka", "correct": false }], "hint": { "en": "Opposite of happy.", "ms": "Lawan gembira." }, "skills": ["antonym"] },
+        { "id": "y2-bm2-3", "topicId": "y2-bm-sinonim-antonim", "subject": "bm", "year": 2, "difficulty": "core", "mechanic": "gate-pass", "prompt": { "en": "Synonym of 'cantik'?", "ms": "Sinonim bagi 'cantik'?" }, "options": [{ "id": "a", "label": "indah", "correct": true }, { "id": "b", "label": "buruk", "correct": false }, { "id": "c", "label": "lama", "correct": false }], "hint": { "en": "Means beautiful.", "ms": "Bermaksud beautiful." }, "skills": ["synonym"] },
+        { "id": "y2-bm2-4", "topicId": "y2-bm-sinonim-antonim", "subject": "bm", "year": 2, "difficulty": "core", "mechanic": "gate-pass", "prompt": { "en": "Antonym of 'cepat'?", "ms": "Antonim bagi 'cepat'?" }, "options": [{ "id": "a", "label": "lambat", "correct": true }, { "id": "b", "label": "laju", "correct": false }, { "id": "c", "label": "pantas", "correct": false }], "hint": { "en": "Opposite of fast.", "ms": "Lawan cepat." }, "skills": ["antonym"] },
+        { "id": "y2-bm2-5", "topicId": "y2-bm-sinonim-antonim", "subject": "bm", "year": 2, "difficulty": "stretch", "mechanic": "gate-pass", "prompt": { "en": "Synonym of 'rumah'?", "ms": "Sinonim bagi 'rumah'?" }, "options": [{ "id": "a", "label": "kediaman", "correct": true }, { "id": "b", "label": "sekolah", "correct": false }, { "id": "c", "label": "kedai", "correct": false }], "hint": { "en": "A place to live.", "ms": "Tempat tinggal." }, "skills": ["synonym"] },
+        { "id": "y2-bm2-6", "topicId": "y2-bm-sinonim-antonim", "subject": "bm", "year": 2, "difficulty": "stretch", "mechanic": "gate-pass", "prompt": { "en": "Antonym of 'tua'?", "ms": "Antonim bagi 'tua'?" }, "options": [{ "id": "a", "label": "muda", "correct": true }, { "id": "b", "label": "lama", "correct": false }, { "id": "c", "label": "besar", "correct": false }], "hint": { "en": "Opposite of old.", "ms": "Lawan tua." }, "skills": ["antonym"] }
       ]
     }
   ]

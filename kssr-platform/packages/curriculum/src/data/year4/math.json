@@ -1,0 +1,47 @@
+{
+  "subject": "math",
+  "year": 4,
+  "schemaVersion": 1,
+  "topics": [
+    {
+      "id": "y4-math-mul-div",
+      "subject": "math",
+      "year": 4,
+      "order": 1,
+      "icon": "✖️",
+      "title": { "en": "Multiply & Divide", "ms": "Darab & Bahagi" },
+      "description": { "en": "Larger multiplication and division.", "ms": "Pendaraban dan pembahagian lebih besar." },
+      "flashcards": [
+        { "id": "y4-math-fc-md", "topicId": "y4-math-mul-div", "title": { "en": "Multiply by tens", "ms": "Darab dengan puluh" }, "definition": { "en": "Multiply the digits, then place the zeros.", "ms": "Darab digit, kemudian letak sifar." }, "example": { "en": "12 × 3 = 36", "ms": "12 × 3 = 36" }, "illustration": "🧮", "hint": { "en": "Break it into tens and ones.", "ms": "Pecah kepada puluh dan sa." }, "funFact": { "en": "Division is sharing equally.", "ms": "Pembahagian ialah membahagi sama rata." } }
+      ],
+      "challenges": [
+        { "id": "y4-m1-1", "topicId": "y4-math-mul-div", "subject": "math", "year": 4, "difficulty": "intro", "mechanic": "gate-pass", "prompt": { "en": "12 × 3 = ?", "ms": "12 × 3 = ?" }, "options": [{ "id": "a", "label": "36", "correct": true }, { "id": "b", "label": "33", "correct": false }, { "id": "c", "label": "39", "correct": false }], "hint": { "en": "10×3 + 2×3.", "ms": "10×3 + 2×3." }, "skills": ["multiplication"] },
+        { "id": "y4-m1-2", "topicId": "y4-math-mul-div", "subject": "math", "year": 4, "difficulty": "core", "mechanic": "gate-pass", "prompt": { "en": "15 × 4 = ?", "ms": "15 × 4 = ?" }, "options": [{ "id": "a", "label": "60", "correct": true }, { "id": "b", "label": "45", "correct": false }, { "id": "c", "label": "54", "correct": false }], "hint": { "en": "10×4 + 5×4.", "ms": "10×4 + 5×4." }, "skills": ["multiplication"] },
+        { "id": "y4-m1-3", "topicId": "y4-math-mul-div", "subject": "math", "year": 4, "difficulty": "core", "mechanic": "gate-pass", "prompt": { "en": "48 ÷ 6 = ?", "ms": "48 ÷ 6 = ?" }, "options": [{ "id": "a", "label": "8", "correct": true }, { "id": "b", "label": "7", "correct": false }, { "id": "c", "label": "9", "correct": false }], "hint": { "en": "Which × 6 = 48?", "ms": "Mana × 6 = 48?" }, "skills": ["division"] },
+        { "id": "y4-m1-4", "topicId": "y4-math-mul-div", "subject": "math", "year": 4, "difficulty": "core", "mechanic": "lane-select", "prompt": { "en": "A box holds 25 pencils. 4 boxes?", "ms": "Sekotak ada 25 pensel. 4 kotak?" }, "options": [{ "id": "a", "label": "100", "correct": true }, { "id": "b", "label": "90", "correct": false }, { "id": "c", "label": "75", "correct": false }], "hint": { "en": "25 × 4.", "ms": "25 × 4." }, "skills": ["multiplication", "word-problem"] },
+        { "id": "y4-m1-5", "topicId": "y4-math-mul-div", "subject": "math", "year": 4, "difficulty": "stretch", "mechanic": "gate-pass", "prompt": { "en": "72 ÷ 8 = ?", "ms": "72 ÷ 8 = ?" }, "options": [{ "id": "a", "label": "9", "correct": true }, { "id": "b", "label": "8", "correct": false }, { "id": "c", "label": "7", "correct": false }], "hint": { "en": "8 × ? = 72.", "ms": "8 × ? = 72." }, "skills": ["division"] },
+        { "id": "y4-m1-6", "topicId": "y4-math-mul-div", "subject": "math", "year": 4, "difficulty": "stretch", "mechanic": "gate-pass", "prompt": { "en": "23 × 3 = ?", "ms": "23 × 3 = ?" }, "options": [{ "id": "a", "label": "69", "correct": true }, { "id": "b", "label": "63", "correct": false }, { "id": "c", "label": "66", "correct": false }], "hint": { "en": "20×3 + 3×3.", "ms": "20×3 + 3×3." }, "skills": ["multiplication"] }
+      ]
+    },
+    {
+      "id": "y4-math-frac-money",
+      "subject": "math",
+      "year": 4,
+      "order": 2,
+      "icon": "💰",
+      "title": { "en": "Fractions & Money", "ms": "Pecahan & Wang" },
+      "description": { "en": "Fractions and Ringgit-sen money sums.", "ms": "Pecahan dan pengiraan wang Ringgit-sen." },
+      "flashcards": [
+        { "id": "y4-math-fc-money", "topicId": "y4-math-frac-money", "title": { "en": "Money", "ms": "Wang" }, "definition": { "en": "RM1 = 100 sen. Add and give change.", "ms": "RM1 = 100 sen. Tambah dan beri baki." }, "example": { "en": "RM2 − RM1.50 = RM0.50", "ms": "RM2 − RM1.50 = RM0.50" }, "illustration": "💰", "hint": { "en": "Line up the decimal points.", "ms": "Susun titik perpuluhan." }, "funFact": { "en": "1/2 of RM10 is RM5.", "ms": "1/2 daripada RM10 ialah RM5." } }
+      ],
+      "challenges": [
+        { "id": "y4-m2-1", "topicId": "y4-math-frac-money", "subject": "math", "year": 4, "difficulty": "intro", "mechanic": "gate-pass", "prompt": { "en": "RM3 + RM4 = ?", "ms": "RM3 + RM4 = ?" }, "options": [{ "id": "a", "label": "RM7", "correct": true }, { "id": "b", "label": "RM6", "correct": false }, { "id": "c", "label": "RM8", "correct": false }], "hint": { "en": "3 + 4.", "ms": "3 + 4." }, "skills": ["money"] },
+        { "id": "y4-m2-2", "topicId": "y4-math-frac-money", "subject": "math", "year": 4, "difficulty": "core", "mechanic": "lane-select", "prompt": { "en": "Pay RM10 for a RM6 toy. Change?", "ms": "Bayar RM10 untuk mainan RM6. Baki?" }, "options": [{ "id": "a", "label": "RM4", "correct": true }, { "id": "b", "label": "RM5", "correct": false }, { "id": "c", "label": "RM3", "correct": false }], "hint": { "en": "10 − 6.", "ms": "10 − 6." }, "skills": ["money"] },
+        { "id": "y4-m2-3", "topicId": "y4-math-frac-money", "subject": "math", "year": 4, "difficulty": "core", "mechanic": "lane-select", "prompt": { "en": "1/2 of RM20 is?", "ms": "1/2 daripada RM20 ialah?" }, "options": [{ "id": "a", "label": "RM10", "correct": true }, { "id": "b", "label": "RM5", "correct": false }, { "id": "c", "label": "RM2", "correct": false }], "hint": { "en": "Half of 20.", "ms": "Separuh 20." }, "skills": ["fractions", "money"] },
+        { "id": "y4-m2-4", "topicId": "y4-math-frac-money", "subject": "math", "year": 4, "difficulty": "core", "mechanic": "lane-select", "prompt": { "en": "Which is bigger: 2/3 or 1/3?", "ms": "Mana lebih besar: 2/3 atau 1/3?" }, "options": [{ "id": "a", "label": "2/3", "correct": true }, { "id": "b", "label": "1/3", "correct": false }, { "id": "c", "label": "sama", "correct": false }], "hint": { "en": "More thirds.", "ms": "Lebih banyak per tiga." }, "skills": ["fractions"] },
+        { "id": "y4-m2-5", "topicId": "y4-math-frac-money", "subject": "math", "year": 4, "difficulty": "stretch", "mechanic": "gate-pass", "prompt": { "en": "RM5.50 + RM2.50 = ?", "ms": "RM5.50 + RM2.50 = ?" }, "options": [{ "id": "a", "label": "RM8.00", "correct": true }, { "id": "b", "label": "RM7.00", "correct": false }, { "id": "c", "label": "RM8.50", "correct": false }], "hint": { "en": "Add sen first.", "ms": "Tambah sen dahulu." }, "skills": ["money"] },
+        { "id": "y4-m2-6", "topicId": "y4-math-frac-money", "subject": "math", "year": 4, "difficulty": "stretch", "mechanic": "lane-select", "prompt": { "en": "1/4 of 12 is?", "ms": "1/4 daripada 12 ialah?" }, "options": [{ "id": "a", "label": "3", "correct": true }, { "id": "b", "label": "4", "correct": false }, { "id": "c", "label": "6", "correct": false }], "hint": { "en": "12 ÷ 4.", "ms": "12 ÷ 4." }, "skills": ["fractions"] }
+      ]
+    }
+  ]
+}

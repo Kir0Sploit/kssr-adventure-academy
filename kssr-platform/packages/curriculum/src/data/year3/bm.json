@@ -4,58 +4,43 @@
   "schemaVersion": 1,
   "topics": [
     {
-      "id": "y3-bm-kata-kerja",
+      "id": "y3-bm-kelas-kata",
       "subject": "bm",
       "year": 3,
       "order": 1,
       "icon": "🏃",
-      "title": { "en": "Verbs (Kata Kerja)", "ms": "Kata Kerja" },
-      "description": { "en": "Identify action words in Malay.", "ms": "Mengenal pasti kata perbuatan dalam Bahasa Melayu." },
+      "title": { "en": "Word Classes", "ms": "Kelas Kata" },
+      "description": { "en": "Verbs, nouns and adjectives in Malay.", "ms": "Kata kerja, kata nama dan kata adjektif." },
       "flashcards": [
-        {
-          "id": "y3-bm-fc-kerja",
-          "topicId": "y3-bm-kata-kerja",
-          "title": { "en": "Action words", "ms": "Kata perbuatan" },
-          "definition": { "en": "Kata kerja shows what someone does.", "ms": "Kata kerja menunjukkan perbuatan seseorang." },
-          "example": { "en": "berlari, makan, menulis", "ms": "berlari, makan, menulis" },
-          "illustration": "🏃",
-          "hint": { "en": "Ask: what is the action?", "ms": "Tanya: apakah perbuatannya?" },
-          "funFact": { "en": "'rajin' is NOT a verb — it is an adjective.", "ms": "'rajin' BUKAN kata kerja — ia kata adjektif." }
-        }
+        { "id": "y3-bm-fc-kerja", "topicId": "y3-bm-kelas-kata", "title": { "en": "Action words", "ms": "Kata kerja" }, "definition": { "en": "Kata kerja shows an action.", "ms": "Kata kerja menunjukkan perbuatan." }, "example": { "en": "berlari, makan, menulis", "ms": "berlari, makan, menulis" }, "illustration": "🏃", "pronunciation": { "text": "berlari, menulis", "locale": "ms" }, "hint": { "en": "What is the action?", "ms": "Apakah perbuatannya?" }, "funFact": { "en": "'meja' is a noun, not a verb.", "ms": "'meja' kata nama, bukan kata kerja." } }
       ],
       "challenges": [
-        {
-          "id": "y3-bm-c1",
-          "topicId": "y3-bm-kata-kerja",
-          "subject": "bm",
-          "year": 3,
-          "difficulty": "core",
-          "mechanic": "lane-select",
-          "prompt": { "en": "Which is a verb (kata kerja)?", "ms": "Manakah kata kerja?" },
-          "options": [
-            { "id": "a", "label": "berlari", "correct": true },
-            { "id": "b", "label": "cantik", "correct": false },
-            { "id": "c", "label": "meja", "correct": false }
-          ],
-          "hint": { "en": "Which word is an action?", "ms": "Perkataan mana satu perbuatan?" },
-          "skills": ["kata-kerja"]
-        },
-        {
-          "id": "y3-bm-c2",
-          "topicId": "y3-bm-kata-kerja",
-          "subject": "bm",
-          "year": 3,
-          "difficulty": "core",
-          "mechanic": "gate-pass",
-          "prompt": { "en": "Synonym of 'pandai'?", "ms": "Sinonim bagi 'pandai'?" },
-          "options": [
-            { "id": "a", "label": "bijak", "correct": true },
-            { "id": "b", "label": "malas", "correct": false },
-            { "id": "c", "label": "sedih", "correct": false }
-          ],
-          "hint": { "en": "Means clever.", "ms": "Bermaksud cerdik." },
-          "skills": ["synonym"]
-        }
+        { "id": "y3-bm1-1", "topicId": "y3-bm-kelas-kata", "subject": "bm", "year": 3, "difficulty": "intro", "mechanic": "lane-select", "prompt": { "en": "Which is a verb (kata kerja)?", "ms": "Manakah kata kerja?" }, "options": [{ "id": "a", "label": "berlari", "correct": true }, { "id": "b", "label": "cantik", "correct": false }, { "id": "c", "label": "meja", "correct": false }], "hint": { "en": "An action.", "ms": "Satu perbuatan." }, "skills": ["kata-kerja"] },
+        { "id": "y3-bm1-2", "topicId": "y3-bm-kelas-kata", "subject": "bm", "year": 3, "difficulty": "core", "mechanic": "lane-select", "prompt": { "en": "Which is a noun (kata nama)?", "ms": "Manakah kata nama?" }, "options": [{ "id": "a", "label": "buku", "correct": true }, { "id": "b", "label": "berlari", "correct": false }, { "id": "c", "label": "cantik", "correct": false }], "hint": { "en": "A thing.", "ms": "Sesuatu benda." }, "skills": ["kata-nama"] },
+        { "id": "y3-bm1-3", "topicId": "y3-bm-kelas-kata", "subject": "bm", "year": 3, "difficulty": "core", "mechanic": "lane-select", "prompt": { "en": "Which is an adjective (kata adjektif)?", "ms": "Manakah kata adjektif?" }, "options": [{ "id": "a", "label": "rajin", "correct": true }, { "id": "b", "label": "makan", "correct": false }, { "id": "c", "label": "kereta", "correct": false }], "hint": { "en": "Describes something.", "ms": "Menerangkan sesuatu." }, "skills": ["kata-adjektif"] },
+        { "id": "y3-bm1-4", "topicId": "y3-bm-kelas-kata", "subject": "bm", "year": 3, "difficulty": "core", "mechanic": "gate-pass", "prompt": { "en": "Synonym of 'pandai'?", "ms": "Sinonim bagi 'pandai'?" }, "options": [{ "id": "a", "label": "bijak", "correct": true }, { "id": "b", "label": "malas", "correct": false }, { "id": "c", "label": "sedih", "correct": false }], "hint": { "en": "Means clever.", "ms": "Bermaksud cerdik." }, "skills": ["synonym"] },
+        { "id": "y3-bm1-5", "topicId": "y3-bm-kelas-kata", "subject": "bm", "year": 3, "difficulty": "stretch", "mechanic": "lane-select", "prompt": { "en": "Complete: Burung itu ___ di udara.", "ms": "Lengkapkan: Burung itu ___ di udara." }, "options": [{ "id": "a", "label": "terbang", "correct": true }, { "id": "b", "label": "berenang", "correct": false }, { "id": "c", "label": "tidur", "correct": false }], "hint": { "en": "Birds do this.", "ms": "Burung melakukannya." }, "skills": ["sentence"] },
+        { "id": "y3-bm1-6", "topicId": "y3-bm-kelas-kata", "subject": "bm", "year": 3, "difficulty": "stretch", "mechanic": "lane-select", "prompt": { "en": "Which is a noun?", "ms": "Manakah kata nama?" }, "options": [{ "id": "a", "label": "sekolah", "correct": true }, { "id": "b", "label": "membaca", "correct": false }, { "id": "c", "label": "tinggi", "correct": false }], "hint": { "en": "A place.", "ms": "Sesuatu tempat." }, "skills": ["kata-nama"] }
+      ]
+    },
+    {
+      "id": "y3-bm-peribahasa",
+      "subject": "bm",
+      "year": 3,
+      "order": 2,
+      "icon": "📜",
+      "title": { "en": "Simple Proverbs", "ms": "Peribahasa Mudah" },
+      "description": { "en": "Meanings of common Malay proverbs.", "ms": "Maksud peribahasa Melayu biasa." },
+      "flashcards": [
+        { "id": "y3-bm-fc-perib", "topicId": "y3-bm-peribahasa", "title": { "en": "Proverbs", "ms": "Peribahasa" }, "definition": { "en": "Wise sayings with hidden meaning.", "ms": "Kata bijak dengan maksud tersirat." }, "example": { "en": "'Ada gula ada semut'", "ms": "'Ada gula ada semut'" }, "illustration": "🐜", "pronunciation": { "text": "ada gula ada semut", "locale": "ms" }, "hint": { "en": "Think of the real meaning.", "ms": "Fikir maksud sebenar." }, "funFact": { "en": "Proverbs teach life lessons.", "ms": "Peribahasa mengajar pengajaran hidup." } }
+      ],
+      "challenges": [
+        { "id": "y3-bm2-1", "topicId": "y3-bm-peribahasa", "subject": "bm", "year": 3, "difficulty": "core", "mechanic": "gate-pass", "prompt": { "en": "'Bagai aur dengan tebing' means?", "ms": "'Bagai aur dengan tebing' bermaksud?" }, "options": [{ "id": "a", "label": "saling membantu", "correct": true }, { "id": "b", "label": "bermusuhan", "correct": false }, { "id": "c", "label": "bersendirian", "correct": false }], "hint": { "en": "Helping each other.", "ms": "Saling tolong-menolong." }, "skills": ["peribahasa"] },
+        { "id": "y3-bm2-2", "topicId": "y3-bm-peribahasa", "subject": "bm", "year": 3, "difficulty": "core", "mechanic": "gate-pass", "prompt": { "en": "Synonym of 'cantik'?", "ms": "Sinonim bagi 'cantik'?" }, "options": [{ "id": "a", "label": "indah", "correct": true }, { "id": "b", "label": "buruk", "correct": false }, { "id": "c", "label": "kotor", "correct": false }], "hint": { "en": "Beautiful.", "ms": "Bermaksud beautiful." }, "skills": ["synonym"] },
+        { "id": "y3-bm2-3", "topicId": "y3-bm-peribahasa", "subject": "bm", "year": 3, "difficulty": "core", "mechanic": "gate-pass", "prompt": { "en": "'Ringan tulang' means a person who is?", "ms": "'Ringan tulang' bermaksud orang yang?" }, "options": [{ "id": "a", "label": "rajin", "correct": true }, { "id": "b", "label": "malas", "correct": false }, { "id": "c", "label": "sombong", "correct": false }], "hint": { "en": "Loves to work.", "ms": "Suka bekerja." }, "skills": ["simpulan-bahasa"] },
+        { "id": "y3-bm2-4", "topicId": "y3-bm-peribahasa", "subject": "bm", "year": 3, "difficulty": "stretch", "mechanic": "gate-pass", "prompt": { "en": "Antonym of 'rajin'?", "ms": "Antonim bagi 'rajin'?" }, "options": [{ "id": "a", "label": "malas", "correct": true }, { "id": "b", "label": "tekun", "correct": false }, { "id": "c", "label": "pandai", "correct": false }], "hint": { "en": "Opposite of hardworking.", "ms": "Lawan rajin." }, "skills": ["antonym"] },
+        { "id": "y3-bm2-5", "topicId": "y3-bm-peribahasa", "subject": "bm", "year": 3, "difficulty": "stretch", "mechanic": "gate-pass", "prompt": { "en": "'Buah tangan' means?", "ms": "'Buah tangan' bermaksud?" }, "options": [{ "id": "a", "label": "hadiah", "correct": true }, { "id": "b", "label": "buah-buahan", "correct": false }, { "id": "c", "label": "tangan", "correct": false }], "hint": { "en": "A gift / souvenir.", "ms": "Hadiah / oleh-oleh." }, "skills": ["simpulan-bahasa"] },
+        { "id": "y3-bm2-6", "topicId": "y3-bm-peribahasa", "subject": "bm", "year": 3, "difficulty": "stretch", "mechanic": "gate-pass", "prompt": { "en": "Synonym of 'gembira'?", "ms": "Sinonim bagi 'gembira'?" }, "options": [{ "id": "a", "label": "riang", "correct": true }, { "id": "b", "label": "sedih", "correct": false }, { "id": "c", "label": "marah", "correct": false }], "hint": { "en": "Happy.", "ms": "Bermaksud happy." }, "skills": ["synonym"] }
       ]
     }
   ]

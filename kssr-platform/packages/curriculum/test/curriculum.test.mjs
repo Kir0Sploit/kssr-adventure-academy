@@ -46,10 +46,10 @@ test("every challenge has exactly one correct option", () => {
 });
 
 test("topic and content accessors work", () => {
-  const topic = getTopic(1, "math", "y1-math-numbers-10");
+  const topic = getTopic(1, "math", "y1-math-numbers-20");
   assert.ok(topic, "topic found");
-  assert.ok(getFlashcards(1, "math", "y1-math-numbers-10").length >= 1);
-  assert.ok(getChallenges(1, "math", "y1-math-numbers-10").length >= 1);
+  assert.ok(getFlashcards(1, "math", "y1-math-numbers-20").length >= 1);
+  assert.ok(getChallenges(1, "math", "y1-math-numbers-20").length >= 1);
 });
 
 test("difficulty banding scales with mastery", () => {
@@ -59,11 +59,11 @@ test("difficulty banding scales with mastery", () => {
 });
 
 test("adaptive selector returns a fresh challenge when possible", () => {
-  const topic = getTopic(1, "math", "y1-math-numbers-10");
-  const seen = new Set(["y1-math-c1"]);
+  const topic = getTopic(1, "math", "y1-math-numbers-20");
+  const seen = new Set(["y1-m1-1"]);
   const picked = nextChallenge(topic, { mastery: 0, seenCorrect: seen });
   assert.ok(picked, "a challenge is selected");
-  assert.notEqual(picked.id, "y1-math-c1", "prefers an unseen challenge");
+  assert.notEqual(picked.id, "y1-m1-1", "prefers an unseen challenge");
 });
 
 test("mastery EMA increases on correct, never throws", () => {
@@ -76,5 +76,6 @@ test("mastery EMA increases on correct, never throws", () => {
 });
 
 test("missing slice throws a helpful error", () => {
-  assert.throws(() => getSubjectCurriculum(6, "math"), /not authored yet/);
+  // Year 9 is outside KSSR coverage — should throw.
+  assert.throws(() => getSubjectCurriculum(9, "math"), /not authored yet/);
 });

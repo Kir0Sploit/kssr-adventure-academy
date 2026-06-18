@@ -10,52 +10,37 @@
       "order": 1,
       "icon": "✖️",
       "title": { "en": "Multiplication Tables", "ms": "Sifir" },
-      "description": { "en": "Master multiplication facts up to 9 × 9.", "ms": "Menguasai fakta pendaraban hingga 9 × 9." },
+      "description": { "en": "Multiplication facts up to 9 × 9.", "ms": "Fakta pendaraban hingga 9 × 9." },
       "flashcards": [
-        {
-          "id": "y3-math-fc-times",
-          "topicId": "y3-math-times-tables",
-          "title": { "en": "What is multiplication?", "ms": "Apa itu pendaraban?" },
-          "definition": { "en": "Multiplication is repeated addition of equal groups.", "ms": "Pendaraban ialah penambahan berulang kumpulan yang sama." },
-          "example": { "en": "3 × 4 = 4 + 4 + 4 = 12", "ms": "3 × 4 = 4 + 4 + 4 = 12" },
-          "illustration": "✖️",
-          "hint": { "en": "Skip-count in equal steps.", "ms": "Kira lompat dalam langkah sama." },
-          "funFact": { "en": "Any number × 0 is 0.", "ms": "Sebarang nombor × 0 ialah 0." }
-        }
+        { "id": "y3-math-fc-times", "topicId": "y3-math-times-tables", "title": { "en": "Multiplication", "ms": "Pendaraban" }, "definition": { "en": "Repeated adding of equal groups.", "ms": "Penambahan berulang kumpulan sama." }, "example": { "en": "3 × 4 = 12", "ms": "3 × 4 = 12" }, "illustration": "✖️", "hint": { "en": "Skip-count in equal steps.", "ms": "Kira lompat langkah sama." }, "funFact": { "en": "Any number × 0 is 0.", "ms": "Sebarang nombor × 0 ialah 0." } }
       ],
       "challenges": [
-        {
-          "id": "y3-math-c1",
-          "topicId": "y3-math-times-tables",
-          "subject": "math",
-          "year": 3,
-          "difficulty": "core",
-          "mechanic": "gate-pass",
-          "prompt": { "en": "7 × 6 = ?", "ms": "7 × 6 = ?" },
-          "options": [
-            { "id": "a", "label": "42", "correct": true },
-            { "id": "b", "label": "36", "correct": false },
-            { "id": "c", "label": "48", "correct": false }
-          ],
-          "hint": { "en": "7 × 6 is 7 × 5 plus one more 7.", "ms": "7 × 6 ialah 7 × 5 tambah 7." },
-          "skills": ["multiplication"]
-        },
-        {
-          "id": "y3-math-c2",
-          "topicId": "y3-math-times-tables",
-          "subject": "math",
-          "year": 3,
-          "difficulty": "stretch",
-          "mechanic": "lane-select",
-          "prompt": { "en": "24 apples shared into 4 bags. Per bag?", "ms": "24 epal dibahagi 4 beg. Setiap beg?" },
-          "options": [
-            { "id": "a", "label": "6", "correct": true },
-            { "id": "b", "label": "8", "correct": false },
-            { "id": "c", "label": "5", "correct": false }
-          ],
-          "hint": { "en": "Which number × 4 = 24?", "ms": "Nombor mana × 4 = 24?" },
-          "skills": ["division"]
-        }
+        { "id": "y3-m1-1", "topicId": "y3-math-times-tables", "subject": "math", "year": 3, "difficulty": "intro", "mechanic": "gate-pass", "prompt": { "en": "3 × 4 = ?", "ms": "3 × 4 = ?" }, "options": [{ "id": "a", "label": "12", "correct": true }, { "id": "b", "label": "7", "correct": false }, { "id": "c", "label": "9", "correct": false }], "hint": { "en": "4+4+4.", "ms": "4+4+4." }, "skills": ["multiplication"] },
+        { "id": "y3-m1-2", "topicId": "y3-math-times-tables", "subject": "math", "year": 3, "difficulty": "core", "mechanic": "gate-pass", "prompt": { "en": "7 × 6 = ?", "ms": "7 × 6 = ?" }, "options": [{ "id": "a", "label": "42", "correct": true }, { "id": "b", "label": "36", "correct": false }, { "id": "c", "label": "48", "correct": false }], "hint": { "en": "7×5 plus 7.", "ms": "7×5 tambah 7." }, "skills": ["multiplication"] },
+        { "id": "y3-m1-3", "topicId": "y3-math-times-tables", "subject": "math", "year": 3, "difficulty": "core", "mechanic": "gate-pass", "prompt": { "en": "8 × 4 = ?", "ms": "8 × 4 = ?" }, "options": [{ "id": "a", "label": "32", "correct": true }, { "id": "b", "label": "28", "correct": false }, { "id": "c", "label": "36", "correct": false }], "hint": { "en": "Double 8 twice.", "ms": "Gandakan 8 dua kali." }, "skills": ["multiplication"] },
+        { "id": "y3-m1-4", "topicId": "y3-math-times-tables", "subject": "math", "year": 3, "difficulty": "core", "mechanic": "gate-pass", "prompt": { "en": "9 × 3 = ?", "ms": "9 × 3 = ?" }, "options": [{ "id": "a", "label": "27", "correct": true }, { "id": "b", "label": "24", "correct": false }, { "id": "c", "label": "29", "correct": false }], "hint": { "en": "9,18,27.", "ms": "9,18,27." }, "skills": ["multiplication"] },
+        { "id": "y3-m1-5", "topicId": "y3-math-times-tables", "subject": "math", "year": 3, "difficulty": "stretch", "mechanic": "lane-select", "prompt": { "en": "6 boxes, 7 pens each. Total pens?", "ms": "6 kotak, 7 pen setiap satu. Jumlah?" }, "options": [{ "id": "a", "label": "42", "correct": true }, { "id": "b", "label": "13", "correct": false }, { "id": "c", "label": "36", "correct": false }], "hint": { "en": "6 × 7.", "ms": "6 × 7." }, "skills": ["multiplication", "word-problem"] },
+        { "id": "y3-m1-6", "topicId": "y3-math-times-tables", "subject": "math", "year": 3, "difficulty": "stretch", "mechanic": "gate-pass", "prompt": { "en": "8 × 8 = ?", "ms": "8 × 8 = ?" }, "options": [{ "id": "a", "label": "64", "correct": true }, { "id": "b", "label": "56", "correct": false }, { "id": "c", "label": "72", "correct": false }], "hint": { "en": "8 eights.", "ms": "8 lapan." }, "skills": ["multiplication"] }
+      ]
+    },
+    {
+      "id": "y3-math-div-frac",
+      "subject": "math",
+      "year": 3,
+      "order": 2,
+      "icon": "🍕",
+      "title": { "en": "Division & Fractions", "ms": "Pembahagian & Pecahan" },
+      "description": { "en": "Share equally and simple fractions.", "ms": "Membahagi sama rata dan pecahan mudah." },
+      "flashcards": [
+        { "id": "y3-math-fc-frac", "topicId": "y3-math-div-frac", "title": { "en": "Fractions", "ms": "Pecahan" }, "definition": { "en": "A fraction is part of a whole.", "ms": "Pecahan ialah sebahagian daripada keseluruhan." }, "example": { "en": "Half a pizza = 1/2 🍕", "ms": "Separuh piza = 1/2 🍕" }, "illustration": "🍕", "hint": { "en": "Bottom = total parts.", "ms": "Bawah = jumlah bahagian." }, "funFact": { "en": "1/2 is the same as 2/4.", "ms": "1/2 sama dengan 2/4." } }
+      ],
+      "challenges": [
+        { "id": "y3-m2-1", "topicId": "y3-math-div-frac", "subject": "math", "year": 3, "difficulty": "intro", "mechanic": "gate-pass", "prompt": { "en": "12 ÷ 4 = ?", "ms": "12 ÷ 4 = ?" }, "options": [{ "id": "a", "label": "3", "correct": true }, { "id": "b", "label": "4", "correct": false }, { "id": "c", "label": "2", "correct": false }], "hint": { "en": "Which × 4 = 12?", "ms": "Mana × 4 = 12?" }, "skills": ["division"] },
+        { "id": "y3-m2-2", "topicId": "y3-math-div-frac", "subject": "math", "year": 3, "difficulty": "core", "mechanic": "lane-select", "prompt": { "en": "24 apples into 4 bags. Each bag?", "ms": "24 epal ke 4 beg. Setiap beg?" }, "options": [{ "id": "a", "label": "6", "correct": true }, { "id": "b", "label": "8", "correct": false }, { "id": "c", "label": "5", "correct": false }], "hint": { "en": "24 ÷ 4.", "ms": "24 ÷ 4." }, "skills": ["division"] },
+        { "id": "y3-m2-3", "topicId": "y3-math-div-frac", "subject": "math", "year": 3, "difficulty": "core", "mechanic": "lane-select", "prompt": { "en": "Half of 10 is?", "ms": "Separuh daripada 10 ialah?" }, "options": [{ "id": "a", "label": "5", "correct": true }, { "id": "b", "label": "2", "correct": false }, { "id": "c", "label": "20", "correct": false }], "hint": { "en": "Split into 2.", "ms": "Bahagi kepada 2." }, "skills": ["fractions"] },
+        { "id": "y3-m2-4", "topicId": "y3-math-div-frac", "subject": "math", "year": 3, "difficulty": "core", "mechanic": "gate-pass", "prompt": { "en": "20 ÷ 5 = ?", "ms": "20 ÷ 5 = ?" }, "options": [{ "id": "a", "label": "4", "correct": true }, { "id": "b", "label": "5", "correct": false }, { "id": "c", "label": "3", "correct": false }], "hint": { "en": "Which × 5 = 20?", "ms": "Mana × 5 = 20?" }, "skills": ["division"] },
+        { "id": "y3-m2-5", "topicId": "y3-math-div-frac", "subject": "math", "year": 3, "difficulty": "stretch", "mechanic": "lane-select", "prompt": { "en": "Which is bigger: 1/2 or 1/4?", "ms": "Mana lebih besar: 1/2 atau 1/4?" }, "options": [{ "id": "a", "label": "1/2", "correct": true }, { "id": "b", "label": "1/4", "correct": false }, { "id": "c", "label": "sama", "correct": false }], "hint": { "en": "Fewer pieces = bigger.", "ms": "Sedikit bahagian = lebih besar." }, "skills": ["fractions"] },
+        { "id": "y3-m2-6", "topicId": "y3-math-div-frac", "subject": "math", "year": 3, "difficulty": "stretch", "mechanic": "lane-select", "prompt": { "en": "A quarter of 8 is?", "ms": "Satu perempat daripada 8 ialah?" }, "options": [{ "id": "a", "label": "2", "correct": true }, { "id": "b", "label": "4", "correct": false }, { "id": "c", "label": "1", "correct": false }], "hint": { "en": "8 ÷ 4.", "ms": "8 ÷ 4." }, "skills": ["fractions"] }
       ]
     }
   ]

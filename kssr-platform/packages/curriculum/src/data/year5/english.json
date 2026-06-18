@@ -1,0 +1,47 @@
+{
+  "subject": "english",
+  "year": 5,
+  "schemaVersion": 1,
+  "topics": [
+    {
+      "id": "y5-en-grammar",
+      "subject": "english",
+      "year": 5,
+      "order": 1,
+      "icon": "✏️",
+      "title": { "en": "Tenses & Grammar", "ms": "Kala & Tatabahasa" },
+      "description": { "en": "Perfect tense, adverbs and grammar.", "ms": "Kala sempurna, kata keterangan dan tatabahasa." },
+      "flashcards": [
+        { "id": "y5-en-fc-gr", "topicId": "y5-en-grammar", "title": { "en": "Present perfect", "ms": "Kala kini sempurna" }, "definition": { "en": "has/have + past participle.", "ms": "has/have + past participle." }, "example": { "en": "She has finished.", "ms": "She has finished." }, "illustration": "✏️", "pronunciation": { "text": "she has finished", "locale": "en" }, "hint": { "en": "Use 'has' for he/she/it.", "ms": "Guna 'has' untuk he/she/it." }, "funFact": { "en": "Adverbs often end in -ly.", "ms": "Kata keterangan selalu berakhir -ly." } }
+      ],
+      "challenges": [
+        { "id": "y5-en1-1", "topicId": "y5-en-grammar", "subject": "english", "year": 5, "difficulty": "core", "mechanic": "lane-select", "prompt": { "en": "She has ___ her homework.", "ms": "She has ___ her homework." }, "options": [{ "id": "a", "label": "finished", "correct": true }, { "id": "b", "label": "finish", "correct": false }, { "id": "c", "label": "finishing", "correct": false }], "hint": { "en": "has + -ed.", "ms": "has + -ed." }, "skills": ["grammar"] },
+        { "id": "y5-en1-2", "topicId": "y5-en-grammar", "subject": "english", "year": 5, "difficulty": "core", "mechanic": "lane-select", "prompt": { "en": "Pick the adverb.", "ms": "Pilih kata keterangan." }, "options": [{ "id": "a", "label": "quickly", "correct": true }, { "id": "b", "label": "quick", "correct": false }, { "id": "c", "label": "quicker", "correct": false }], "hint": { "en": "Ends in -ly.", "ms": "Berakhir -ly." }, "skills": ["adverbs"] },
+        { "id": "y5-en1-3", "topicId": "y5-en-grammar", "subject": "english", "year": 5, "difficulty": "core", "mechanic": "gate-pass", "prompt": { "en": "They ___ lived here for years.", "ms": "They ___ lived here for years." }, "options": [{ "id": "a", "label": "have", "correct": true }, { "id": "b", "label": "has", "correct": false }, { "id": "c", "label": "is", "correct": false }], "hint": { "en": "they → have.", "ms": "they → have." }, "skills": ["grammar"] },
+        { "id": "y5-en1-4", "topicId": "y5-en-grammar", "subject": "english", "year": 5, "difficulty": "stretch", "mechanic": "gate-pass", "prompt": { "en": "Antonym of 'modern'?", "ms": "Antonim bagi 'modern'?" }, "options": [{ "id": "a", "label": "ancient", "correct": true }, { "id": "b", "label": "new", "correct": false }, { "id": "c", "label": "fresh", "correct": false }], "hint": { "en": "Very old.", "ms": "Sangat lama." }, "skills": ["antonym"] },
+        { "id": "y5-en1-5", "topicId": "y5-en-grammar", "subject": "english", "year": 5, "difficulty": "stretch", "mechanic": "gate-pass", "prompt": { "en": "Choose the correct word: He runs ___.", "ms": "Pilih perkataan betul: He runs ___." }, "options": [{ "id": "a", "label": "fast", "correct": true }, { "id": "b", "label": "fastly", "correct": false }, { "id": "c", "label": "faster than", "correct": false }], "hint": { "en": "'fast' is also an adverb.", "ms": "'fast' juga kata keterangan." }, "skills": ["adverbs"] },
+        { "id": "y5-en1-6", "topicId": "y5-en-grammar", "subject": "english", "year": 5, "difficulty": "stretch", "mechanic": "gate-pass", "prompt": { "en": "Pick the correct sentence.", "ms": "Pilih ayat betul." }, "options": [{ "id": "a", "label": "I have never been there.", "correct": true }, { "id": "b", "label": "I has never been there.", "correct": false }, { "id": "c", "label": "I have never went there.", "correct": false }], "hint": { "en": "I → have + been.", "ms": "I → have + been." }, "skills": ["grammar"] }
+      ]
+    },
+    {
+      "id": "y5-en-vocab",
+      "subject": "english",
+      "year": 5,
+      "order": 2,
+      "icon": "📚",
+      "title": { "en": "Vocabulary & Comprehension", "ms": "Kosa Kata & Pemahaman" },
+      "description": { "en": "Word meanings and reading clues.", "ms": "Maksud perkataan dan petunjuk bacaan." },
+      "flashcards": [
+        { "id": "y5-en-fc-vc", "topicId": "y5-en-vocab", "title": { "en": "Context clues", "ms": "Petunjuk konteks" }, "definition": { "en": "Use the sentence to guess a word.", "ms": "Guna ayat untuk teka perkataan." }, "example": { "en": "It was so funny we laughed.", "ms": "It was so funny we laughed." }, "illustration": "📚", "pronunciation": { "text": "funny, laughed", "locale": "en" }, "hint": { "en": "Read around the word.", "ms": "Baca sekeliling perkataan." }, "funFact": { "en": "Big readers know more words.", "ms": "Pembaca tegar tahu lebih banyak perkataan." } }
+      ],
+      "challenges": [
+        { "id": "y5-en2-1", "topicId": "y5-en-vocab", "subject": "english", "year": 5, "difficulty": "core", "mechanic": "gate-pass", "prompt": { "en": "Synonym of 'brave'?", "ms": "Sinonim bagi 'brave'?" }, "options": [{ "id": "a", "label": "courageous", "correct": true }, { "id": "b", "label": "scared", "correct": false }, { "id": "c", "label": "weak", "correct": false }], "hint": { "en": "Full of courage.", "ms": "Penuh keberanian." }, "skills": ["synonym"] },
+        { "id": "y5-en2-2", "topicId": "y5-en-vocab", "subject": "english", "year": 5, "difficulty": "core", "mechanic": "lane-select", "prompt": { "en": "A place with many books is a ___.", "ms": "A place with many books is a ___." }, "options": [{ "id": "a", "label": "library", "correct": true }, { "id": "b", "label": "bakery", "correct": false }, { "id": "c", "label": "stadium", "correct": false }], "hint": { "en": "You borrow books there.", "ms": "Pinjam buku di situ." }, "skills": ["vocabulary"] },
+        { "id": "y5-en2-3", "topicId": "y5-en-vocab", "subject": "english", "year": 5, "difficulty": "core", "mechanic": "gate-pass", "prompt": { "en": "Antonym of 'generous'?", "ms": "Antonim bagi 'generous'?" }, "options": [{ "id": "a", "label": "stingy", "correct": true }, { "id": "b", "label": "kind", "correct": false }, { "id": "c", "label": "giving", "correct": false }], "hint": { "en": "Doesn't like to share.", "ms": "Tidak suka berkongsi." }, "skills": ["antonym"] },
+        { "id": "y5-en2-4", "topicId": "y5-en-vocab", "subject": "english", "year": 5, "difficulty": "core", "mechanic": "lane-select", "prompt": { "en": "Read: 'The sky turned grey and it poured.' The weather is ___.", "ms": "Baca: 'The sky turned grey and it poured.' Cuaca ___." }, "options": [{ "id": "a", "label": "rainy", "correct": true }, { "id": "b", "label": "sunny", "correct": false }, { "id": "c", "label": "dry", "correct": false }], "hint": { "en": "'poured' = heavy rain.", "ms": "'poured' = hujan lebat." }, "skills": ["comprehension"] },
+        { "id": "y5-en2-5", "topicId": "y5-en-vocab", "subject": "english", "year": 5, "difficulty": "stretch", "mechanic": "gate-pass", "prompt": { "en": "Synonym of 'happy'?", "ms": "Sinonim bagi 'happy'?" }, "options": [{ "id": "a", "label": "delighted", "correct": true }, { "id": "b", "label": "gloomy", "correct": false }, { "id": "c", "label": "tired", "correct": false }], "hint": { "en": "Very pleased.", "ms": "Sangat gembira." }, "skills": ["synonym"] },
+        { "id": "y5-en2-6", "topicId": "y5-en-vocab", "subject": "english", "year": 5, "difficulty": "stretch", "mechanic": "lane-select", "prompt": { "en": "A person who flies a plane is a ___.", "ms": "A person who flies a plane is a ___." }, "options": [{ "id": "a", "label": "pilot", "correct": true }, { "id": "b", "label": "sailor", "correct": false }, { "id": "c", "label": "driver", "correct": false }], "hint": { "en": "Works in the sky.", "ms": "Bekerja di udara." }, "skills": ["vocabulary"] }
+      ]
+    }
+  ]
+}

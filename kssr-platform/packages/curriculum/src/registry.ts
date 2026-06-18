@@ -22,6 +22,15 @@ export const COVERAGE: ReadonlyArray<{ year: Year; subject: SubjectId }> = [
   { year: 3, subject: "math" },
   { year: 3, subject: "bm" },
   { year: 3, subject: "english" },
+  { year: 4, subject: "math" },
+  { year: 4, subject: "bm" },
+  { year: 4, subject: "english" },
+  { year: 5, subject: "math" },
+  { year: 5, subject: "bm" },
+  { year: 5, subject: "english" },
+  { year: 6, subject: "math" },
+  { year: 6, subject: "bm" },
+  { year: 6, subject: "english" },
 ];
 
 const cache = new Map<string, SubjectCurriculum>();

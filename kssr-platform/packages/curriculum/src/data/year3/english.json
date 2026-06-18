@@ -9,54 +9,38 @@
       "year": 3,
       "order": 1,
       "icon": "⏪",
-      "title": { "en": "Past Tense", "ms": "Kata Kerja Lampau" },
-      "description": { "en": "Talk about things that already happened.", "ms": "Bercakap tentang perkara yang sudah berlaku." },
+      "title": { "en": "Past Tense & Opposites", "ms": "Kata Lampau & Lawan" },
+      "description": { "en": "Talk about the past; opposite words.", "ms": "Bercakap tentang masa lampau; lawan kata." },
       "flashcards": [
-        {
-          "id": "y3-en-fc-past",
-          "topicId": "y3-en-past-tense",
-          "title": { "en": "Regular & irregular", "ms": "Tetap & tak tetap" },
-          "definition": { "en": "Many verbs add -ed; some change completely.", "ms": "Banyak kata kerja tambah -ed; ada yang berubah sepenuhnya." },
-          "example": { "en": "play → played, go → went", "ms": "play → played, go → went" },
-          "illustration": "⏪",
-          "pronunciation": { "text": "went", "locale": "en" },
-          "hint": { "en": "Some verbs are tricky and change.", "ms": "Sesetengah kata kerja berubah bentuk." },
-          "funFact": { "en": "'go' becomes 'went', not 'goed'.", "ms": "'go' menjadi 'went', bukan 'goed'." }
-        }
+        { "id": "y3-en-fc-past", "topicId": "y3-en-past-tense", "title": { "en": "Past tense", "ms": "Kata kerja lampau" }, "definition": { "en": "Many verbs add -ed; some change.", "ms": "Banyak kata tambah -ed; ada berubah." }, "example": { "en": "play → played, go → went", "ms": "play → played, go → went" }, "illustration": "⏪", "pronunciation": { "text": "went, played", "locale": "en" }, "hint": { "en": "Some verbs are tricky.", "ms": "Sesetengah kata berubah." }, "funFact": { "en": "'go' becomes 'went'.", "ms": "'go' menjadi 'went'." } }
       ],
       "challenges": [
-        {
-          "id": "y3-en-c1",
-          "topicId": "y3-en-past-tense",
-          "subject": "english",
-          "year": 3,
-          "difficulty": "core",
-          "mechanic": "gate-pass",
-          "prompt": { "en": "Past tense of 'go'?", "ms": "Kata lampau bagi 'go'?" },
-          "options": [
-            { "id": "a", "label": "went", "correct": true },
-            { "id": "b", "label": "goed", "correct": false },
-            { "id": "c", "label": "gone", "correct": false }
-          ],
-          "hint": { "en": "It is irregular — it changes shape.", "ms": "Ia tak tetap — bentuknya berubah." },
-          "skills": ["past-tense"]
-        },
-        {
-          "id": "y3-en-c2",
-          "topicId": "y3-en-past-tense",
-          "subject": "english",
-          "year": 3,
-          "difficulty": "core",
-          "mechanic": "lane-select",
-          "prompt": { "en": "Opposite of 'happy'?", "ms": "Lawan bagi 'happy'?" },
-          "options": [
-            { "id": "a", "label": "sad", "correct": true },
-            { "id": "b", "label": "glad", "correct": false },
-            { "id": "c", "label": "merry", "correct": false }
-          ],
-          "hint": { "en": "How do you feel when you cry?", "ms": "Bagaimana perasaan apabila menangis?" },
-          "skills": ["antonym"]
-        }
+        { "id": "y3-en1-1", "topicId": "y3-en-past-tense", "subject": "english", "year": 3, "difficulty": "intro", "mechanic": "gate-pass", "prompt": { "en": "Past tense of 'play'?", "ms": "Kata lampau bagi 'play'?" }, "options": [{ "id": "a", "label": "played", "correct": true }, { "id": "b", "label": "plaid", "correct": false }, { "id": "c", "label": "playing", "correct": false }], "hint": { "en": "Add -ed.", "ms": "Tambah -ed." }, "skills": ["past-tense"] },
+        { "id": "y3-en1-2", "topicId": "y3-en-past-tense", "subject": "english", "year": 3, "difficulty": "core", "mechanic": "gate-pass", "prompt": { "en": "Past tense of 'go'?", "ms": "Kata lampau bagi 'go'?" }, "options": [{ "id": "a", "label": "went", "correct": true }, { "id": "b", "label": "goed", "correct": false }, { "id": "c", "label": "gone", "correct": false }], "hint": { "en": "Irregular.", "ms": "Tak tetap." }, "skills": ["past-tense"] },
+        { "id": "y3-en1-3", "topicId": "y3-en-past-tense", "subject": "english", "year": 3, "difficulty": "core", "mechanic": "lane-select", "prompt": { "en": "Opposite of 'happy'?", "ms": "Lawan bagi 'happy'?" }, "options": [{ "id": "a", "label": "sad", "correct": true }, { "id": "b", "label": "glad", "correct": false }, { "id": "c", "label": "merry", "correct": false }], "hint": { "en": "When you cry.", "ms": "Bila menangis." }, "skills": ["antonym"] },
+        { "id": "y3-en1-4", "topicId": "y3-en-past-tense", "subject": "english", "year": 3, "difficulty": "core", "mechanic": "gate-pass", "prompt": { "en": "Past tense of 'eat'?", "ms": "Kata lampau bagi 'eat'?" }, "options": [{ "id": "a", "label": "ate", "correct": true }, { "id": "b", "label": "eated", "correct": false }, { "id": "c", "label": "eaten", "correct": false }], "hint": { "en": "Irregular verb.", "ms": "Kata tak tetap." }, "skills": ["past-tense"] },
+        { "id": "y3-en1-5", "topicId": "y3-en-past-tense", "subject": "english", "year": 3, "difficulty": "stretch", "mechanic": "lane-select", "prompt": { "en": "Opposite of 'big'?", "ms": "Lawan bagi 'big'?" }, "options": [{ "id": "a", "label": "small", "correct": true }, { "id": "b", "label": "huge", "correct": false }, { "id": "c", "label": "tall", "correct": false }], "hint": { "en": "Tiny.", "ms": "Amat kecil." }, "skills": ["antonym"] },
+        { "id": "y3-en1-6", "topicId": "y3-en-past-tense", "subject": "english", "year": 3, "difficulty": "stretch", "mechanic": "gate-pass", "prompt": { "en": "Past tense of 'run'?", "ms": "Kata lampau bagi 'run'?" }, "options": [{ "id": "a", "label": "ran", "correct": true }, { "id": "b", "label": "runned", "correct": false }, { "id": "c", "label": "running", "correct": false }], "hint": { "en": "Irregular.", "ms": "Tak tetap." }, "skills": ["past-tense"] }
+      ]
+    },
+    {
+      "id": "y3-en-adjectives",
+      "subject": "english",
+      "year": 3,
+      "order": 2,
+      "icon": "🌈",
+      "title": { "en": "Adjectives & Reading", "ms": "Adjektif & Bacaan" },
+      "description": { "en": "Describing words and reading clues.", "ms": "Perkataan penerang dan petunjuk bacaan." },
+      "flashcards": [
+        { "id": "y3-en-fc-adj", "topicId": "y3-en-adjectives", "title": { "en": "Adjectives", "ms": "Kata adjektif" }, "definition": { "en": "Words that describe nouns.", "ms": "Perkataan yang menerangkan kata nama." }, "example": { "en": "a big, red ball", "ms": "a big, red ball" }, "illustration": "🌈", "pronunciation": { "text": "big, small, happy", "locale": "en" }, "hint": { "en": "How does it look or feel?", "ms": "Bagaimana rupa atau rasanya?" }, "funFact": { "en": "Adjectives make sentences colourful.", "ms": "Adjektif menjadikan ayat menarik." } }
+      ],
+      "challenges": [
+        { "id": "y3-en2-1", "topicId": "y3-en-adjectives", "subject": "english", "year": 3, "difficulty": "intro", "mechanic": "lane-select", "prompt": { "en": "Pick the adjective.", "ms": "Pilih kata adjektif." }, "options": [{ "id": "a", "label": "beautiful", "correct": true }, { "id": "b", "label": "run", "correct": false }, { "id": "c", "label": "table", "correct": false }], "hint": { "en": "Describes something.", "ms": "Menerangkan sesuatu." }, "skills": ["adjectives"] },
+        { "id": "y3-en2-2", "topicId": "y3-en-adjectives", "subject": "english", "year": 3, "difficulty": "core", "mechanic": "lane-select", "prompt": { "en": "The elephant is very ___.", "ms": "The elephant is very ___." }, "options": [{ "id": "a", "label": "big", "correct": true }, { "id": "b", "label": "run", "correct": false }, { "id": "c", "label": "eat", "correct": false }], "hint": { "en": "Size word.", "ms": "Perkataan saiz." }, "skills": ["adjectives"] },
+        { "id": "y3-en2-3", "topicId": "y3-en-adjectives", "subject": "english", "year": 3, "difficulty": "core", "mechanic": "gate-pass", "prompt": { "en": "Synonym of 'happy'?", "ms": "Sinonim bagi 'happy'?" }, "options": [{ "id": "a", "label": "glad", "correct": true }, { "id": "b", "label": "sad", "correct": false }, { "id": "c", "label": "angry", "correct": false }], "hint": { "en": "Also means happy.", "ms": "Juga bermaksud happy." }, "skills": ["synonym"] },
+        { "id": "y3-en2-4", "topicId": "y3-en-adjectives", "subject": "english", "year": 3, "difficulty": "core", "mechanic": "gate-pass", "prompt": { "en": "Pick the correct sentence.", "ms": "Pilih ayat betul." }, "options": [{ "id": "a", "label": "She has a small cat.", "correct": true }, { "id": "b", "label": "She a small has cat.", "correct": false }, { "id": "c", "label": "Small she cat has a.", "correct": false }], "hint": { "en": "Adjective before noun.", "ms": "Adjektif sebelum kata nama." }, "skills": ["sentence"] },
+        { "id": "y3-en2-5", "topicId": "y3-en-adjectives", "subject": "english", "year": 3, "difficulty": "stretch", "mechanic": "lane-select", "prompt": { "en": "Ice cream tastes ___.", "ms": "Ice cream tastes ___." }, "options": [{ "id": "a", "label": "sweet", "correct": true }, { "id": "b", "label": "loud", "correct": false }, { "id": "c", "label": "fast", "correct": false }], "hint": { "en": "A taste word.", "ms": "Perkataan rasa." }, "skills": ["adjectives"] },
+        { "id": "y3-en2-6", "topicId": "y3-en-adjectives", "subject": "english", "year": 3, "difficulty": "stretch", "mechanic": "gate-pass", "prompt": { "en": "Opposite of 'fast'?", "ms": "Lawan bagi 'fast'?" }, "options": [{ "id": "a", "label": "slow", "correct": true }, { "id": "b", "label": "quick", "correct": false }, { "id": "c", "label": "rapid", "correct": false }], "hint": { "en": "Not fast.", "ms": "Bukan laju." }, "skills": ["antonym"] }
       ]
     }
   ]

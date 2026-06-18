@@ -4,99 +4,63 @@
   "schemaVersion": 1,
   "topics": [
     {
-      "id": "y1-en-animals",
+      "id": "y1-en-animals-things",
       "subject": "english",
       "year": 1,
       "order": 1,
       "icon": "🐾",
-      "title": { "en": "Animal Words", "ms": "Perkataan Haiwan" },
-      "description": { "en": "Learn the names of common animals.", "ms": "Belajar nama haiwan biasa." },
+      "title": { "en": "Animals & Things", "ms": "Haiwan & Benda" },
+      "description": { "en": "Names of common animals and objects.", "ms": "Nama haiwan dan benda biasa." },
       "flashcards": [
         {
           "id": "y1-en-fc-animals",
-          "topicId": "y1-en-animals",
+          "topicId": "y1-en-animals-things",
           "title": { "en": "Baby animals", "ms": "Anak haiwan" },
-          "definition": { "en": "Baby animals often have special names.", "ms": "Anak haiwan selalunya ada nama khas." },
-          "example": { "en": "A baby dog is a 'puppy' 🐶", "ms": "Anak anjing ialah 'puppy' 🐶" },
+          "definition": { "en": "Baby animals have special names.", "ms": "Anak haiwan ada nama khas." },
+          "example": { "en": "baby dog = puppy 🐶", "ms": "anak anjing = puppy 🐶" },
           "illustration": "🐶",
-          "pronunciation": { "text": "puppy", "locale": "en" },
-          "hint": { "en": "Think small and cute!", "ms": "Fikirkan yang kecil dan comel!" },
-          "funFact": { "en": "A baby cat is a 'kitten'.", "ms": "Anak kucing ialah 'kitten'." }
+          "pronunciation": { "text": "puppy, kitten", "locale": "en" },
+          "hint": { "en": "Small and cute!", "ms": "Kecil dan comel!" },
+          "funFact": { "en": "A baby cat is a kitten.", "ms": "Anak kucing ialah kitten." }
         }
       ],
       "challenges": [
-        {
-          "id": "y1-en-c1",
-          "topicId": "y1-en-animals",
-          "subject": "english",
-          "year": 1,
-          "difficulty": "intro",
-          "mechanic": "collect",
-          "prompt": { "en": "A baby dog is a ___", "ms": "Anak anjing ialah ___" },
-          "options": [
-            { "id": "a", "label": "puppy", "correct": true },
-            { "id": "b", "label": "kitten", "correct": false },
-            { "id": "c", "label": "calf", "correct": false }
-          ],
-          "hint": { "en": "It barks: woof!", "ms": "Ia menyalak: woof!" },
-          "skills": ["vocabulary"]
-        },
-        {
-          "id": "y1-en-c2",
-          "topicId": "y1-en-animals",
-          "subject": "english",
-          "year": 1,
-          "difficulty": "core",
-          "mechanic": "lane-select",
-          "prompt": { "en": "Pick the colour word.", "ms": "Pilih perkataan warna." },
-          "options": [
-            { "id": "a", "label": "blue", "correct": true },
-            { "id": "b", "label": "run", "correct": false },
-            { "id": "c", "label": "tall", "correct": false }
-          ],
-          "hint": { "en": "The sky is this colour.", "ms": "Langit berwarna ini." },
-          "skills": ["colours"]
-        }
+        { "id": "y1-en1-1", "topicId": "y1-en-animals-things", "subject": "english", "year": 1, "difficulty": "intro", "mechanic": "collect", "prompt": { "en": "A baby dog is a ___", "ms": "Anak anjing ialah ___" }, "options": [{ "id": "a", "label": "puppy", "correct": true }, { "id": "b", "label": "kitten", "correct": false }, { "id": "c", "label": "calf", "correct": false }], "hint": { "en": "It says woof.", "ms": "Ia berbunyi woof." }, "skills": ["vocabulary"] },
+        { "id": "y1-en1-2", "topicId": "y1-en-animals-things", "subject": "english", "year": 1, "difficulty": "intro", "mechanic": "lane-select", "prompt": { "en": "Which animal can fly?", "ms": "Haiwan manakah boleh terbang?" }, "options": [{ "id": "a", "label": "bird", "correct": true }, { "id": "b", "label": "fish", "correct": false }, { "id": "c", "label": "cow", "correct": false }], "hint": { "en": "It has wings.", "ms": "Ia ada sayap." }, "skills": ["vocabulary"] },
+        { "id": "y1-en1-3", "topicId": "y1-en-animals-things", "subject": "english", "year": 1, "difficulty": "core", "mechanic": "lane-select", "prompt": { "en": "Which lives in water?", "ms": "Manakah hidup dalam air?" }, "options": [{ "id": "a", "label": "fish", "correct": true }, { "id": "b", "label": "cat", "correct": false }, { "id": "c", "label": "bird", "correct": false }], "hint": { "en": "It swims.", "ms": "Ia berenang." }, "skills": ["vocabulary"] },
+        { "id": "y1-en1-4", "topicId": "y1-en-animals-things", "subject": "english", "year": 1, "difficulty": "core", "mechanic": "lane-select", "prompt": { "en": "We write with a ___", "ms": "Kita menulis dengan ___" }, "options": [{ "id": "a", "label": "pencil", "correct": true }, { "id": "b", "label": "spoon", "correct": false }, { "id": "c", "label": "shoe", "correct": false }], "hint": { "en": "Used in school.", "ms": "Digunakan di sekolah." }, "skills": ["vocabulary"] },
+        { "id": "y1-en1-5", "topicId": "y1-en-animals-things", "subject": "english", "year": 1, "difficulty": "core", "mechanic": "lane-select", "prompt": { "en": "A baby cat is a ___", "ms": "Anak kucing ialah ___" }, "options": [{ "id": "a", "label": "kitten", "correct": true }, { "id": "b", "label": "puppy", "correct": false }, { "id": "c", "label": "chick", "correct": false }], "hint": { "en": "It says meow.", "ms": "Ia berbunyi meow." }, "skills": ["vocabulary"] },
+        { "id": "y1-en1-6", "topicId": "y1-en-animals-things", "subject": "english", "year": 1, "difficulty": "stretch", "mechanic": "lane-select", "prompt": { "en": "Which one do you wear?", "ms": "Manakah anda pakai?" }, "options": [{ "id": "a", "label": "shoes", "correct": true }, { "id": "b", "label": "table", "correct": false }, { "id": "c", "label": "apple", "correct": false }], "hint": { "en": "On your feet.", "ms": "Di kaki anda." }, "skills": ["vocabulary"] }
       ]
     },
     {
-      "id": "y1-en-greetings",
+      "id": "y1-en-colours-greetings",
       "subject": "english",
       "year": 1,
       "order": 2,
       "icon": "👋",
-      "title": { "en": "Greetings", "ms": "Ucapan" },
-      "description": { "en": "Say hello and be polite.", "ms": "Memberi salam dan bersopan." },
+      "title": { "en": "Colours & Greetings", "ms": "Warna & Ucapan" },
+      "description": { "en": "Colour words and being polite.", "ms": "Perkataan warna dan bersopan." },
       "flashcards": [
         {
           "id": "y1-en-fc-greet",
-          "topicId": "y1-en-greetings",
+          "topicId": "y1-en-colours-greetings",
           "title": { "en": "Polite words", "ms": "Perkataan sopan" },
-          "definition": { "en": "We use 'please' and 'thank you' to be kind.", "ms": "Kita guna 'please' dan 'thank you' untuk bersopan." },
+          "definition": { "en": "Use 'please' and 'thank you' to be kind.", "ms": "Guna please dan thank you untuk bersopan." },
           "example": { "en": "Thank you! 🙏", "ms": "Thank you! 🙏" },
           "illustration": "👋",
-          "pronunciation": { "text": "thank you", "locale": "en" },
-          "hint": { "en": "Say it with a smile.", "ms": "Sebut dengan senyuman." },
-          "funFact": { "en": "'Hello' works any time of day.", "ms": "'Hello' sesuai pada bila-bila masa." }
+          "pronunciation": { "text": "hello, thank you", "locale": "en" },
+          "hint": { "en": "Say it with a smile.", "ms": "Sebut sambil senyum." },
+          "funFact": { "en": "'Hello' works any time of day.", "ms": "'Hello' sesuai bila-bila masa." }
         }
       ],
       "challenges": [
-        {
-          "id": "y1-en-c3",
-          "topicId": "y1-en-greetings",
-          "subject": "english",
-          "year": 1,
-          "difficulty": "core",
-          "mechanic": "gate-pass",
-          "prompt": { "en": "What do you say to thank someone?", "ms": "Apa anda kata untuk berterima kasih?" },
-          "options": [
-            { "id": "a", "label": "Thank you", "correct": true },
-            { "id": "b", "label": "Goodbye", "correct": false },
-            { "id": "c", "label": "Hello", "correct": false }
-          ],
-          "hint": { "en": "It shows you are grateful.", "ms": "Ia menunjukkan anda bersyukur." },
-          "skills": ["greetings"]
-        }
+        { "id": "y1-en2-1", "topicId": "y1-en-colours-greetings", "subject": "english", "year": 1, "difficulty": "intro", "mechanic": "lane-select", "prompt": { "en": "Pick the colour word.", "ms": "Pilih perkataan warna." }, "options": [{ "id": "a", "label": "blue", "correct": true }, { "id": "b", "label": "run", "correct": false }, { "id": "c", "label": "tall", "correct": false }], "hint": { "en": "The sky is this.", "ms": "Langit begini." }, "skills": ["colours"] },
+        { "id": "y1-en2-2", "topicId": "y1-en-colours-greetings", "subject": "english", "year": 1, "difficulty": "intro", "mechanic": "lane-select", "prompt": { "en": "What colour is a banana?", "ms": "Apakah warna pisang?" }, "options": [{ "id": "a", "label": "yellow", "correct": true }, { "id": "b", "label": "blue", "correct": false }, { "id": "c", "label": "black", "correct": false }], "hint": { "en": "Sunny colour.", "ms": "Warna matahari." }, "skills": ["colours"] },
+        { "id": "y1-en2-3", "topicId": "y1-en-colours-greetings", "subject": "english", "year": 1, "difficulty": "core", "mechanic": "gate-pass", "prompt": { "en": "What do you say to thank someone?", "ms": "Apa anda kata untuk berterima kasih?" }, "options": [{ "id": "a", "label": "Thank you", "correct": true }, { "id": "b", "label": "Goodbye", "correct": false }, { "id": "c", "label": "Hello", "correct": false }], "hint": { "en": "Shows you are grateful.", "ms": "Menunjukkan bersyukur." }, "skills": ["greetings"] },
+        { "id": "y1-en2-4", "topicId": "y1-en-colours-greetings", "subject": "english", "year": 1, "difficulty": "core", "mechanic": "gate-pass", "prompt": { "en": "You meet a friend in the morning. You say:", "ms": "Anda jumpa kawan pada waktu pagi. Anda kata:" }, "options": [{ "id": "a", "label": "Good morning", "correct": true }, { "id": "b", "label": "Good night", "correct": false }, { "id": "c", "label": "Thank you", "correct": false }], "hint": { "en": "Morning greeting.", "ms": "Ucapan pagi." }, "skills": ["greetings"] },
+        { "id": "y1-en2-5", "topicId": "y1-en-colours-greetings", "subject": "english", "year": 1, "difficulty": "core", "mechanic": "lane-select", "prompt": { "en": "What colour is grass?", "ms": "Apakah warna rumput?" }, "options": [{ "id": "a", "label": "green", "correct": true }, { "id": "b", "label": "red", "correct": false }, { "id": "c", "label": "white", "correct": false }], "hint": { "en": "Leaves are this.", "ms": "Warna daun." }, "skills": ["colours"] },
+        { "id": "y1-en2-6", "topicId": "y1-en-colours-greetings", "subject": "english", "year": 1, "difficulty": "stretch", "mechanic": "gate-pass", "prompt": { "en": "Ask for something politely:", "ms": "Minta sesuatu dengan sopan:" }, "options": [{ "id": "a", "label": "May I please?", "correct": true }, { "id": "b", "label": "Give me now!", "correct": false }, { "id": "c", "label": "No!", "correct": false }], "hint": { "en": "Use 'please'.", "ms": "Guna 'please'." }, "skills": ["greetings"] }
       ]
     }
   ]

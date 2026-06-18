@@ -1,0 +1,47 @@
+{
+  "subject": "bm",
+  "year": 4,
+  "schemaVersion": 1,
+  "topics": [
+    {
+      "id": "y4-bm-penjodoh",
+      "subject": "bm",
+      "year": 4,
+      "order": 1,
+      "icon": "🔢",
+      "title": { "en": "Measure Words (Penjodoh)", "ms": "Penjodoh Bilangan" },
+      "description": { "en": "Correct penjodoh bilangan and imbuhan.", "ms": "Penjodoh bilangan dan imbuhan yang betul." },
+      "flashcards": [
+        { "id": "y4-bm-fc-pen", "topicId": "y4-bm-penjodoh", "title": { "en": "Penjodoh bilangan", "ms": "Penjodoh bilangan" }, "definition": { "en": "Counting words for nouns: buah, ekor, orang.", "ms": "Kata bilangan untuk nama: buah, ekor, orang." }, "example": { "en": "sebuah kereta, seekor kucing", "ms": "sebuah kereta, seekor kucing" }, "illustration": "🚗", "pronunciation": { "text": "sebuah, seekor, seorang", "locale": "ms" }, "hint": { "en": "Match the word to the thing.", "ms": "Padankan kata dengan benda." }, "funFact": { "en": "'seekor' is for animals.", "ms": "'seekor' untuk haiwan." } }
+      ],
+      "challenges": [
+        { "id": "y4-bm1-1", "topicId": "y4-bm-penjodoh", "subject": "bm", "year": 4, "difficulty": "intro", "mechanic": "lane-select", "prompt": { "en": "se___ kereta", "ms": "se___ kereta" }, "options": [{ "id": "a", "label": "buah", "correct": true }, { "id": "b", "label": "ekor", "correct": false }, { "id": "c", "label": "orang", "correct": false }], "hint": { "en": "For objects/vehicles.", "ms": "Untuk objek/kenderaan." }, "skills": ["penjodoh-bilangan"] },
+        { "id": "y4-bm1-2", "topicId": "y4-bm-penjodoh", "subject": "bm", "year": 4, "difficulty": "core", "mechanic": "lane-select", "prompt": { "en": "se___ kucing", "ms": "se___ kucing" }, "options": [{ "id": "a", "label": "ekor", "correct": true }, { "id": "b", "label": "buah", "correct": false }, { "id": "c", "label": "helai", "correct": false }], "hint": { "en": "For animals.", "ms": "Untuk haiwan." }, "skills": ["penjodoh-bilangan"] },
+        { "id": "y4-bm1-3", "topicId": "y4-bm-penjodoh", "subject": "bm", "year": 4, "difficulty": "core", "mechanic": "lane-select", "prompt": { "en": "se___ guru", "ms": "se___ guru" }, "options": [{ "id": "a", "label": "orang", "correct": true }, { "id": "b", "label": "ekor", "correct": false }, { "id": "c", "label": "biji", "correct": false }], "hint": { "en": "For people.", "ms": "Untuk manusia." }, "skills": ["penjodoh-bilangan"] },
+        { "id": "y4-bm1-4", "topicId": "y4-bm-penjodoh", "subject": "bm", "year": 4, "difficulty": "core", "mechanic": "lane-select", "prompt": { "en": "se___ kertas", "ms": "se___ kertas" }, "options": [{ "id": "a", "label": "helai", "correct": true }, { "id": "b", "label": "buah", "correct": false }, { "id": "c", "label": "ekor", "correct": false }], "hint": { "en": "For thin flat things.", "ms": "Untuk benda nipis." }, "skills": ["penjodoh-bilangan"] },
+        { "id": "y4-bm1-5", "topicId": "y4-bm-penjodoh", "subject": "bm", "year": 4, "difficulty": "stretch", "mechanic": "build", "prompt": { "en": "Add 'pe-...-an' to 'ajar'.", "ms": "Tambah 'pe-...-an' pada 'ajar'." }, "options": [{ "id": "a", "label": "pelajaran", "correct": true }, { "id": "b", "label": "mengajar", "correct": false }, { "id": "c", "label": "pengajar", "correct": false }], "hint": { "en": "A lesson.", "ms": "Sesuatu pelajaran." }, "skills": ["imbuhan"] },
+        { "id": "y4-bm1-6", "topicId": "y4-bm-penjodoh", "subject": "bm", "year": 4, "difficulty": "stretch", "mechanic": "lane-select", "prompt": { "en": "se___ telur", "ms": "se___ telur" }, "options": [{ "id": "a", "label": "biji", "correct": true }, { "id": "b", "label": "helai", "correct": false }, { "id": "c", "label": "orang", "correct": false }], "hint": { "en": "For small round things.", "ms": "Untuk benda bulat kecil." }, "skills": ["penjodoh-bilangan"] }
+      ]
+    },
+    {
+      "id": "y4-bm-peribahasa",
+      "subject": "bm",
+      "year": 4,
+      "order": 2,
+      "icon": "📜",
+      "title": { "en": "Proverbs & Idioms", "ms": "Peribahasa & Simpulan Bahasa" },
+      "description": { "en": "Meanings of proverbs and idioms.", "ms": "Maksud peribahasa dan simpulan bahasa." },
+      "flashcards": [
+        { "id": "y4-bm-fc-idiom", "topicId": "y4-bm-peribahasa", "title": { "en": "Idioms", "ms": "Simpulan bahasa" }, "definition": { "en": "Two words with a hidden meaning.", "ms": "Dua kata dengan maksud tersirat." }, "example": { "en": "'buah hati' = a loved one", "ms": "'buah hati' = orang tersayang" }, "illustration": "💗", "pronunciation": { "text": "buah hati, ringan tulang", "locale": "ms" }, "hint": { "en": "Not the literal meaning.", "ms": "Bukan maksud harfiah." }, "funFact": { "en": "'kaki ayam' means barefoot.", "ms": "'kaki ayam' bermaksud tidak berkasut." } }
+      ],
+      "challenges": [
+        { "id": "y4-bm2-1", "topicId": "y4-bm-peribahasa", "subject": "bm", "year": 4, "difficulty": "core", "mechanic": "gate-pass", "prompt": { "en": "'Berbunga hati' means?", "ms": "'Berbunga hati' bermaksud?" }, "options": [{ "id": "a", "label": "sangat gembira", "correct": true }, { "id": "b", "label": "sangat marah", "correct": false }, { "id": "c", "label": "sangat letih", "correct": false }], "hint": { "en": "Very happy.", "ms": "Amat gembira." }, "skills": ["simpulan-bahasa"] },
+        { "id": "y4-bm2-2", "topicId": "y4-bm-peribahasa", "subject": "bm", "year": 4, "difficulty": "core", "mechanic": "gate-pass", "prompt": { "en": "'Kaki ayam' means?", "ms": "'Kaki ayam' bermaksud?" }, "options": [{ "id": "a", "label": "tidak berkasut", "correct": true }, { "id": "b", "label": "kaki ayam betul", "correct": false }, { "id": "c", "label": "suka makan", "correct": false }], "hint": { "en": "Barefoot.", "ms": "Tanpa kasut." }, "skills": ["simpulan-bahasa"] },
+        { "id": "y4-bm2-3", "topicId": "y4-bm-peribahasa", "subject": "bm", "year": 4, "difficulty": "core", "mechanic": "gate-pass", "prompt": { "en": "'Bagai pinang dibelah dua' means?", "ms": "'Bagai pinang dibelah dua' bermaksud?" }, "options": [{ "id": "a", "label": "sangat serupa", "correct": true }, { "id": "b", "label": "berbeza", "correct": false }, { "id": "c", "label": "bertengkar", "correct": false }], "hint": { "en": "Very alike.", "ms": "Sangat sama." }, "skills": ["peribahasa"] },
+        { "id": "y4-bm2-4", "topicId": "y4-bm-peribahasa", "subject": "bm", "year": 4, "difficulty": "stretch", "mechanic": "gate-pass", "prompt": { "en": "'Kepala batu' means a person who is?", "ms": "'Kepala batu' bermaksud orang yang?" }, "options": [{ "id": "a", "label": "degil", "correct": true }, { "id": "b", "label": "pandai", "correct": false }, { "id": "c", "label": "baik hati", "correct": false }], "hint": { "en": "Stubborn.", "ms": "Tidak mahu dengar." }, "skills": ["simpulan-bahasa"] },
+        { "id": "y4-bm2-5", "topicId": "y4-bm-peribahasa", "subject": "bm", "year": 4, "difficulty": "stretch", "mechanic": "gate-pass", "prompt": { "en": "Proverb for 'united we stand'?", "ms": "Peribahasa untuk 'bersatu teguh'?" }, "options": [{ "id": "a", "label": "Bersatu teguh bercerai roboh", "correct": true }, { "id": "b", "label": "Ada gula ada semut", "correct": false }, { "id": "c", "label": "Harapkan pagar", "correct": false }], "hint": { "en": "About unity.", "ms": "Tentang perpaduan." }, "skills": ["peribahasa"] },
+        { "id": "y4-bm2-6", "topicId": "y4-bm-peribahasa", "subject": "bm", "year": 4, "difficulty": "stretch", "mechanic": "gate-pass", "prompt": { "en": "Synonym of 'usaha'?", "ms": "Sinonim bagi 'usaha'?" }, "options": [{ "id": "a", "label": "ikhtiar", "correct": true }, { "id": "b", "label": "rehat", "correct": false }, { "id": "c", "label": "tidur", "correct": false }], "hint": { "en": "Effort.", "ms": "Bermaksud effort." }, "skills": ["synonym"] }
+      ]
+    }
+  ]
+}

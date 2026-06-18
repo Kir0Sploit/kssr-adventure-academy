@@ -1,0 +1,47 @@
+{
+  "subject": "english",
+  "year": 4,
+  "schemaVersion": 1,
+  "topics": [
+    {
+      "id": "y4-en-tenses",
+      "subject": "english",
+      "year": 4,
+      "order": 1,
+      "icon": "⏱️",
+      "title": { "en": "Tenses & Sentences", "ms": "Kala & Ayat" },
+      "description": { "en": "Present, past and correct sentences.", "ms": "Kini, lampau dan ayat yang betul." },
+      "flashcards": [
+        { "id": "y4-en-fc-tense", "topicId": "y4-en-tenses", "title": { "en": "Subject-verb agreement", "ms": "Persetujuan subjek-kata kerja" }, "definition": { "en": "He/she/it takes a verb with -s.", "ms": "He/she/it ambil kata kerja dengan -s." }, "example": { "en": "She walks. They walk.", "ms": "She walks. They walk." }, "illustration": "⏱️", "pronunciation": { "text": "she walks, they walk", "locale": "en" }, "hint": { "en": "Check who is doing it.", "ms": "Semak siapa pelakunya." }, "funFact": { "en": "'I' never takes -s.", "ms": "'I' tidak ambil -s." } }
+      ],
+      "challenges": [
+        { "id": "y4-en1-1", "topicId": "y4-en-tenses", "subject": "english", "year": 4, "difficulty": "intro", "mechanic": "lane-select", "prompt": { "en": "He ___ to school every day.", "ms": "He ___ to school every day." }, "options": [{ "id": "a", "label": "walks", "correct": true }, { "id": "b", "label": "walk", "correct": false }, { "id": "c", "label": "walking", "correct": false }], "hint": { "en": "After he, add -s.", "ms": "Selepas he, tambah -s." }, "skills": ["grammar"] },
+        { "id": "y4-en1-2", "topicId": "y4-en-tenses", "subject": "english", "year": 4, "difficulty": "core", "mechanic": "gate-pass", "prompt": { "en": "Pick the correct sentence.", "ms": "Pilih ayat betul." }, "options": [{ "id": "a", "label": "They are playing.", "correct": true }, { "id": "b", "label": "They is playing.", "correct": false }, { "id": "c", "label": "They am play.", "correct": false }], "hint": { "en": "They → are.", "ms": "They → are." }, "skills": ["grammar"] },
+        { "id": "y4-en1-3", "topicId": "y4-en-tenses", "subject": "english", "year": 4, "difficulty": "core", "mechanic": "gate-pass", "prompt": { "en": "Past tense of 'write'?", "ms": "Kata lampau bagi 'write'?" }, "options": [{ "id": "a", "label": "wrote", "correct": true }, { "id": "b", "label": "writed", "correct": false }, { "id": "c", "label": "written", "correct": false }], "hint": { "en": "Irregular.", "ms": "Tak tetap." }, "skills": ["past-tense"] },
+        { "id": "y4-en1-4", "topicId": "y4-en-tenses", "subject": "english", "year": 4, "difficulty": "core", "mechanic": "lane-select", "prompt": { "en": "'___ you help me?' (polite)", "ms": "'___ you help me?'" }, "options": [{ "id": "a", "label": "Could", "correct": true }, { "id": "b", "label": "Does", "correct": false }, { "id": "c", "label": "Am", "correct": false }], "hint": { "en": "Polite request.", "ms": "Permintaan sopan." }, "skills": ["grammar"] },
+        { "id": "y4-en1-5", "topicId": "y4-en-tenses", "subject": "english", "year": 4, "difficulty": "stretch", "mechanic": "gate-pass", "prompt": { "en": "We ___ to the zoo yesterday.", "ms": "We ___ to the zoo yesterday." }, "options": [{ "id": "a", "label": "went", "correct": true }, { "id": "b", "label": "go", "correct": false }, { "id": "c", "label": "goes", "correct": false }], "hint": { "en": "Yesterday = past.", "ms": "Yesterday = lampau." }, "skills": ["past-tense"] },
+        { "id": "y4-en1-6", "topicId": "y4-en-tenses", "subject": "english", "year": 4, "difficulty": "stretch", "mechanic": "gate-pass", "prompt": { "en": "Pick the correct sentence.", "ms": "Pilih ayat betul." }, "options": [{ "id": "a", "label": "She doesn't like rain.", "correct": true }, { "id": "b", "label": "She don't likes rain.", "correct": false }, { "id": "c", "label": "She not like rain.", "correct": false }], "hint": { "en": "She → doesn't.", "ms": "She → doesn't." }, "skills": ["grammar"] }
+      ]
+    },
+    {
+      "id": "y4-en-vocab",
+      "subject": "english",
+      "year": 4,
+      "order": 2,
+      "icon": "📖",
+      "title": { "en": "Vocabulary & Synonyms", "ms": "Kosa Kata & Sinonim" },
+      "description": { "en": "Word meanings, synonyms and antonyms.", "ms": "Maksud perkataan, sinonim dan antonim." },
+      "flashcards": [
+        { "id": "y4-en-fc-syn", "topicId": "y4-en-vocab", "title": { "en": "Synonyms", "ms": "Sinonim" }, "definition": { "en": "Words that mean the same.", "ms": "Perkataan yang sama maksud." }, "example": { "en": "big = large", "ms": "big = large" }, "illustration": "📖", "pronunciation": { "text": "big, large, huge", "locale": "en" }, "hint": { "en": "Same meaning word.", "ms": "Perkataan sama maksud." }, "funFact": { "en": "Antonyms are opposites.", "ms": "Antonim ialah lawan." } }
+      ],
+      "challenges": [
+        { "id": "y4-en2-1", "topicId": "y4-en-vocab", "subject": "english", "year": 4, "difficulty": "intro", "mechanic": "gate-pass", "prompt": { "en": "Synonym of 'big'?", "ms": "Sinonim bagi 'big'?" }, "options": [{ "id": "a", "label": "large", "correct": true }, { "id": "b", "label": "tiny", "correct": false }, { "id": "c", "label": "short", "correct": false }], "hint": { "en": "Means big.", "ms": "Bermaksud big." }, "skills": ["synonym"] },
+        { "id": "y4-en2-2", "topicId": "y4-en-vocab", "subject": "english", "year": 4, "difficulty": "core", "mechanic": "gate-pass", "prompt": { "en": "Antonym of 'happy'?", "ms": "Antonim bagi 'happy'?" }, "options": [{ "id": "a", "label": "sad", "correct": true }, { "id": "b", "label": "glad", "correct": false }, { "id": "c", "label": "joyful", "correct": false }], "hint": { "en": "Opposite.", "ms": "Lawan." }, "skills": ["antonym"] },
+        { "id": "y4-en2-3", "topicId": "y4-en-vocab", "subject": "english", "year": 4, "difficulty": "core", "mechanic": "lane-select", "prompt": { "en": "A doctor works in a ___.", "ms": "A doctor works in a ___." }, "options": [{ "id": "a", "label": "hospital", "correct": true }, { "id": "b", "label": "kitchen", "correct": false }, { "id": "c", "label": "garage", "correct": false }], "hint": { "en": "Where sick people go.", "ms": "Tempat orang sakit." }, "skills": ["vocabulary"] },
+        { "id": "y4-en2-4", "topicId": "y4-en-vocab", "subject": "english", "year": 4, "difficulty": "core", "mechanic": "gate-pass", "prompt": { "en": "Synonym of 'fast'?", "ms": "Sinonim bagi 'fast'?" }, "options": [{ "id": "a", "label": "quick", "correct": true }, { "id": "b", "label": "slow", "correct": false }, { "id": "c", "label": "late", "correct": false }], "hint": { "en": "Speedy.", "ms": "Pantas." }, "skills": ["synonym"] },
+        { "id": "y4-en2-5", "topicId": "y4-en-vocab", "subject": "english", "year": 4, "difficulty": "stretch", "mechanic": "gate-pass", "prompt": { "en": "Antonym of 'ancient'?", "ms": "Antonim bagi 'ancient'?" }, "options": [{ "id": "a", "label": "modern", "correct": true }, { "id": "b", "label": "old", "correct": false }, { "id": "c", "label": "past", "correct": false }], "hint": { "en": "New / today.", "ms": "Baharu / kini." }, "skills": ["antonym"] },
+        { "id": "y4-en2-6", "topicId": "y4-en-vocab", "subject": "english", "year": 4, "difficulty": "stretch", "mechanic": "lane-select", "prompt": { "en": "A person who teaches is a ___.", "ms": "A person who teaches is a ___." }, "options": [{ "id": "a", "label": "teacher", "correct": true }, { "id": "b", "label": "farmer", "correct": false }, { "id": "c", "label": "pilot", "correct": false }], "hint": { "en": "Works in school.", "ms": "Bekerja di sekolah." }, "skills": ["vocabulary"] }
+      ]
+    }
+  ]
+}

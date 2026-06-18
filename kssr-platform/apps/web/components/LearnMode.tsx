@@ -2,7 +2,7 @@
 import { useState } from "react";
 import type { Locale, Topic } from "@kssr/shared";
 import { audio } from "@/lib/audio";
-import { speak } from "@/lib/speak";
+import { speak, spell } from "@/lib/speak";
 
 export default function LearnMode({
   topic,
@@ -44,12 +44,20 @@ export default function LearnMode({
         <p className="mt-3 text-center">{card.definition[locale]}</p>
         <div className="panel rounded-2xl p-3 mt-3 text-center font-bold text-violet-700">{card.example[locale]}</div>
         <div className="mt-3 text-sm text-amber-600 font-bold">💡 {card.funFact[locale]}</div>
-        <button
-          className="btn !min-h-0 btn-sky rounded-full px-4 py-2 mt-3 text-sm font-display"
-          onClick={() => speak(card.pronunciation?.text ?? card.title[locale], card.pronunciation?.locale ?? locale)}
-        >
-          🔊 {locale === "ms" ? "Dengar" : "Listen"}
-        </button>
+        <div className="flex gap-2 mt-3 justify-center flex-wrap">
+          <button
+            className="btn !min-h-0 btn-sky rounded-full px-4 py-2 text-sm font-display"
+            onClick={() => speak(card.pronunciation?.text ?? card.title[locale], card.pronunciation?.locale ?? locale)}
+          >
+            🔊 {locale === "ms" ? "Dengar" : "Listen"}
+          </button>
+          <button
+            className="btn !min-h-0 rounded-full px-4 py-2 text-sm font-display"
+            onClick={() => spell(card.pronunciation?.text ?? card.title[locale], card.pronunciation?.locale ?? locale)}
+          >
+            🔤 {locale === "ms" ? "Eja" : "Spell"}
+          </button>
+        </div>
       </div>
       <div className="flex gap-2 mt-4">
         {i > 0 && (
