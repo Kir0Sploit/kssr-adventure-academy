@@ -23,9 +23,9 @@ export default function QuizGame({ topic, locale, accent, onAnswer, onReward, on
   const q = questions[idx];
   if (!q) return null;
 
-  const next = (nextCorrect: number) => {
+  const next = (nc: number) => {
     if (idx + 1 >= TOTAL) {
-      onComplete({ answered: TOTAL, correct: nextCorrect, accuracy: nextCorrect / TOTAL });
+      onComplete({ answered: TOTAL, correct: nc, accuracy: nc / TOTAL });
       return;
     }
     const ni = idx + 1;
@@ -47,7 +47,7 @@ export default function QuizGame({ topic, locale, accent, onAnswer, onReward, on
       audio.coin();
       const nc = correctCount + 1;
       setCorrectCount(nc);
-      setStreak((s) => s + 1);
+      setStreak((x) => x + 1);
       onReward(rewardFor(attempts));
       setFeedback(PRAISE[locale][Math.floor(Math.random() * PRAISE[locale].length)]!);
       setTimeout(() => next(nc), 750);
@@ -70,18 +70,16 @@ export default function QuizGame({ topic, locale, accent, onAnswer, onReward, on
   return (
     <div className="p-3 max-w-xl mx-auto w-full animate-slideUp">
       <div className="flex items-center gap-2 mb-3">
-        <button className="btn glass rounded-xl px-3 py-2 text-sm font-bold" onClick={onBack}>
-          ← {isMs ? "Kembali" : "Back"}
-        </button>
-        <div className="flex-1 h-2.5 rounded-full bg-black/40 overflow-hidden">
+        <button className="btn !min-h-0 rounded-2xl px-4 py-2" onClick={onBack}>← {isMs ? "Kembali" : "Back"}</button>
+        <div className="flex-1 h-3 rounded-full bg-black/10 overflow-hidden">
           <div className="h-full rounded-full transition-all" style={{ width: `${(idx / TOTAL) * 100}%`, background: accent }} />
         </div>
-        <span className="text-sm font-bold">{idx + 1}/{TOTAL}</span>
-        {streak >= 2 && <span className="text-sm font-black text-orange-300">🔥{streak}</span>}
+        <span className="font-display text-sm">{idx + 1}/{TOTAL}</span>
+        {streak >= 2 && <span className="font-display text-orange-500">🔥{streak}</span>}
       </div>
 
-      <div className="glass card p-6 text-center min-h-[120px] grid place-items-center animate-pop" key={q.id}>
-        <p className="text-2xl font-black leading-snug">{promptText(q, locale)}</p>
+      <div className="card p-6 text-center min-h-[120px] grid place-items-center animate-pop sticker" key={q.id}>
+        <p className="font-display text-2xl leading-snug text-violet-700">{promptText(q, locale)}</p>
       </div>
 
       <div className="grid gap-2.5 mt-4">
@@ -93,26 +91,26 @@ export default function QuizGame({ topic, locale, accent, onAnswer, onReward, on
             <button
               key={o.id}
               disabled={!!picked || isWrong || isDim}
-              className="btn rounded-2xl px-4 py-4 font-bold text-lg text-left transition"
-              style={{
-                background: isPicked ? "#16a34a" : isWrong ? "#b91c1c" : "rgba(255,255,255,.07)",
-                border: "1px solid rgba(255,255,255,.14)",
-                opacity: isDim ? 0.3 : 1,
-              }}
+              className="btn rounded-2xl px-4 py-4 font-display text-lg text-left flex items-center gap-2"
+              style={
+                isPicked
+                  ? { background: "#36b14f", color: "#fff", boxShadow: "0 6px 0 #1f8a3a" }
+                  : isWrong
+                    ? { background: "#f3b1b1", color: "#7a2020" }
+                    : { opacity: isDim ? 0.4 : 1 }
+              }
               onClick={() => answer(o)}
             >
-              <span className="opacity-60 mr-2">{String.fromCharCode(65 + i)}.</span>
+              <span className="text-soft">{String.fromCharCode(65 + i)}.</span>
               {optionLabel(o, locale)}
             </button>
           );
         })}
       </div>
 
-      <div className="flex items-center justify-between mt-3 min-h-[28px]">
-        <span className="font-black text-lg" style={{ color: picked ? "#4ade80" : "#fca5a5" }}>
-          {feedback}
-        </span>
-        <button className="btn grad-gold text-black rounded-xl px-4 py-2 text-sm font-bold" onClick={hint}>
+      <div className="flex items-center justify-between mt-3 min-h-[30px]">
+        <span className="font-display text-lg" style={{ color: picked ? "#36b14f" : "#e07a7a" }}>{feedback}</span>
+        <button className="btn !min-h-0 btn-primary rounded-2xl px-4 py-2 text-sm font-display" onClick={hint}>
           💡 {isMs ? "Bantuan" : "Hint"}
         </button>
       </div>

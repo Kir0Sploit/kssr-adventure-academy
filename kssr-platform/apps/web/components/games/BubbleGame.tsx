@@ -20,7 +20,6 @@ export default function BubbleGame({ topic, locale, accent, onAnswer, onReward, 
   const q = questions[round];
   const bubbles = useMemo(() => shuffle(q?.options ?? []), [q, nonce]);
 
-  // Respawn the round if the player lets the bubbles drift away (no punishment).
   useEffect(() => {
     if (!q) return;
     const id = window.setTimeout(() => {
@@ -65,19 +64,23 @@ export default function BubbleGame({ topic, locale, accent, onAnswer, onReward, 
   return (
     <div className="p-3 max-w-xl mx-auto w-full animate-slideUp">
       <div className="flex items-center gap-2 mb-2">
-        <button className="btn glass rounded-xl px-3 py-2 text-sm font-bold" onClick={onBack}>← {isMs ? "Kembali" : "Back"}</button>
-        <div className="flex-1 h-2.5 rounded-full bg-black/40 overflow-hidden">
+        <button className="btn !min-h-0 rounded-2xl px-4 py-2" onClick={onBack}>← {isMs ? "Kembali" : "Back"}</button>
+        <div className="flex-1 h-3 rounded-full bg-black/10 overflow-hidden">
           <div className="h-full rounded-full transition-all" style={{ width: `${(round / TOTAL) * 100}%`, background: accent }} />
         </div>
-        <span className="text-sm font-bold">{round + 1}/{TOTAL}</span>
+        <span className="font-display text-sm">{round + 1}/{TOTAL}</span>
       </div>
 
-      <div className="glass card p-4 text-center mb-2">
-        <p className="text-xl font-black leading-snug">{promptText(q, locale)}</p>
-        <p className="text-xs opacity-60 mt-1">{isMs ? "Ketik buih jawapan betul!" : "Tap the correct answer bubble!"}</p>
+      <div className="card p-4 text-center mb-2 sticker">
+        <p className="font-display text-xl leading-snug text-violet-700">{promptText(q, locale)}</p>
+        <p className="text-xs text-soft mt-1">{isMs ? "Ketik buih jawapan betul!" : "Tap the correct answer bubble!"}</p>
       </div>
 
-      <div className="relative w-full h-[52vh] rounded-3xl overflow-hidden glass" key={`${round}-${nonce}`}>
+      <div
+        className="relative w-full h-[52vh] rounded-3xl overflow-hidden border-[3px] border-white"
+        style={{ background: "linear-gradient(180deg,#cdeffe,#eafaff)" }}
+        key={`${round}-${nonce}`}
+      >
         {bubbles.map((o, i) => {
           if (popped.includes(o.id)) return null;
           const left = ((i + 1) / (bubbles.length + 1)) * 100;
@@ -87,13 +90,14 @@ export default function BubbleGame({ topic, locale, accent, onAnswer, onReward, 
             <button
               key={o.id + nonce}
               onClick={() => tap(o.id, o.correct)}
-              className="btn absolute -translate-x-1/2 rounded-full grid place-items-center font-black text-center shadow-lg"
+              className="absolute -translate-x-1/2 rounded-full grid place-items-center font-display text-center text-white"
               style={{
                 left: `${left}%`,
-                width: "5.5rem",
-                height: "5.5rem",
-                background: `radial-gradient(circle at 35% 30%, #ffffff55, ${color})`,
-                border: "2px solid rgba(255,255,255,.5)",
+                width: "5.6rem",
+                height: "5.6rem",
+                background: `radial-gradient(circle at 35% 30%, #ffffffaa, ${color})`,
+                border: "3px solid rgba(255,255,255,.7)",
+                boxShadow: "0 6px 12px rgba(0,0,0,.18)",
                 animation: `rise ${dur}s linear forwards`,
                 animationDelay: `${(i % 3) * 0.5}s`,
                 fontSize: "0.95rem",
@@ -107,7 +111,7 @@ export default function BubbleGame({ topic, locale, accent, onAnswer, onReward, 
         })}
       </div>
 
-      <div className="text-center mt-2 min-h-[26px] font-black text-lg" style={{ color: feedback && PRAISE[locale].includes(feedback) ? "#4ade80" : "#fca5a5" }}>
+      <div className="text-center mt-2 min-h-[28px] font-display text-lg" style={{ color: feedback && PRAISE[locale].includes(feedback) ? "#36b14f" : "#e07a7a" }}>
         {feedback}
       </div>
     </div>

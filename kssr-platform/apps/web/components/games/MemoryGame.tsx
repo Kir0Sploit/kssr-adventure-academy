@@ -48,13 +48,12 @@ export default function MemoryGame({ topic, locale, accent, onAnswer, onReward, 
 
     setBusy(true);
     const first = cards.find((c) => c.key === nf[0])!;
-    const second = card;
-    if (first.pairId === second.pairId) {
+    if (first.pairId === card.pairId) {
       audio.correct();
       audio.coin();
-      onAnswer(second.challenge, true);
+      onAnswer(card.challenge, true);
       onReward({ coins: 10, xp: 12, stars: 1 });
-      const nm = [...matched, second.pairId];
+      const nm = [...matched, card.pairId];
       setMatched(nm);
       setFlipped([]);
       setBusy(false);
@@ -64,7 +63,7 @@ export default function MemoryGame({ topic, locale, accent, onAnswer, onReward, 
       }
     } else {
       audio.wrong();
-      onAnswer(second.challenge, false);
+      onAnswer(card.challenge, false);
       setMismatches((m) => m + 1);
       setTimeout(() => {
         setFlipped([]);
@@ -76,8 +75,8 @@ export default function MemoryGame({ topic, locale, accent, onAnswer, onReward, 
   if (pairs < 2) {
     return (
       <div className="p-6 text-center">
-        <p className="opacity-80 mb-4">{isMs ? "Topik ini belum cukup soalan untuk padanan." : "Not enough questions for matching yet."}</p>
-        <button className="btn glass rounded-2xl px-6 py-3 font-bold" onClick={onBack}>← {isMs ? "Kembali" : "Back"}</button>
+        <p className="text-soft mb-4">{isMs ? "Topik ini belum cukup soalan untuk padanan." : "Not enough questions for matching yet."}</p>
+        <button className="btn rounded-2xl px-6 py-3 font-display" onClick={onBack}>← {isMs ? "Kembali" : "Back"}</button>
       </div>
     );
   }
@@ -85,34 +84,32 @@ export default function MemoryGame({ topic, locale, accent, onAnswer, onReward, 
   return (
     <div className="p-3 max-w-xl mx-auto w-full animate-slideUp">
       <div className="flex items-center gap-2 mb-3">
-        <button className="btn glass rounded-xl px-3 py-2 text-sm font-bold" onClick={onBack}>← {isMs ? "Kembali" : "Back"}</button>
-        <span className="font-bold text-sm ml-auto">🧩 {matched.length}/{pairs}</span>
+        <button className="btn !min-h-0 rounded-2xl px-4 py-2" onClick={onBack}>← {isMs ? "Kembali" : "Back"}</button>
+        <span className="chip px-3 py-1.5 font-display text-sm ml-auto">🧩 {matched.length}/{pairs}</span>
       </div>
-      <p className="text-center text-sm opacity-70 mb-3">
+      <p className="text-center text-sm text-soft mb-3">
         {isMs ? "Padankan soalan dengan jawapan betul." : "Match each question with its correct answer."}
       </p>
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
         {cards.map((c) => {
           const isUp = flipped.includes(c.key) || matched.includes(c.pairId);
           const isMatched = matched.includes(c.pairId);
+          const isAnswer = c.kind === "a";
+          const style: React.CSSProperties = isMatched
+            ? { background: "#d8f5dd", borderColor: "#36b14f", color: "#1f6b35" }
+            : isUp
+              ? isAnswer
+                ? { background: accent, color: "#fff", borderColor: "#fff" }
+                : { background: "#fff", color: "var(--ink)" }
+              : { background: "#fdeecb", color: "var(--ink)" };
           return (
             <button
               key={c.key}
               onClick={() => flip(c)}
-              className="btn rounded-2xl aspect-[3/4] p-2 text-center grid place-items-center font-bold text-sm transition-all"
-              style={{
-                background: isMatched
-                  ? "rgba(34,197,94,.25)"
-                  : isUp
-                    ? c.kind === "q"
-                      ? "rgba(255,255,255,.12)"
-                      : accent
-                    : "rgba(255,255,255,.06)",
-                border: `1px solid ${isMatched ? "#22c55e" : "rgba(255,255,255,.15)"}`,
-                transform: isUp ? "rotateY(0deg)" : undefined,
-              }}
+              className="btn aspect-[3/4] p-2 text-center grid place-items-center font-display text-sm"
+              style={style}
             >
-              {isUp ? <span className="leading-tight">{c.text}</span> : <span className="text-2xl opacity-60">❓</span>}
+              {isUp ? <span className="leading-tight">{c.text}</span> : <span className="text-3xl">❓</span>}
             </button>
           );
         })}

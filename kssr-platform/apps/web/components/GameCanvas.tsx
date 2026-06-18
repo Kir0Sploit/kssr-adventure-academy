@@ -82,23 +82,20 @@ export default function GameCanvas({
     <div className="relative w-full animate-slideUp">
       <div
         ref={hostRef}
-        className="w-full h-[62vh] sm:h-[68vh] rounded-3xl overflow-hidden glass ring-1 ring-white/10"
+        className="w-full h-[62vh] sm:h-[68vh] rounded-3xl overflow-hidden border-[3px] border-white shadow-lg"
         style={{ touchAction: "none" }}
       />
       <div className="absolute top-3 left-3 flex gap-2">
-        <button className="btn glass rounded-xl px-3 py-2 text-sm font-bold" onClick={onBack}>
+        <button className="btn !min-h-0 rounded-2xl px-4 py-2 font-display" onClick={onBack}>
           ← {locale === "ms" ? "Kembali" : "Back"}
         </button>
       </div>
       <div className="absolute top-3 right-3 flex gap-2">
-        <button
-          className="btn grad-gold text-black rounded-xl px-3 py-2 text-sm font-bold"
-          onClick={() => handleRef.current?.hint()}
-        >
+        <button className="btn !min-h-0 btn-primary rounded-2xl px-4 py-2 font-display" onClick={() => handleRef.current?.hint()}>
           💡 {locale === "ms" ? "Bantuan" : "Hint"}
         </button>
       </div>
-      <p className="text-center text-xs opacity-60 mt-2 px-2">
+      <p className="text-center text-xs text-soft mt-2 px-2 font-bold">
         {locale === "ms"
           ? "Gerak kiri/kanan (anak panah, ketik, atau leret) ke lorong jawapan betul"
           : "Move left/right (arrows, tap, or swipe) into the correct answer lane"}

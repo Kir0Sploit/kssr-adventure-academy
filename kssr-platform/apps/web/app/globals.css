@@ -3,7 +3,9 @@
 @tailwind utilities;
 
 :root {
-  color-scheme: dark;
+  --ink: #3a2f6b; /* primary text on light surfaces */
+  --ink-soft: #6b6390;
+  --paper: #fffdf7;
 }
 
 * {
@@ -14,99 +16,200 @@ html,
 body {
   height: 100%;
   margin: 0;
-  background: #070a18;
-  color: #fff;
-  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  color: var(--ink);
+  font-family: var(--font-body), system-ui, "Segoe UI", sans-serif;
+  font-weight: 600;
+  background: #bdecff;
   overscroll-behavior: none;
   -webkit-font-smoothing: antialiased;
 }
 
-/* Animated aurora background ------------------------------------------------ */
-.aurora {
+.font-display {
+  font-family: var(--font-display), var(--font-body), sans-serif;
+}
+
+/* ---------- Daytime adventure scene (fixed background) ---------- */
+.scene {
   position: fixed;
   inset: 0;
   z-index: -1;
   overflow: hidden;
-  background: #070a18;
+  background: linear-gradient(180deg, #8fd9ff 0%, #c5efff 45%, #fff3d6 100%);
 }
-.aurora::before,
-.aurora::after {
+.sun {
+  position: absolute;
+  top: 5%;
+  right: 8%;
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fff3a8 0%, #ffd84d 60%, #ffc83d 100%);
+  box-shadow: 0 0 60px 18px rgba(255, 210, 80, 0.55);
+  animation: floaty 6s ease-in-out infinite;
+}
+.cloud {
+  position: absolute;
+  background: #ffffff;
+  border-radius: 100px;
+  opacity: 0.92;
+  filter: drop-shadow(0 8px 10px rgba(120, 170, 210, 0.25));
+}
+.cloud::before,
+.cloud::after {
   content: "";
   position: absolute;
-  width: 70vmax;
-  height: 70vmax;
+  background: #fff;
   border-radius: 50%;
-  filter: blur(80px);
-  opacity: 0.5;
-  animation: drift 18s ease-in-out infinite alternate;
 }
-.aurora::before {
-  background: radial-gradient(circle, #7c3aed, transparent 60%);
-  top: -20vmax;
-  left: -10vmax;
+.cloud-1 {
+  width: 120px;
+  height: 36px;
+  top: 14%;
+  left: -140px;
+  animation: clouds 38s linear infinite;
 }
-.aurora::after {
-  background: radial-gradient(circle, #06b6d4, transparent 60%);
-  bottom: -25vmax;
-  right: -10vmax;
-  animation-delay: -6s;
+.cloud-2 {
+  width: 90px;
+  height: 28px;
+  top: 26%;
+  left: -120px;
+  animation: clouds 52s linear infinite;
+  animation-delay: -10s;
 }
-@keyframes drift {
-  0% {
-    transform: translate(0, 0) scale(1);
-  }
-  100% {
-    transform: translate(8vmax, 6vmax) scale(1.2);
+.cloud-3 {
+  width: 150px;
+  height: 44px;
+  top: 8%;
+  left: -180px;
+  animation: clouds 64s linear infinite;
+  animation-delay: -28s;
+}
+.cloud::before {
+  width: 55%;
+  height: 180%;
+  top: -55%;
+  left: 12%;
+}
+.cloud::after {
+  width: 45%;
+  height: 150%;
+  top: -40%;
+  right: 14%;
+}
+.hills {
+  position: absolute;
+  bottom: 60px;
+  left: -5%;
+  width: 110%;
+  height: 220px;
+  background: radial-gradient(120% 100% at 50% 100%, #7ed957 0%, #5cc23f 70%);
+  border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+  opacity: 0.85;
+}
+.grass {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 80px;
+  background: linear-gradient(180deg, #6fce4a, #4faf33);
+}
+@keyframes clouds {
+  to {
+    transform: translateX(120vw);
   }
 }
 
-/* Reusable components ------------------------------------------------------- */
+/* ---------- Surfaces ---------- */
+.card {
+  background: var(--paper);
+  border-radius: 26px;
+  border: 3px solid #ffffff;
+  box-shadow: 0 10px 0 rgba(120, 150, 190, 0.22), 0 14px 30px rgba(60, 80, 130, 0.18);
+  color: var(--ink);
+}
+.panel {
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(8px);
+  border-radius: 22px;
+  border: 2px solid #fff;
+  box-shadow: 0 8px 22px rgba(60, 80, 130, 0.18);
+  color: var(--ink);
+}
+.sticker {
+  transform: rotate(-1.4deg);
+}
+.sticker-r {
+  transform: rotate(1.6deg);
+}
+
+/* ---------- Chunky 3D buttons ---------- */
 .btn {
-  min-height: 48px;
+  min-height: 52px;
   cursor: pointer;
-  transition: transform 0.08s ease, box-shadow 0.2s ease, filter 0.2s ease;
+  border: none;
+  font-weight: 800;
+  color: var(--ink);
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 6px 0 rgba(120, 150, 190, 0.4);
+  transition: transform 0.06s ease, box-shadow 0.06s ease, filter 0.15s ease;
   touch-action: manipulation;
 }
 .btn:active {
-  transform: scale(0.95);
+  transform: translateY(5px);
+  box-shadow: 0 1px 0 rgba(120, 150, 190, 0.4);
 }
 .btn:hover {
-  filter: brightness(1.08);
+  filter: brightness(1.03);
 }
-.glass {
-  background: rgba(22, 27, 54, 0.55);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+.btn:disabled {
+  cursor: default;
 }
-.grad {
-  background: linear-gradient(135deg, #8b5cf6, #3b82f6 55%, #06b6d4);
-  box-shadow: 0 8px 24px rgba(59, 130, 246, 0.35);
+.btn-primary {
+  color: #fff;
+  background: linear-gradient(180deg, #ffb43d, #ff9a1f);
+  box-shadow: 0 6px 0 #d9760c;
 }
-.grad-gold {
-  background: linear-gradient(135deg, #fbbf24, #f59e0b);
-  box-shadow: 0 8px 24px rgba(245, 158, 11, 0.35);
+.btn-primary:active {
+  box-shadow: 0 1px 0 #d9760c;
 }
-.card {
-  border-radius: 1.25rem;
-  transition: transform 0.15s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+.btn-go {
+  color: #fff;
+  background: linear-gradient(180deg, #5ad06a, #36b14f);
+  box-shadow: 0 6px 0 #1f8a3a;
 }
-.card:hover {
-  transform: translateY(-3px);
+.btn-go:active {
+  box-shadow: 0 1px 0 #1f8a3a;
 }
-.text-shadow {
-  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.45);
+.btn-sky {
+  color: #fff;
+  background: linear-gradient(180deg, #58b6ff, #2f8fea);
+  box-shadow: 0 6px 0 #1f6cc4;
+}
+.btn-sky:active {
+  box-shadow: 0 1px 0 #1f6cc4;
 }
 
-/* Animations ---------------------------------------------------------------- */
+.chip {
+  border-radius: 999px;
+  font-weight: 800;
+  background: #fff;
+  color: var(--ink);
+  box-shadow: 0 3px 0 rgba(120, 150, 190, 0.3);
+}
+.text-soft {
+  color: var(--ink-soft);
+}
+
+/* ---------- Animations ---------- */
 @keyframes pop {
   0% {
     transform: scale(0.7);
     opacity: 0;
   }
   60% {
-    transform: scale(1.06);
+    transform: scale(1.07);
     opacity: 1;
   }
   100% {
@@ -123,9 +226,27 @@ body {
     transform: translateY(-10px);
   }
 }
+@keyframes wiggle {
+  0%,
+  100% {
+    transform: rotate(-3deg);
+  }
+  50% {
+    transform: rotate(3deg);
+  }
+}
+@keyframes bobble {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-6px) scale(1.04);
+  }
+}
 @keyframes slideUp {
   from {
-    transform: translateY(24px);
+    transform: translateY(22px);
     opacity: 0;
   }
   to {
@@ -133,29 +254,6 @@ body {
     opacity: 1;
   }
 }
-@keyframes shimmer {
-  0% {
-    background-position: -200% 0;
-  }
-  100% {
-    background-position: 200% 0;
-  }
-}
-.animate-pop {
-  animation: pop 0.4s ease-out;
-}
-.animate-floaty {
-  animation: floaty 3.2s ease-in-out infinite;
-}
-.animate-slideUp {
-  animation: slideUp 0.45s ease-out both;
-}
-.shine {
-  background: linear-gradient(110deg, transparent 35%, rgba(255, 255, 255, 0.18) 50%, transparent 65%);
-  background-size: 200% 100%;
-  animation: shimmer 2.5s linear infinite;
-}
-
 @keyframes rise {
   from {
     top: 100%;
@@ -166,18 +264,33 @@ body {
 }
 @keyframes popout {
   to {
-    transform: scale(1.6);
+    transform: scale(1.7);
     opacity: 0;
   }
+}
+.animate-pop {
+  animation: pop 0.4s ease-out;
+}
+.animate-floaty {
+  animation: floaty 3.2s ease-in-out infinite;
+}
+.animate-wiggle {
+  animation: wiggle 1.4s ease-in-out infinite;
+}
+.animate-bobble {
+  animation: bobble 1.6s ease-in-out infinite;
+}
+.animate-slideUp {
+  animation: slideUp 0.45s ease-out both;
 }
 .bubble-pop {
   animation: popout 0.3s ease-out forwards !important;
 }
 
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 10px;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(120, 150, 190, 0.4);
   border-radius: 8px;
 }

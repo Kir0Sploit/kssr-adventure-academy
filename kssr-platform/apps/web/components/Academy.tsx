@@ -14,6 +14,14 @@ import type { GameSummary } from "@/lib/gameUtils";
 const AVATARS = ["🦸", "🦸‍♀️", "🧒", "👧", "🧑‍🚀", "🥷", "🧝", "🦹"];
 type Screen = "onboard" | "select" | "choose" | "learn" | "play" | "summary";
 
+function Mascot({ size = 84 }: { size?: number }) {
+  return (
+    <span className="inline-block animate-bobble" style={{ fontSize: size, lineHeight: 1 }}>
+      🦧
+    </span>
+  );
+}
+
 export default function Academy({ catalog }: { catalog: Catalog }) {
   const s = useProgress();
   const [mounted, setMounted] = useState(false);
@@ -28,7 +36,6 @@ export default function Academy({ catalog }: { catalog: Catalog }) {
   useEffect(() => {
     setMounted(true);
     if (useProgress.getState().name === "Hero") setScreen("onboard");
-    // Unlock audio on the very first user gesture (autoplay policy).
     const unlock = () => {
       audio.unlock();
       if (useProgress.getState().audioOn) audio.startMusic();
@@ -50,32 +57,25 @@ export default function Academy({ catalog }: { catalog: Catalog }) {
   const click = () => audio.click();
 
   if (!mounted) {
-    return (
-      <div className="min-h-screen grid place-items-center text-2xl animate-floaty">🦧 KSSR Adventure Academy…</div>
-    );
+    return <div className="min-h-screen grid place-items-center text-2xl font-display animate-bobble">🦧 …</div>;
   }
 
   /* ---------- Onboarding ---------- */
   if (screen === "onboard") {
     return (
       <main className="min-h-screen grid place-items-center p-4">
-        <div className="glass card p-6 sm:p-8 w-full max-w-md text-center animate-pop">
-          <div className="text-7xl animate-floaty">🦧🎓</div>
-          <h1 className="text-3xl font-black mt-3 text-shadow">KSSR Adventure Academy</h1>
-          <p className="opacity-80 text-sm mb-5">{isMs ? "Belajar sambil bermain!" : "Learn while you play!"}</p>
+        <div className="card p-6 sm:p-8 w-full max-w-md text-center animate-pop">
+          <Mascot size={92} />
+          <h1 className="font-display text-3xl mt-2 text-violet-700">KSSR Adventure Academy</h1>
+          <p className="text-soft mb-5">{isMs ? "Jom belajar sambil bermain!" : "Let's learn while we play!"}</p>
 
-          <p className="font-bold mb-2">{isMs ? "Pilih wira anda" : "Choose your hero"}</p>
+          <p className="font-display text-lg mb-2">{isMs ? "Pilih wira anda" : "Choose your hero"}</p>
           <div className="flex flex-wrap justify-center gap-2 mb-5">
             {AVATARS.map((a) => (
               <button
                 key={a}
-                className={`btn text-3xl w-14 h-14 rounded-2xl grid place-items-center transition ${
-                  s.avatar === a ? "grad scale-110" : "bg-white/10"
-                }`}
-                onClick={() => {
-                  click();
-                  s.setProfile({ avatar: a });
-                }}
+                className={`btn !min-h-0 text-3xl w-14 h-14 rounded-2xl grid place-items-center ${s.avatar === a ? "btn-primary scale-110" : ""}`}
+                onClick={() => { click(); s.setProfile({ avatar: a }); }}
               >
                 {a}
               </button>
@@ -83,53 +83,35 @@ export default function Academy({ catalog }: { catalog: Catalog }) {
           </div>
 
           <input
-            className="w-full rounded-2xl px-4 py-3 bg-white/10 border-2 border-white/20 font-bold text-center mb-5 outline-none focus:border-cyan-400"
+            className="w-full rounded-2xl px-4 py-3 bg-amber-50 border-[3px] border-amber-200 font-bold text-center text-violet-800 mb-5 outline-none focus:border-amber-400"
             placeholder={isMs ? "Nama anda" : "Your name"}
             maxLength={14}
             onChange={(e) => s.setProfile({ name: e.target.value || "Hero" })}
           />
 
-          <p className="font-bold mb-2">{isMs ? "Pilih tahun (Darjah)" : "Choose your year (Darjah)"}</p>
+          <p className="font-display text-lg mb-2">{isMs ? "Tahun berapa?" : "Which year?"}</p>
           <div className="flex flex-wrap justify-center gap-2 mb-6">
             {catalog.years.map((y) => (
               <button
                 key={y}
-                className={`btn rounded-full px-4 py-2 font-bold ${s.year === y ? "grad" : "bg-white/10"}`}
-                onClick={() => {
-                  click();
-                  s.setProfile({ year: y as Year });
-                }}
+                className={`btn !min-h-0 rounded-full px-4 py-2 ${s.year === y ? "btn-go" : ""}`}
+                onClick={() => { click(); s.setProfile({ year: y as Year }); }}
               >
                 {isMs ? "Tahun" : "Year"} {y}
               </button>
             ))}
           </div>
 
-          <button
-            className="btn grad rounded-2xl px-8 py-4 font-black text-lg w-full shine"
-            onClick={() => {
-              click();
-              setScreen("select");
-            }}
-          >
-            🚀 {isMs ? "Mula Pengembaraan" : "Start Adventure"}
+          <button className="btn btn-primary rounded-2xl px-8 py-4 font-display text-xl w-full" onClick={() => { click(); setScreen("select"); }}>
+            🚀 {isMs ? "Mula!" : "Start!"}
           </button>
         </div>
       </main>
     );
   }
 
-  /* ---------- Handlers ---------- */
-  const startTopic = (t: Topic) => {
-    click();
-    setTopicId(t.id);
-    setScreen("choose");
-  };
-  const beginPlay = () => {
-    click();
-    playStart.current = Date.now();
-    setScreen("play");
-  };
+  const startTopic = (t: Topic) => { click(); setTopicId(t.id); setScreen("choose"); };
+  const beginPlay = () => { click(); playStart.current = Date.now(); setScreen("play"); };
   const handleComplete = (sum: GameSummary) => {
     s.addTime(Math.round((Date.now() - playStart.current) / 1000));
     s.unlock("first-play");
@@ -138,6 +120,7 @@ export default function Academy({ catalog }: { catalog: Catalog }) {
     if (subject === "math") s.unlock("math_hero");
     if (subject === "bm") s.unlock("bm_champion");
     if (subject === "english") s.unlock("english_master");
+    audio.victory();
     setSummary(sum);
     setScreen("summary");
   };
@@ -149,19 +132,20 @@ export default function Academy({ catalog }: { catalog: Catalog }) {
       {/* ---------- Topic selection ---------- */}
       {screen === "select" && (
         <section className="p-3 sm:p-5 max-w-3xl mx-auto w-full animate-slideUp">
-          <div className="flex items-center justify-between mb-4 gap-3">
-            <h2 className="text-lg sm:text-2xl font-black text-shadow">
-              {isMs ? "Pilih pengembaraan" : "Pick your adventure"}
-            </h2>
+          <div className="card p-4 mb-4 flex items-center gap-3 sticker">
+            <Mascot size={56} />
+            <div className="flex-1">
+              <p className="font-display text-lg text-violet-700 leading-tight">
+                {isMs ? `Hai ${s.name}! Apa kita belajar hari ini?` : `Hi ${s.name}! What shall we learn today?`}
+              </p>
+            </div>
             <select
-              className="glass rounded-xl px-3 py-2 bg-transparent font-bold text-sm"
+              className="chip px-3 py-2 font-display text-sm text-violet-700 outline-none"
               value={s.year}
               onChange={(e) => s.setProfile({ year: Number(e.target.value) as Year })}
             >
               {catalog.years.map((y) => (
-                <option key={y} value={y} className="text-black">
-                  {isMs ? "Tahun" : "Year"} {y}
-                </option>
+                <option key={y} value={y}>{isMs ? "Tahun" : "Year"} {y}</option>
               ))}
             </select>
           </div>
@@ -170,28 +154,25 @@ export default function Academy({ catalog }: { catalog: Catalog }) {
             {catalog.subjects.map((subj) => (
               <button
                 key={subj.id}
-                className="btn card rounded-2xl px-2 py-3 sm:py-4 font-bold text-sm sm:text-base flex flex-col items-center gap-1"
-                style={{
-                  background: subject === subj.id ? subj.color : "rgba(255,255,255,.07)",
-                  boxShadow: subject === subj.id ? `0 8px 24px ${subj.color}66` : undefined,
-                  border: "1px solid rgba(255,255,255,.12)",
-                }}
-                onClick={() => {
-                  click();
-                  setSubject(subj.id);
-                }}
+                className="btn rounded-3xl px-2 py-3 sm:py-4 flex flex-col items-center gap-1"
+                style={
+                  subject === subj.id
+                    ? { background: subj.color, color: "#fff", boxShadow: `0 6px 0 ${subj.color}99` }
+                    : undefined
+                }
+                onClick={() => { click(); setSubject(subj.id); }}
               >
-                <span className="text-2xl sm:text-3xl">{subj.icon}</span>
-                {subj.name[s.locale]}
+                <span className="text-3xl sm:text-4xl">{subj.icon}</span>
+                <span className="font-display text-sm sm:text-base">{subj.name[s.locale]}</span>
               </button>
             ))}
           </div>
 
           {topics.length === 0 ? (
-            <div className="glass card p-8 text-center opacity-80">
+            <div className="card p-8 text-center text-soft">
               {isMs
-                ? `Kandungan Tahun ${s.year} ${subjectMeta.name.ms} akan datang. Cuba Tahun 1–3.`
-                : `Year ${s.year} ${subjectMeta.name.en} content is coming soon. Try Years 1–3.`}
+                ? `Topik Tahun ${s.year} ${subjectMeta.name.ms} akan datang. Cuba Tahun 1–3 dahulu!`
+                : `Year ${s.year} ${subjectMeta.name.en} topics are coming soon. Try Years 1–3!`}
             </div>
           ) : (
             <div className="grid gap-3 sm:grid-cols-2">
@@ -200,23 +181,21 @@ export default function Academy({ catalog }: { catalog: Catalog }) {
                 return (
                   <button
                     key={t.id}
-                    className="btn glass card p-4 text-left animate-slideUp"
-                    style={{ borderLeft: `6px solid ${subjectMeta.color}`, animationDelay: `${i * 60}ms` }}
+                    className={`btn card p-4 text-left animate-slideUp ${i % 2 ? "sticker-r" : "sticker"}`}
+                    style={{ borderTop: `8px solid ${subjectMeta.color}`, animationDelay: `${i * 60}ms` }}
                     onClick={() => startTopic(t)}
                   >
                     <div className="flex items-center justify-between gap-2">
                       <div className="min-w-0">
-                        <div className="font-black truncate">{t.icon} {t.title[s.locale]}</div>
-                        <div className="text-xs opacity-70 line-clamp-2">{t.description[s.locale]}</div>
+                        <div className="font-display text-lg truncate">{t.icon} {t.title[s.locale]}</div>
+                        <div className="text-xs text-soft line-clamp-2">{t.description[s.locale]}</div>
                       </div>
-                      <div className="text-right text-xs opacity-80 shrink-0">
-                        <div className="text-lg font-black" style={{ color: subjectMeta.color }}>
-                          {Math.round(m * 100)}%
-                        </div>
-                        {t.challenges.length} ⚡
+                      <div className="text-right shrink-0">
+                        <div className="font-display text-xl" style={{ color: subjectMeta.color }}>{Math.round(m * 100)}%</div>
+                        <div className="text-xs text-soft">{t.challenges.length} ⚡</div>
                       </div>
                     </div>
-                    <div className="h-1.5 rounded-full bg-black/40 overflow-hidden mt-2">
+                    <div className="h-2.5 rounded-full bg-black/10 overflow-hidden mt-2">
                       <div className="h-full rounded-full" style={{ width: `${m * 100}%`, background: subjectMeta.color }} />
                     </div>
                   </button>
@@ -234,12 +213,7 @@ export default function Academy({ catalog }: { catalog: Catalog }) {
           locale={s.locale}
           accent={subjectMeta.color}
           onLearn={() => { click(); setScreen("learn"); }}
-          onPickMode={(id) => {
-            click();
-            setModeId(id);
-            playStart.current = Date.now();
-            setScreen("play");
-          }}
+          onPickMode={(id) => { click(); setModeId(id); playStart.current = Date.now(); setScreen("play"); }}
           onBack={() => { click(); setScreen("select"); }}
         />
       )}
@@ -247,16 +221,11 @@ export default function Academy({ catalog }: { catalog: Catalog }) {
       {/* ---------- Learn ---------- */}
       {screen === "learn" && topic && (
         <section className="flex-1 flex flex-col">
-          <button
-            className="btn glass rounded-xl px-3 py-2 m-3 self-start text-sm font-bold"
-            onClick={() => { click(); setScreen("choose"); }}
-          >
+          <button className="btn !min-h-0 rounded-2xl px-4 py-2 m-3 self-start" onClick={() => { click(); setScreen("choose"); }}>
             ← {isMs ? "Kembali" : "Back"}
           </button>
-          <h2 className="text-center text-xl font-black text-shadow">{topic.icon} {topic.title[s.locale]}</h2>
-          <p className="text-center text-xs opacity-70 mb-1">
-            {isMs ? "Belajar dahulu, kemudian pilih permainan!" : "Learn first, then pick a game!"}
-          </p>
+          <h2 className="text-center font-display text-2xl text-violet-700">{topic.icon} {topic.title[s.locale]}</h2>
+          <p className="text-center text-sm text-soft mb-1">{isMs ? "Belajar dahulu, kemudian pilih permainan!" : "Learn first, then pick a game!"}</p>
           <LearnMode topic={topic} locale={s.locale} onStart={() => { click(); setScreen("choose"); }} />
         </section>
       )}
@@ -286,35 +255,29 @@ export default function Academy({ catalog }: { catalog: Catalog }) {
       {/* ---------- Summary ---------- */}
       {screen === "summary" && summary && topic && (
         <section className="flex-1 grid place-items-center p-4">
-          <div className="glass card p-6 sm:p-8 text-center max-w-md w-full animate-pop">
-            <div className="text-7xl animate-floaty">🏆</div>
-            <h2 className="text-3xl font-black mt-2 text-shadow">{isMs ? "Tahniah!" : "Well done!"}</h2>
-            <p className="opacity-80">{topic.title[s.locale]}</p>
+          <div className="card p-6 sm:p-8 text-center max-w-md w-full animate-pop">
+            <div className="text-7xl animate-bobble">🏆</div>
+            <h2 className="font-display text-3xl mt-2 text-violet-700">{isMs ? "Tahniah!" : "Well done!"}</h2>
+            <p className="text-soft">{topic.title[s.locale]}</p>
             <div className="grid grid-cols-2 gap-3 my-5">
-              <div className="glass rounded-2xl p-3">
-                <div className="text-3xl font-black text-cyan-300">{Math.round(summary.accuracy * 100)}%</div>
-                <div className="text-xs opacity-70">{isMs ? "Ketepatan" : "Accuracy"}</div>
+              <div className="panel rounded-2xl p-3">
+                <div className="font-display text-3xl text-sky-600">{Math.round(summary.accuracy * 100)}%</div>
+                <div className="text-xs text-soft">{isMs ? "Ketepatan" : "Accuracy"}</div>
               </div>
-              <div className="glass rounded-2xl p-3">
-                <div className="text-3xl font-black text-yellow-300">⭐ {summary.correct}</div>
-                <div className="text-xs opacity-70">{isMs ? "Pintu dilepasi" : "Gates cleared"}</div>
+              <div className="panel rounded-2xl p-3">
+                <div className="font-display text-3xl text-amber-500">⭐ {summary.correct}</div>
+                <div className="text-xs text-soft">{isMs ? "Markah" : "Score"}</div>
               </div>
             </div>
             <div className="flex gap-2">
-              <button className="btn grad rounded-2xl px-5 py-3 font-black flex-1" onClick={beginPlay}>
+              <button className="btn btn-go rounded-2xl px-5 py-3 font-display flex-1" onClick={beginPlay}>
                 🔁 {isMs ? "Main Lagi" : "Play Again"}
               </button>
-              <button
-                className="btn glass rounded-2xl px-5 py-3 font-black flex-1"
-                onClick={() => { click(); setScreen("choose"); }}
-              >
+              <button className="btn rounded-2xl px-5 py-3 font-display flex-1" onClick={() => { click(); setScreen("choose"); }}>
                 🎮 {isMs ? "Permainan Lain" : "Other Games"}
               </button>
             </div>
-            <button
-              className="btn glass rounded-2xl px-5 py-3 font-bold w-full mt-2 text-sm"
-              onClick={() => { click(); setScreen("select"); }}
-            >
+            <button className="btn rounded-2xl px-5 py-2 w-full mt-2 text-sm" onClick={() => { click(); setScreen("select"); }}>
               🗺️ {isMs ? "Pilih Topik Lain" : "Choose Another Topic"}
             </button>
           </div>

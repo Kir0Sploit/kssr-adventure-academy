@@ -1,5 +1,9 @@
 import type { Metadata, Viewport } from "next";
+import { Fredoka, Nunito } from "next/font/google";
 import "./globals.css";
+
+const display = Fredoka({ subsets: ["latin"], weight: ["500", "600", "700"], variable: "--font-display" });
+const body = Nunito({ subsets: ["latin"], weight: ["400", "600", "700", "800"], variable: "--font-body" });
 
 export const metadata: Metadata = {
   title: "KSSR Adventure Academy",
@@ -7,7 +11,7 @@ export const metadata: Metadata = {
     "A play-first learning game for Malaysian primary school students (Darjah 1-6) — Maths, Bahasa Melayu and English.",
   manifest: "/manifest.webmanifest",
   applicationName: "KSSR Adventure Academy",
-  appleWebApp: { capable: true, statusBarStyle: "black-translucent", title: "KSSR Academy" },
+  appleWebApp: { capable: true, statusBarStyle: "default", title: "KSSR Academy" },
 };
 
 export const viewport: Viewport = {
@@ -15,15 +19,22 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 1,
   userScalable: false,
-  themeColor: "#070a18",
+  themeColor: "#9fe3ff",
   viewportFit: "cover",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${display.variable} ${body.variable}`}>
       <body>
-        <div className="aurora" aria-hidden />
+        <div className="scene" aria-hidden>
+          <span className="sun" />
+          <span className="cloud cloud-1" />
+          <span className="cloud cloud-2" />
+          <span className="cloud cloud-3" />
+          <span className="hills" />
+          <span className="grass" />
+        </div>
         {children}
       </body>
     </html>

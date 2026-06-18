@@ -18,25 +18,28 @@ export default function Hud({ onParent }: { onParent: () => void }) {
 
   return (
     <header className="sticky top-0 z-30 px-2 py-2">
-      <div className="glass rounded-2xl flex items-center gap-1.5 sm:gap-2 flex-wrap p-1.5 text-xs sm:text-sm font-extrabold">
-        <span className="rounded-xl px-2.5 py-1.5 bg-white/5">{s.avatar} {s.name}</span>
-        <span className="rounded-xl px-2.5 py-1.5 bg-white/5 text-yellow-300">⭐ {s.stars}</span>
-        <span className="rounded-xl px-2.5 py-1.5 bg-white/5 text-amber-400">🪙 {s.coins}</span>
-        <span className="rounded-xl px-2.5 py-1.5 bg-white/5 text-cyan-300 hidden sm:inline">🧠 {s.knowledgePoints}</span>
-        <div className="rounded-xl px-2.5 py-1 bg-white/5 min-w-[120px] flex-1 sm:flex-none">
-          <div className="text-[10px] opacity-70 truncate">Lv {s.level} · {s.rank()}</div>
-          <div className="h-1.5 rounded-full bg-black/40 overflow-hidden">
-            <div className="h-full rounded-full" style={{ width: `${pct}%`, background: "linear-gradient(90deg,#22c55e,#06b6d4)" }} />
+      <div className="panel rounded-3xl flex items-center gap-1.5 sm:gap-2 flex-wrap p-2 text-sm">
+        <span className="chip px-2.5 py-1.5 flex items-center gap-1">
+          <span className="text-lg">{s.avatar}</span>
+          <span className="font-display">{s.name}</span>
+        </span>
+        <span className="chip px-2.5 py-1.5 text-amber-600">⭐ {s.stars}</span>
+        <span className="chip px-2.5 py-1.5 text-amber-700">🪙 {s.coins}</span>
+        <span className="chip px-2.5 py-1.5 text-sky-700 hidden sm:inline">🧠 {s.knowledgePoints}</span>
+        <div className="chip px-3 py-1.5 min-w-[128px] flex-1 sm:flex-none">
+          <div className="text-[10px] text-soft truncate font-bold">Lv {s.level} · {s.rank()}</div>
+          <div className="h-2 rounded-full bg-black/10 overflow-hidden">
+            <div className="h-full rounded-full" style={{ width: `${pct}%`, background: "linear-gradient(90deg,#5ad06a,#58b6ff)" }} />
           </div>
         </div>
-        <button className="btn rounded-xl px-2.5 grad-gold text-black ml-auto" onClick={onParent} aria-label="Parent dashboard">
+        <button className="btn !min-h-0 rounded-2xl px-3 py-2 btn-primary ml-auto" onClick={onParent} aria-label="Parent dashboard">
           📊
         </button>
-        <button className="btn rounded-xl px-2.5 bg-white/10" onClick={toggleAudio} aria-label="Toggle sound">
+        <button className="btn !min-h-0 rounded-2xl px-3 py-2" onClick={toggleAudio} aria-label="Toggle sound">
           {s.audioOn ? "🔊" : "🔇"}
         </button>
         <button
-          className="btn rounded-xl px-2.5 bg-white/10"
+          className="btn !min-h-0 rounded-2xl px-3 py-2 btn-sky"
           onClick={() => s.setLocale(s.locale === "en" ? "ms" : "en")}
           aria-label="Toggle language"
         >
