@@ -3,15 +3,16 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import type { Catalog } from "@/lib/catalog";
 import { useProgress } from "@/lib/store";
 import { audio } from "@/lib/audio";
-import type { Challenge, SubjectId, Topic, Year } from "@kssr/shared";
-import type { RunSummary } from "@kssr/game-engine";
+import type { SubjectId, Topic, Year } from "@kssr/shared";
 import Hud from "./Hud";
 import LearnMode from "./LearnMode";
-import GameCanvas from "./GameCanvas";
+import GameSelect from "./GameSelect";
 import ParentDashboard from "./ParentDashboard";
+import { getMode } from "@/lib/games";
+import type { GameSummary } from "@/lib/gameUtils";
 
 const AVATARS = ["🦸", "🦸‍♀️", "🧒", "👧", "🧑‍🚀", "🥷", "🧝", "🦹"];
-type Screen = "onboard" | "select" | "learn" | "play" | "summary";
+type Screen = "onboard" | "select" | "choose" | "learn" | "play" | "summary";
 
 export default function Academy({ catalog }: { catalog: Catalog }) {
   const s = useProgress();
@@ -19,8 +20,9 @@ export default function Academy({ catalog }: { catalog: Catalog }) {
   const [screen, setScreen] = useState<Screen>("select");
   const [subject, setSubject] = useState<SubjectId>("math");
   const [topicId, setTopicId] = useState<string | null>(null);
+  const [modeId, setModeId] = useState<string>("quiz");
   const [parentOpen, setParentOpen] = useState(false);
-  const [summary, setSummary] = useState<RunSummary | null>(null);
+  const [summary, setSummary] = useState<GameSummary | null>(null);
   const playStart = useRef(0);
 
   useEffect(() => {
@@ -121,14 +123,14 @@ export default function Academy({ catalog }: { catalog: Catalog }) {
   const startTopic = (t: Topic) => {
     click();
     setTopicId(t.id);
-    setScreen("learn");
+    setScreen("choose");
   };
   const beginPlay = () => {
     click();
     playStart.current = Date.now();
     setScreen("play");
   };
-  const handleComplete = (sum: RunSummary) => {
+  const handleComplete = (sum: GameSummary) => {
     s.addTime(Math.round((Date.now() - playStart.current) / 1000));
     s.unlock("first-play");
     const level = sum.accuracy >= 0.9 ? "Gold" : sum.accuracy >= 0.7 ? "Silver" : "Bronze";
@@ -225,38 +227,61 @@ export default function Academy({ catalog }: { catalog: Catalog }) {
         </section>
       )}
 
+      {/* ---------- Choose game mode ---------- */}
+      {screen === "choose" && topic && (
+        <GameSelect
+          topic={topic}
+          locale={s.locale}
+          accent={subjectMeta.color}
+          onLearn={() => { click(); setScreen("learn"); }}
+          onPickMode={(id) => {
+            click();
+            setModeId(id);
+            playStart.current = Date.now();
+            setScreen("play");
+          }}
+          onBack={() => { click(); setScreen("select"); }}
+        />
+      )}
+
       {/* ---------- Learn ---------- */}
       {screen === "learn" && topic && (
         <section className="flex-1 flex flex-col">
           <button
             className="btn glass rounded-xl px-3 py-2 m-3 self-start text-sm font-bold"
-            onClick={() => { click(); setScreen("select"); }}
+            onClick={() => { click(); setScreen("choose"); }}
           >
             ← {isMs ? "Kembali" : "Back"}
           </button>
           <h2 className="text-center text-xl font-black text-shadow">{topic.icon} {topic.title[s.locale]}</h2>
           <p className="text-center text-xs opacity-70 mb-1">
-            {isMs ? "Belajar dahulu, kemudian main!" : "Learn first, then play!"}
+            {isMs ? "Belajar dahulu, kemudian pilih permainan!" : "Learn first, then pick a game!"}
           </p>
-          <LearnMode topic={topic} locale={s.locale} onStart={beginPlay} />
+          <LearnMode topic={topic} locale={s.locale} onStart={() => { click(); setScreen("choose"); }} />
         </section>
       )}
 
-      {/* ---------- Play ---------- */}
-      {screen === "play" && topic && (
-        <section className="p-3 max-w-2xl mx-auto w-full">
-          <GameCanvas
-            topic={topic}
-            locale={s.locale}
-            accent={subjectMeta.color}
-            initialMastery={s.mastery[topic.id] ?? 0}
-            onAnswer={(_c: Challenge, correct) => s.recordAnswer(subject, topic.id, correct)}
-            onReward={(r) => s.addReward(r)}
-            onComplete={handleComplete}
-            onBack={() => { click(); setScreen("select"); }}
-          />
-        </section>
-      )}
+      {/* ---------- Play (selected mode) ---------- */}
+      {screen === "play" && topic && (() => {
+        const mode = getMode(modeId);
+        if (!mode) return null;
+        const Mode = mode.Component;
+        return (
+          <section className="p-3 max-w-2xl mx-auto w-full">
+            <Mode
+              key={`${topic.id}-${modeId}`}
+              topic={topic}
+              locale={s.locale}
+              accent={subjectMeta.color}
+              initialMastery={s.mastery[topic.id] ?? 0}
+              onAnswer={(_c, correct) => s.recordAnswer(subject, topic.id, correct)}
+              onReward={(r) => s.addReward(r)}
+              onComplete={handleComplete}
+              onBack={() => { click(); setScreen("choose"); }}
+            />
+          </section>
+        );
+      })()}
 
       {/* ---------- Summary ---------- */}
       {screen === "summary" && summary && topic && (
@@ -281,11 +306,17 @@ export default function Academy({ catalog }: { catalog: Catalog }) {
               </button>
               <button
                 className="btn glass rounded-2xl px-5 py-3 font-black flex-1"
-                onClick={() => { click(); setScreen("select"); }}
+                onClick={() => { click(); setScreen("choose"); }}
               >
-                🗺️ {isMs ? "Pilih Lain" : "Choose Another"}
+                🎮 {isMs ? "Permainan Lain" : "Other Games"}
               </button>
             </div>
+            <button
+              className="btn glass rounded-2xl px-5 py-3 font-bold w-full mt-2 text-sm"
+              onClick={() => { click(); setScreen("select"); }}
+            >
+              🗺️ {isMs ? "Pilih Topik Lain" : "Choose Another Topic"}
+            </button>
           </div>
         </section>
       )}

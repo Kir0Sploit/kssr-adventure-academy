@@ -1,8 +1,8 @@
 "use client";
 import { useEffect, useRef } from "react";
-import type { Challenge, Locale, Topic } from "@kssr/shared";
-import type { RunnerHandle, RunSummary } from "@kssr/game-engine";
+import type { RunnerHandle } from "@kssr/game-engine";
 import { audio } from "@/lib/audio";
+import type { GameModeProps } from "@/lib/gameUtils";
 
 export default function GameCanvas({
   topic,
@@ -13,16 +13,7 @@ export default function GameCanvas({
   onReward,
   onComplete,
   onBack,
-}: {
-  topic: Topic;
-  locale: Locale;
-  accent: string;
-  initialMastery: number;
-  onAnswer: (c: Challenge, correct: boolean) => void;
-  onReward: (r: { coins: number; xp: number; stars: number }) => void;
-  onComplete: (s: RunSummary) => void;
-  onBack: () => void;
-}) {
+}: GameModeProps) {
   const hostRef = useRef<HTMLDivElement>(null);
   const handleRef = useRef<RunnerHandle | null>(null);
 

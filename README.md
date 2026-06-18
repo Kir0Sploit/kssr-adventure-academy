@@ -32,9 +32,14 @@ npm run dev        # http://localhost:3000
 
 ## 🎮 How to play
 
-Pick an avatar, name and year → choose a subject + topic → **Learn** with
-flashcards → **Play** the runner: use arrow keys, tap, or swipe to steer into
-the lane with the correct answer. Correct answers reward XP, coins and stars and
-speed you up; wrong answers gently re-present the question — never a "game over".
-Tap 📊 for the parent dashboard and printable certificates; 🔊 toggles music;
-EN/BM switches language live.
+Pick an avatar, name and year → choose a subject + topic → pick a **game mode**:
+
+- 📇 **Flashcards** — learn the concept first (with pronunciation audio)
+- ❓ **Quiz** — answer questions with streaks, hints and instant feedback
+- 🫧 **Bubble Pop** — tap the correct rising bubble
+- 🧩 **Memory Match** — match each question to its answer
+- 🏃 **Endless Runner** — steer into the correct-answer lane
+
+Correct answers reward XP, coins and stars; wrong answers gently re-present the
+question — never a "game over". Tap 📊 for the parent dashboard and printable
+certificates; 🔊 toggles music; EN/BM switches language live.
