@@ -1,0 +1,103 @@
+{
+  "subject": "bm",
+  "year": 1,
+  "schemaVersion": 1,
+  "topics": [
+    {
+      "id": "y1-bm-suku-kata",
+      "subject": "bm",
+      "year": 1,
+      "order": 1,
+      "icon": "🔤",
+      "title": { "en": "Syllables (Suku Kata)", "ms": "Suku Kata" },
+      "description": { "en": "Combine syllables to build simple Malay words.", "ms": "Menggabungkan suku kata untuk membina perkataan mudah." },
+      "flashcards": [
+        {
+          "id": "y1-bm-fc-suku",
+          "topicId": "y1-bm-suku-kata",
+          "title": { "en": "Open syllables", "ms": "Suku kata terbuka" },
+          "definition": { "en": "A consonant + a vowel makes an open syllable, like 'ba', 'ku'.", "ms": "Konsonan + vokal membentuk suku kata terbuka, contoh 'ba', 'ku'." },
+          "example": { "en": "ba + ju = baju", "ms": "ba + ju = baju" },
+          "illustration": "👕",
+          "pronunciation": { "text": "baju", "locale": "ms" },
+          "hint": { "en": "Say each syllable slowly, then join them.", "ms": "Sebut setiap suku kata perlahan, kemudian cantumkan." },
+          "funFact": { "en": "'baju' means shirt.", "ms": "'baju' bermaksud pakaian." }
+        }
+      ],
+      "challenges": [
+        {
+          "id": "y1-bm-c1",
+          "topicId": "y1-bm-suku-kata",
+          "subject": "bm",
+          "year": 1,
+          "difficulty": "intro",
+          "mechanic": "build",
+          "prompt": { "en": "Join: 'bu' + 'ku' = ?", "ms": "Cantum: 'bu' + 'ku' = ?" },
+          "options": [
+            { "id": "a", "label": "buku", "correct": true },
+            { "id": "b", "label": "kubu", "correct": false },
+            { "id": "c", "label": "baku", "correct": false }
+          ],
+          "hint": { "en": "Say the first part, then the second.", "ms": "Sebut bahagian pertama, kemudian kedua." },
+          "explanation": { "en": "'buku' means book.", "ms": "'buku' bermaksud book." },
+          "skills": ["suku-kata"]
+        },
+        {
+          "id": "y1-bm-c2",
+          "topicId": "y1-bm-suku-kata",
+          "subject": "bm",
+          "year": 1,
+          "difficulty": "core",
+          "mechanic": "lane-select",
+          "prompt": { "en": "Which word means 'cat'?", "ms": "Perkataan manakah bermaksud 'cat' (haiwan)?" },
+          "options": [
+            { "id": "a", "label": "kucing", "correct": true },
+            { "id": "b", "label": "anjing", "correct": false },
+            { "id": "c", "label": "ikan", "correct": false }
+          ],
+          "hint": { "en": "It says 'meow'.", "ms": "Ia berbunyi 'meow'." },
+          "skills": ["vocabulary"]
+        }
+      ]
+    },
+    {
+      "id": "y1-bm-lawan-kata",
+      "subject": "bm",
+      "year": 1,
+      "order": 2,
+      "icon": "↔️",
+      "title": { "en": "Opposites (Lawan Kata)", "ms": "Lawan Kata" },
+      "description": { "en": "Learn words with opposite meanings.", "ms": "Belajar perkataan yang berlawanan maksud." },
+      "flashcards": [
+        {
+          "id": "y1-bm-fc-lawan",
+          "topicId": "y1-bm-lawan-kata",
+          "title": { "en": "Opposites", "ms": "Lawan Kata" },
+          "definition": { "en": "Some words mean the opposite of others.", "ms": "Sesetengah perkataan bermaksud berlawanan." },
+          "example": { "en": "besar (big) ↔ kecil (small)", "ms": "besar ↔ kecil" },
+          "illustration": "↔️",
+          "hint": { "en": "Think of two things that are different.", "ms": "Fikirkan dua benda yang berbeza." },
+          "funFact": { "en": "'panas' is the opposite of 'sejuk'.", "ms": "'panas' lawan bagi 'sejuk'." }
+        }
+      ],
+      "challenges": [
+        {
+          "id": "y1-bm-c3",
+          "topicId": "y1-bm-lawan-kata",
+          "subject": "bm",
+          "year": 1,
+          "difficulty": "core",
+          "mechanic": "gate-pass",
+          "prompt": { "en": "Opposite of 'besar'?", "ms": "Lawan bagi 'besar'?" },
+          "options": [
+            { "id": "a", "label": "kecil", "correct": true },
+            { "id": "b", "label": "tinggi", "correct": false },
+            { "id": "c", "label": "panjang", "correct": false }
+          ],
+          "hint": { "en": "Think of something tiny.", "ms": "Fikirkan sesuatu yang amat kecil." },
+          "skills": ["antonym"]
+        }
+      ]
+    }
+  ]
+}

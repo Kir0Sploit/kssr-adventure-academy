@@ -1,0 +1,30 @@
+{
+  "name": "@kssr/curriculum",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./node": {
+      "types": "./dist/node-loader.d.ts",
+      "import": "./dist/node-loader.js"
+    },
+    "./static": {
+      "types": "./dist/static.d.ts",
+      "import": "./dist/static.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -b && node ./scripts/copy-data.mjs",
+    "clean": "tsc -b --clean",
+    "test": "node --test ./test/*.test.mjs"
+  },
+  "dependencies": {
+    "@kssr/shared": "0.1.0"
+  }
+}

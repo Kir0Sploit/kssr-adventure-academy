@@ -1,0 +1,63 @@
+{
+  "subject": "math",
+  "year": 2,
+  "schemaVersion": 1,
+  "topics": [
+    {
+      "id": "y2-math-add-sub-100",
+      "subject": "math",
+      "year": 2,
+      "order": 1,
+      "icon": "➕",
+      "title": { "en": "Add & Subtract to 100", "ms": "Tambah & Tolak hingga 100" },
+      "description": { "en": "Add and subtract numbers within 100.", "ms": "Menambah dan menolak nombor dalam lingkungan 100." },
+      "flashcards": [
+        {
+          "id": "y2-math-fc-addsub",
+          "topicId": "y2-math-add-sub-100",
+          "title": { "en": "Subtraction", "ms": "Penolakan" },
+          "definition": { "en": "Subtraction means taking some away to find what is left.", "ms": "Penolakan bermaksud mengambil sebahagian untuk cari bakinya." },
+          "example": { "en": "10 − 4 = 6", "ms": "10 − 4 = 6" },
+          "illustration": "🪙",
+          "hint": { "en": "Count back from the bigger number.", "ms": "Kira undur dari nombor besar." },
+          "funFact": { "en": "Subtraction is the opposite of addition.", "ms": "Penolakan lawan kepada penambahan." }
+        }
+      ],
+      "challenges": [
+        {
+          "id": "y2-math-c1",
+          "topicId": "y2-math-add-sub-100",
+          "subject": "math",
+          "year": 2,
+          "difficulty": "core",
+          "mechanic": "gate-pass",
+          "prompt": { "en": "You have 24 coins and spend 9. How many left?", "ms": "Anda ada 24 syiling dan belanja 9. Berapa baki?" },
+          "options": [
+            { "id": "a", "label": "15", "correct": true },
+            { "id": "b", "label": "16", "correct": false },
+            { "id": "c", "label": "14", "correct": false }
+          ],
+          "hint": { "en": "Count back 9 from 24.", "ms": "Kira undur 9 dari 24." },
+          "skills": ["subtraction"]
+        },
+        {
+          "id": "y2-math-c2",
+          "topicId": "y2-math-add-sub-100",
+          "subject": "math",
+          "year": 2,
+          "difficulty": "stretch",
+          "mechanic": "lane-select",
+          "prompt": { "en": "3 baskets with 4 fruits each. Total?", "ms": "3 bakul, 4 buah setiap satu. Jumlah?" },
+          "options": [
+            { "id": "a", "label": "12", "correct": true },
+            { "id": "b", "label": "7", "correct": false },
+            { "id": "c", "label": "9", "correct": false }
+          ],
+          "hint": { "en": "Add 4 three times.", "ms": "Tambah 4 sebanyak tiga kali." },
+          "explanation": { "en": "4 + 4 + 4 = 12.", "ms": "4 + 4 + 4 = 12." },
+          "skills": ["multiplication"]
+        }
+      ]
+    }
+  ]
+}

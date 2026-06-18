@@ -1,0 +1,30 @@
+{
+  "name": "kssr-adventure-academy",
+  "version": "0.1.0",
+  "private": true,
+  "description": "KSSR Adventure Academy — a play-first educational gaming platform for Malaysian primary school students (Darjah 1-6).",
+  "license": "UNLICENSED",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "build:shared": "npm run build -w @kssr/shared",
+    "build:curriculum": "npm run build -w @kssr/curriculum",
+    "build:engine": "npm run build -w @kssr/game-engine",
+    "build:packages": "npm run build:shared && npm run build:curriculum && npm run build:engine",
+    "build:web": "npm run build -w @kssr/web",
+    "build:all": "npm run build:packages && npm run build:web",
+    "dev": "npm run dev -w @kssr/web",
+    "start": "npm run start -w @kssr/web",
+    "test:curriculum": "npm run test -w @kssr/curriculum",
+    "typecheck": "tsc -b packages/shared packages/curriculum packages/game-engine"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "@types/node": "^20.19.43",
+    "typescript": "^5.5.4"
+  }
+}

@@ -1,0 +1,129 @@
+{
+  "subject": "math",
+  "year": 1,
+  "schemaVersion": 1,
+  "topics": [
+    {
+      "id": "y1-math-numbers-10",
+      "subject": "math",
+      "year": 1,
+      "order": 1,
+      "icon": "🔢",
+      "title": { "en": "Numbers to 10", "ms": "Nombor hingga 10" },
+      "description": {
+        "en": "Count, read and order numbers from 0 to 10.",
+        "ms": "Mengira, membaca dan menyusun nombor 0 hingga 10."
+      },
+      "flashcards": [
+        {
+          "id": "y1-math-fc-count",
+          "topicId": "y1-math-numbers-10",
+          "title": { "en": "Counting", "ms": "Mengira" },
+          "definition": {
+            "en": "We count objects one by one to find how many there are.",
+            "ms": "Kita mengira objek satu demi satu untuk tahu bilangannya."
+          },
+          "example": { "en": "🍎🍎🍎 = 3 apples", "ms": "🍎🍎🍎 = 3 biji epal" },
+          "illustration": "🍎",
+          "pronunciation": { "text": "one, two, three", "locale": "en" },
+          "hint": { "en": "Point to each item as you say a number.", "ms": "Tunjuk setiap objek sambil sebut nombor." },
+          "funFact": { "en": "Your fingers are great counting tools!", "ms": "Jari anda alat mengira yang hebat!" }
+        }
+      ],
+      "challenges": [
+        {
+          "id": "y1-math-c1",
+          "topicId": "y1-math-numbers-10",
+          "subject": "math",
+          "year": 1,
+          "difficulty": "intro",
+          "mechanic": "collect",
+          "prompt": { "en": "Count the stars: ⭐⭐⭐⭐", "ms": "Kira bintang: ⭐⭐⭐⭐" },
+          "options": [
+            { "id": "a", "label": "4", "correct": true },
+            { "id": "b", "label": "3", "correct": false },
+            { "id": "c", "label": "5", "correct": false }
+          ],
+          "hint": { "en": "Touch each star as you count.", "ms": "Sentuh setiap bintang sambil mengira." },
+          "explanation": { "en": "There are four stars.", "ms": "Terdapat empat bintang." },
+          "skills": ["counting"]
+        },
+        {
+          "id": "y1-math-c2",
+          "topicId": "y1-math-numbers-10",
+          "subject": "math",
+          "year": 1,
+          "difficulty": "core",
+          "mechanic": "lane-select",
+          "prompt": { "en": "Which number comes after 6?", "ms": "Nombor manakah selepas 6?" },
+          "options": [
+            { "id": "a", "label": "7", "correct": true },
+            { "id": "b", "label": "5", "correct": false },
+            { "id": "c", "label": "8", "correct": false }
+          ],
+          "hint": { "en": "Count up: 6 then one more.", "ms": "Kira naik: 6 kemudian tambah satu." },
+          "skills": ["number-order"]
+        },
+        {
+          "id": "y1-math-c3",
+          "topicId": "y1-math-numbers-10",
+          "subject": "math",
+          "year": 1,
+          "difficulty": "core",
+          "mechanic": "gate-pass",
+          "prompt": { "en": "2 + 3 = ?", "ms": "2 + 3 = ?" },
+          "options": [
+            { "id": "a", "label": "5", "correct": true },
+            { "id": "b", "label": "4", "correct": false },
+            { "id": "c", "label": "6", "correct": false }
+          ],
+          "hint": { "en": "Start at 2 and count on 3 more.", "ms": "Mula dari 2 dan kira 3 lagi." },
+          "explanation": { "en": "2 and 3 more makes 5.", "ms": "2 tambah 3 menjadi 5." },
+          "skills": ["addition"]
+        }
+      ]
+    },
+    {
+      "id": "y1-math-shapes",
+      "subject": "math",
+      "year": 1,
+      "order": 2,
+      "icon": "🔺",
+      "title": { "en": "Basic Shapes", "ms": "Bentuk Asas" },
+      "description": {
+        "en": "Recognise circles, squares, triangles and rectangles.",
+        "ms": "Mengenal bulatan, segi empat sama, segi tiga dan segi empat tepat."
+      },
+      "flashcards": [
+        {
+          "id": "y1-math-fc-shapes",
+          "topicId": "y1-math-shapes",
+          "title": { "en": "Shapes around us", "ms": "Bentuk di sekeliling kita" },
+          "definition": { "en": "Shapes are everywhere — in wheels, windows and signs.", "ms": "Bentuk ada di mana-mana — pada roda, tingkap dan papan tanda." },
+          "example": { "en": "A clock is a circle ⭕", "ms": "Jam ialah bulatan ⭕" },
+          "illustration": "🔺",
+          "hint": { "en": "Count the sides of each shape.", "ms": "Kira bilangan sisi setiap bentuk." },
+          "funFact": { "en": "A triangle has 3 sides.", "ms": "Segi tiga mempunyai 3 sisi." }
+        }
+      ],
+      "challenges": [
+        {
+          "id": "y1-math-c4",
+          "topicId": "y1-math-shapes",
+          "subject": "math",
+          "year": 1,
+          "difficulty": "intro",
+          "mechanic": "lane-select",
+          "prompt": { "en": "Which shape has 3 sides?", "ms": "Bentuk manakah ada 3 sisi?" },
+          "options": [
+            { "id": "a", "label": { "en": "Triangle", "ms": "Segi tiga" }, "correct": true },
+            { "id": "b", "label": { "en": "Circle", "ms": "Bulatan" }, "correct": false },
+            { "id": "c", "label": { "en": "Square", "ms": "Segi empat" }, "correct": false }
+          ],
+          "hint": { "en": "Think of a slice of watermelon.", "ms": "Fikirkan sepotong tembikai." },
+          "skills": ["shapes"]
+        }
+      ]
+    }
+  ]
+}

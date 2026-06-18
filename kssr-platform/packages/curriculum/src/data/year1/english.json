@@ -1,0 +1,103 @@
+{
+  "subject": "english",
+  "year": 1,
+  "schemaVersion": 1,
+  "topics": [
+    {
+      "id": "y1-en-animals",
+      "subject": "english",
+      "year": 1,
+      "order": 1,
+      "icon": "🐾",
+      "title": { "en": "Animal Words", "ms": "Perkataan Haiwan" },
+      "description": { "en": "Learn the names of common animals.", "ms": "Belajar nama haiwan biasa." },
+      "flashcards": [
+        {
+          "id": "y1-en-fc-animals",
+          "topicId": "y1-en-animals",
+          "title": { "en": "Baby animals", "ms": "Anak haiwan" },
+          "definition": { "en": "Baby animals often have special names.", "ms": "Anak haiwan selalunya ada nama khas." },
+          "example": { "en": "A baby dog is a 'puppy' 🐶", "ms": "Anak anjing ialah 'puppy' 🐶" },
+          "illustration": "🐶",
+          "pronunciation": { "text": "puppy", "locale": "en" },
+          "hint": { "en": "Think small and cute!", "ms": "Fikirkan yang kecil dan comel!" },
+          "funFact": { "en": "A baby cat is a 'kitten'.", "ms": "Anak kucing ialah 'kitten'." }
+        }
+      ],
+      "challenges": [
+        {
+          "id": "y1-en-c1",
+          "topicId": "y1-en-animals",
+          "subject": "english",
+          "year": 1,
+          "difficulty": "intro",
+          "mechanic": "collect",
+          "prompt": { "en": "A baby dog is a ___", "ms": "Anak anjing ialah ___" },
+          "options": [
+            { "id": "a", "label": "puppy", "correct": true },
+            { "id": "b", "label": "kitten", "correct": false },
+            { "id": "c", "label": "calf", "correct": false }
+          ],
+          "hint": { "en": "It barks: woof!", "ms": "Ia menyalak: woof!" },
+          "skills": ["vocabulary"]
+        },
+        {
+          "id": "y1-en-c2",
+          "topicId": "y1-en-animals",
+          "subject": "english",
+          "year": 1,
+          "difficulty": "core",
+          "mechanic": "lane-select",
+          "prompt": { "en": "Pick the colour word.", "ms": "Pilih perkataan warna." },
+          "options": [
+            { "id": "a", "label": "blue", "correct": true },
+            { "id": "b", "label": "run", "correct": false },
+            { "id": "c", "label": "tall", "correct": false }
+          ],
+          "hint": { "en": "The sky is this colour.", "ms": "Langit berwarna ini." },
+          "skills": ["colours"]
+        }
+      ]
+    },
+    {
+      "id": "y1-en-greetings",
+      "subject": "english",
+      "year": 1,
+      "order": 2,
+      "icon": "👋",
+      "title": { "en": "Greetings", "ms": "Ucapan" },
+      "description": { "en": "Say hello and be polite.", "ms": "Memberi salam dan bersopan." },
+      "flashcards": [
+        {
+          "id": "y1-en-fc-greet",
+          "topicId": "y1-en-greetings",
+          "title": { "en": "Polite words", "ms": "Perkataan sopan" },
+          "definition": { "en": "We use 'please' and 'thank you' to be kind.", "ms": "Kita guna 'please' dan 'thank you' untuk bersopan." },
+          "example": { "en": "Thank you! 🙏", "ms": "Thank you! 🙏" },
+          "illustration": "👋",
+          "pronunciation": { "text": "thank you", "locale": "en" },
+          "hint": { "en": "Say it with a smile.", "ms": "Sebut dengan senyuman." },
+          "funFact": { "en": "'Hello' works any time of day.", "ms": "'Hello' sesuai pada bila-bila masa." }
+        }
+      ],
+      "challenges": [
+        {
+          "id": "y1-en-c3",
+          "topicId": "y1-en-greetings",
+          "subject": "english",
+          "year": 1,
+          "difficulty": "core",
+          "mechanic": "gate-pass",
+          "prompt": { "en": "What do you say to thank someone?", "ms": "Apa anda kata untuk berterima kasih?" },
+          "options": [
+            { "id": "a", "label": "Thank you", "correct": true },
+            { "id": "b", "label": "Goodbye", "correct": false },
+            { "id": "c", "label": "Hello", "correct": false }
+          ],
+          "hint": { "en": "It shows you are grateful.", "ms": "Ia menunjukkan anda bersyukur." },
+          "skills": ["greetings"]
+        }
+      ]
+    }
+  ]
+}

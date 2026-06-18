@@ -1,0 +1,62 @@
+{
+  "subject": "bm",
+  "year": 3,
+  "schemaVersion": 1,
+  "topics": [
+    {
+      "id": "y3-bm-kata-kerja",
+      "subject": "bm",
+      "year": 3,
+      "order": 1,
+      "icon": "🏃",
+      "title": { "en": "Verbs (Kata Kerja)", "ms": "Kata Kerja" },
+      "description": { "en": "Identify action words in Malay.", "ms": "Mengenal pasti kata perbuatan dalam Bahasa Melayu." },
+      "flashcards": [
+        {
+          "id": "y3-bm-fc-kerja",
+          "topicId": "y3-bm-kata-kerja",
+          "title": { "en": "Action words", "ms": "Kata perbuatan" },
+          "definition": { "en": "Kata kerja shows what someone does.", "ms": "Kata kerja menunjukkan perbuatan seseorang." },
+          "example": { "en": "berlari, makan, menulis", "ms": "berlari, makan, menulis" },
+          "illustration": "🏃",
+          "hint": { "en": "Ask: what is the action?", "ms": "Tanya: apakah perbuatannya?" },
+          "funFact": { "en": "'rajin' is NOT a verb — it is an adjective.", "ms": "'rajin' BUKAN kata kerja — ia kata adjektif." }
+        }
+      ],
+      "challenges": [
+        {
+          "id": "y3-bm-c1",
+          "topicId": "y3-bm-kata-kerja",
+          "subject": "bm",
+          "year": 3,
+          "difficulty": "core",
+          "mechanic": "lane-select",
+          "prompt": { "en": "Which is a verb (kata kerja)?", "ms": "Manakah kata kerja?" },
+          "options": [
+            { "id": "a", "label": "berlari", "correct": true },
+            { "id": "b", "label": "cantik", "correct": false },
+            { "id": "c", "label": "meja", "correct": false }
+          ],
+          "hint": { "en": "Which word is an action?", "ms": "Perkataan mana satu perbuatan?" },
+          "skills": ["kata-kerja"]
+        },
+        {
+          "id": "y3-bm-c2",
+          "topicId": "y3-bm-kata-kerja",
+          "subject": "bm",
+          "year": 3,
+          "difficulty": "core",
+          "mechanic": "gate-pass",
+          "prompt": { "en": "Synonym of 'pandai'?", "ms": "Sinonim bagi 'pandai'?" },
+          "options": [
+            { "id": "a", "label": "bijak", "correct": true },
+            { "id": "b", "label": "malas", "correct": false },
+            { "id": "c", "label": "sedih", "correct": false }
+          ],
+          "hint": { "en": "Means clever.", "ms": "Bermaksud cerdik." },
+          "skills": ["synonym"]
+        }
+      ]
+    }
+  ]
+}

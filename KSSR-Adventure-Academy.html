@@ -1,0 +1,1323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+<title>KSSR Adventure Academy</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+<style>
+  :root{
+    --c1:#7c3aed; --c2:#2563eb; --c3:#06b6d4; --gold:#fbbf24; --good:#22c55e;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent; user-select:none;}
+  html,body{margin:0;padding:0;height:100%;width:100%;overflow:hidden;background:#0b1020;font-family:'Segoe UI',system-ui,sans-serif;color:#fff;}
+  #game{position:fixed;inset:0;overflow:hidden;}
+  canvas{position:absolute;inset:0;width:100%;height:100%;image-rendering:auto;}
+  .glass{background:rgba(20,24,48,.62);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.14);}
+  .btn{cursor:pointer;transition:transform .08s,filter .15s;}
+  .btn:active{transform:scale(.94);}
+  .btn:hover{filter:brightness(1.12);}
+  .grad{background:linear-gradient(135deg,var(--c1),var(--c2) 55%,var(--c3));}
+  .overlay{position:absolute;inset:0;display:none;align-items:center;justify-content:center;z-index:40;}
+  .overlay.show{display:flex;}
+  .panel{width:min(720px,94vw);max-height:92vh;overflow:auto;border-radius:22px;padding:18px;}
+  .pill{border-radius:999px;padding:4px 12px;font-weight:700;font-size:12px;}
+  /* HUD */
+  #hud{position:absolute;top:0;left:0;right:0;z-index:20;pointer-events:none;padding:8px;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;}
+  #hud .glass{pointer-events:auto;}
+  .stat{display:flex;align-items:center;gap:6px;border-radius:14px;padding:6px 10px;font-weight:800;font-size:13px;}
+  /* Joystick */
+  #joy{position:absolute;left:18px;bottom:24px;width:130px;height:130px;border-radius:50%;z-index:30;touch-action:none;}
+  #joyBase{position:absolute;inset:0;border-radius:50%;background:rgba(255,255,255,.10);border:2px solid rgba(255,255,255,.25);}
+  #joyKnob{position:absolute;left:50%;top:50%;width:58px;height:58px;margin:-29px 0 0 -29px;border-radius:50%;background:linear-gradient(135deg,#a78bfa,#3b82f6);border:2px solid rgba(255,255,255,.6);box-shadow:0 6px 18px rgba(0,0,0,.5);}
+  /* Action buttons */
+  #pad{position:absolute;right:16px;bottom:24px;width:180px;height:180px;z-index:30;}
+  .abtn{position:absolute;width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:22px;color:#fff;border:3px solid rgba(255,255,255,.5);box-shadow:0 6px 16px rgba(0,0,0,.45);touch-action:none;}
+  #btnA{right:8px;top:58px;background:linear-gradient(135deg,#22c55e,#16a34a);}
+  #btnB{left:8px;top:58px;background:linear-gradient(135deg,#ef4444,#b91c1c);}
+  #btnX{left:58px;top:8px;background:linear-gradient(135deg,#3b82f6,#1d4ed8);}
+  #btnY{left:58px;bottom:8px;background:linear-gradient(135deg,#f59e0b,#d97706);}
+  .topbtn{display:flex;align-items:center;justify-content:center;width:42px;height:42px;border-radius:12px;font-size:16px;}
+  .choice{display:block;width:100%;text-align:left;margin:8px 0;padding:14px 16px;border-radius:16px;font-weight:700;font-size:16px;border:2px solid rgba(255,255,255,.18);background:rgba(255,255,255,.06);}
+  .choice:hover{background:rgba(255,255,255,.14);}
+  .choice.correct{background:linear-gradient(135deg,#22c55e,#16a34a);border-color:#fff;}
+  .choice.wrong{background:linear-gradient(135deg,#ef4444,#b91c1c);border-color:#fff;}
+  .toast{position:absolute;left:50%;top:14%;transform:translateX(-50%);z-index:60;padding:12px 22px;border-radius:16px;font-weight:900;font-size:20px;opacity:0;pointer-events:none;}
+  .toast.show{animation:pop 1.6s ease forwards;}
+  @keyframes pop{0%{opacity:0;transform:translateX(-50%) scale(.6)}15%{opacity:1;transform:translateX(-50%) scale(1.1)}30%{transform:translateX(-50%) scale(1)}80%{opacity:1}100%{opacity:0;transform:translateX(-50%) translateY(-30px)}}
+  .ach{position:absolute;right:14px;top:70px;z-index:60;width:300px;border-radius:16px;padding:12px;transform:translateX(360px);transition:transform .5s;}
+  .ach.show{transform:translateX(0);}
+  .fade{animation:fade .4s ease;}
+  @keyframes fade{from{opacity:0}to{opacity:1}}
+  .spin{animation:spin 8s linear infinite;}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .float{animation:flt 3s ease-in-out infinite;}
+  @keyframes flt{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+  ::-webkit-scrollbar{width:8px}::-webkit-scrollbar-thumb{background:rgba(255,255,255,.25);border-radius:8px}
+  .hpbar{height:18px;border-radius:10px;background:rgba(0,0,0,.4);overflow:hidden;border:1px solid rgba(255,255,255,.3)}
+  .hpfill{height:100%;background:linear-gradient(90deg,#ef4444,#f97316);transition:width .4s}
+  .av{width:64px;height:64px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:34px;border:3px solid rgba(255,255,255,.3);cursor:pointer;}
+  .av.sel{border-color:var(--gold);box-shadow:0 0 0 3px var(--gold);}
+  .cert{background:#fffef8;color:#1e293b;border:14px solid #d4af37;border-radius:8px;padding:28px;text-align:center;position:relative;}
+  .input{width:100%;padding:12px 14px;border-radius:12px;border:2px solid rgba(255,255,255,.2);background:rgba(255,255,255,.08);color:#fff;font-size:16px;font-weight:700;}
+  @media(max-width:640px){.panel{width:96vw}}
+</style>
+</head>
+<body>
+<div id="game">
+  <canvas id="cv"></canvas>
+
+  <!-- HUD -->
+  <div id="hud">
+    <div class="flex gap-2 items-center flex-wrap">
+      <div class="glass stat"><i class="fa-solid fa-user text-purple-300"></i><span id="hudName">Hero</span></div>
+      <div class="glass stat"><i class="fa-solid fa-star text-yellow-300"></i><span id="hudStars">0</span></div>
+      <div class="glass stat"><i class="fa-solid fa-coins text-yellow-400"></i><span id="hudCoins">0</span></div>
+      <div class="glass stat"><i class="fa-solid fa-bolt text-cyan-300"></i>Lv<span id="hudLvl">1</span></div>
+      <div class="glass stat" style="min-width:120px"><div class="w-full"><div class="text-[10px] opacity-70" id="hudRank">Year 1 Explorer</div><div class="hpbar" style="height:8px"><div class="hpfill" id="xpfill" style="width:0%;background:linear-gradient(90deg,#22c55e,#06b6d4)"></div></div></div></div>
+    </div>
+    <div class="flex gap-2 items-center" style="pointer-events:auto">
+      <div class="glass topbtn btn" id="langBtn" title="Language">EN</div>
+      <div class="glass topbtn btn" id="mapBtn" title="Map"><i class="fa-solid fa-map"></i></div>
+      <div class="glass topbtn btn" id="questBtn" title="Quests"><i class="fa-solid fa-scroll"></i></div>
+      <div class="glass topbtn btn" id="invBtn" title="Inventory"><i class="fa-solid fa-bag-shopping"></i></div>
+      <div class="glass topbtn btn" id="parentBtn" title="Parent"><i class="fa-solid fa-chart-line"></i></div>
+      <div class="glass topbtn btn" id="menuBtn" title="Menu"><i class="fa-solid fa-bars"></i></div>
+    </div>
+  </div>
+
+  <!-- Interaction prompt -->
+  <div id="prompt" class="glass" style="position:absolute;left:50%;bottom:200px;transform:translateX(-50%);z-index:25;display:none;border-radius:14px;padding:8px 16px;font-weight:800">
+    <i class="fa-solid fa-circle-a text-green-400"></i> <span id="promptTxt">Interact</span>
+  </div>
+
+  <!-- Mobile controls -->
+  <div id="joy"><div id="joyBase"></div><div id="joyKnob"></div></div>
+  <div id="pad">
+    <div class="abtn btn" id="btnX">X</div>
+    <div class="abtn btn" id="btnY">Y</div>
+    <div class="abtn btn" id="btnB">B</div>
+    <div class="abtn btn" id="btnA">A</div>
+  </div>
+
+  <!-- Toast + achievement -->
+  <div class="toast" id="toast"></div>
+  <div class="ach glass" id="achPop">
+    <div class="flex items-center gap-3"><div class="text-3xl text-yellow-300"><i class="fa-solid fa-trophy"></i></div>
+    <div><div class="text-xs opacity-70" id="achLabel">Achievement</div><div class="font-black" id="achName">Unlocked</div></div></div>
+  </div>
+
+  <!-- Generic Modal -->
+  <div class="overlay" id="modal"><div class="panel glass" id="modalPanel"></div></div>
+</div>
+<script>
+"use strict";
+/* ============================================================
+   KSSR ADVENTURE ACADEMY  — single file engine
+   ============================================================ */
+
+/* ---------- i18n ---------- */
+const I18N = {
+  en:{
+    play:"Play", continue:"Continue", newGame:"New Game", start:"Start Adventure",
+    chooseName:"What is your hero's name?", chooseAvatar:"Choose your hero",
+    welcome:"Welcome to KSSR Adventure Academy!",
+    interact:"Interact", talk:"Talk", quests:"Quests", inventory:"Inventory",
+    map:"World Map", menu:"Menu", parent:"Parent Dashboard", hint:"Hint", back:"Back",
+    noQuest:"No active quests. Explore and talk to villagers!",
+    active:"Active", done:"Completed", reward:"Reward", accept:"Accept Quest",
+    correct:"Correct!", tryagain:"Try again!", great:"Great effort!",
+    submit:"Submit", close:"Close", next:"Next", travel:"Travel", locked:"Locked",
+    pets:"Pets", badges:"Badges", titles:"Titles", items:"Items", certs:"Certificates",
+    timePlayed:"Time Played", xpEarned:"XP Earned", subjects:"Subjects Practiced",
+    accuracy:"Accuracy", questsDone:"Quests Completed", progBySubj:"Progress by Subject",
+    insights:"Learning Insights", noData:"Start playing to see progress!",
+    save:"Save Game", reset:"Reset Game", resetSure:"Reset all progress? This cannot be undone.",
+    printCert:"Print Certificate", certTitle:"Certificate of Achievement",
+    presented:"This certifies that", hasCompleted:"has successfully demonstrated mastery in",
+    year:"Year", date:"Date", seal:"KSSR Adventure Academy",
+    bossDefeat:"Defeat the boss by answering correctly!", victory:"VICTORY!",
+    hp:"HP", boss:"Boss Battle", enter:"Enter", explore:"Explore the world!",
+    questAccepted:"Quest Accepted!", questComplete:"Quest Complete!", levelUp:"LEVEL UP!",
+    found:"You found", newPet:"New companion unlocked!", region:"Region",
+    selectSubject:"Choose a subject to focus your adventure",
+    math:"Mathematics", bm:"Bahasa Melayu", eng:"English", any:"Mixed",
+    settings:"Settings", language:"Language", audio:"Sound", on:"On", off:"Off",
+    emptyInv:"Empty — explore to collect items!", talkTo:"Talk to", help:"can help",
+    skills:"Skills Mastered", chest:"Treasure Chest!", hintMsg:"Look carefully and take your time. You can do it!",
+    yourTurn:"Your answer attacks the boss!", bossHurt:"The challenge weakens!", confirm:"OK"
+  },
+  ms:{
+    play:"Main", continue:"Sambung", newGame:"Permainan Baru", start:"Mula Pengembaraan",
+    chooseName:"Apakah nama wira anda?", chooseAvatar:"Pilih wira anda",
+    welcome:"Selamat datang ke Akademi Pengembaraan KSSR!",
+    interact:"Berinteraksi", talk:"Berbual", quests:"Misi", inventory:"Inventori",
+    map:"Peta Dunia", menu:"Menu", parent:"Papan Ibu Bapa", hint:"Bantuan", back:"Kembali",
+    noQuest:"Tiada misi aktif. Teroka dan berbual dengan penduduk!",
+    active:"Aktif", done:"Selesai", reward:"Ganjaran", accept:"Terima Misi",
+    correct:"Betul!", tryagain:"Cuba lagi!", great:"Usaha yang baik!",
+    submit:"Hantar", close:"Tutup", next:"Seterusnya", travel:"Mengembara", locked:"Berkunci",
+    pets:"Haiwan", badges:"Lencana", titles:"Gelaran", items:"Barang", certs:"Sijil",
+    timePlayed:"Masa Bermain", xpEarned:"XP Diperoleh", subjects:"Subjek Dilatih",
+    accuracy:"Ketepatan", questsDone:"Misi Selesai", progBySubj:"Kemajuan Mengikut Subjek",
+    insights:"Pandangan Pembelajaran", noData:"Mula bermain untuk melihat kemajuan!",
+    save:"Simpan", reset:"Set Semula", resetSure:"Set semula semua kemajuan? Ini tidak boleh diundur.",
+    printCert:"Cetak Sijil", certTitle:"Sijil Pencapaian",
+    presented:"Ini mengesahkan bahawa", hasCompleted:"telah berjaya menunjukkan penguasaan dalam",
+    year:"Tahun", date:"Tarikh", seal:"Akademi Pengembaraan KSSR",
+    bossDefeat:"Kalahkan bos dengan menjawab dengan betul!", victory:"KEMENANGAN!",
+    hp:"Nyawa", boss:"Pertempuran Bos", enter:"Masuk", explore:"Teroka dunia!",
+    questAccepted:"Misi Diterima!", questComplete:"Misi Selesai!", levelUp:"NAIK TAHAP!",
+    found:"Anda menjumpai", newPet:"Rakan baharu dibuka!", region:"Kawasan",
+    selectSubject:"Pilih subjek untuk fokus pengembaraan anda",
+    math:"Matematik", bm:"Bahasa Melayu", eng:"Bahasa Inggeris", any:"Campuran",
+    settings:"Tetapan", language:"Bahasa", audio:"Bunyi", on:"Buka", off:"Tutup",
+    emptyInv:"Kosong — teroka untuk mengumpul barang!", talkTo:"Berbual dengan", help:"boleh membantu",
+    skills:"Kemahiran Dikuasai", chest:"Peti Harta!", hintMsg:"Lihat dengan teliti dan ambil masa anda. Anda boleh lakukan!",
+    yourTurn:"Jawapan anda menyerang bos!", bossHurt:"Cabaran semakin lemah!", confirm:"OK"
+  }
+};
+let LANG = "en";
+function t(k){ return (I18N[LANG] && I18N[LANG][k]) || (I18N.en[k]||k); }
+
+/* ---------- praise lines ---------- */
+const PRAISE = { en:["Awesome!","Excellent!","Fantastic!","Brilliant!","Superb!","Well done!"], ms:["Hebat!","Mantap!","Bijak!","Cemerlang!","Syabas!","Tahniah!"] };
+const ENCOURAGE = { en:["Try again!","Almost there!","Keep going!","You can do it!"], ms:["Cuba lagi!","Hampir betul!","Teruskan!","Anda boleh lakukan!"] };
+function praise(){ const a=PRAISE[LANG]; return a[Math.floor(Math.random()*a.length)]; }
+function encourage(){ const a=ENCOURAGE[LANG]; return a[Math.floor(Math.random()*a.length)]; }
+
+/* ---------- Save State ---------- */
+const SAVE_KEY = "kssr_adventure_save_v1";
+const DEFAULT_STATE = {
+  created:false, name:"Hero", avatar:0, lang:"en", audio:true,
+  xp:0, coins:0, stars:0, level:1, year:1,
+  region:"kampung", px:0, py:0,
+  quests:{}, completedQuests:[], questItems:[],
+  pets:[], activePet:null, badges:[], titles:[], collectibles:[], certificates:[],
+  achievements:[], chests:[], bosses:[],
+  stats:{ math:{c:0,a:0}, bm:{c:0,a:0}, eng:{c:0,a:0} },
+  timePlayed:0, questsCompleted:0, lastDaily:0
+};
+let S = null;
+function load(){
+  try{ const raw=localStorage.getItem(SAVE_KEY); if(raw){ S=Object.assign(JSON.parse(JSON.stringify(DEFAULT_STATE)),JSON.parse(raw)); }
+  }catch(e){}
+  if(!S) S=JSON.parse(JSON.stringify(DEFAULT_STATE));
+  LANG=S.lang||"en";
+}
+function save(){ try{ S.lang=LANG; localStorage.setItem(SAVE_KEY, JSON.stringify(S)); }catch(e){} }
+
+/* ---------- Audio Engine (Web Audio API) ---------- */
+let AC=null;
+function ac(){ if(!AC){ try{AC=new (window.AudioContext||window.webkitAudioContext)();}catch(e){} } return AC; }
+function tone(freq,dur,type,vol,when){
+  if(!S||!S.audio) return; const c=ac(); if(!c) return;
+  const o=c.createOscillator(), g=c.createGain(); o.type=type||"sine"; o.frequency.value=freq;
+  const tt=c.currentTime+(when||0); o.connect(g); g.connect(c.destination);
+  g.gain.setValueAtTime(0.0001,tt); g.gain.exponentialRampToValueAtTime(vol||0.15,tt+0.02);
+  g.gain.exponentialRampToValueAtTime(0.0001,tt+dur); o.start(tt); o.stop(tt+dur+0.02);
+}
+function playClick(){ tone(420,0.06,"square",0.08); }
+function playCoin(){ tone(880,0.08,"square",0.1); tone(1320,0.1,"square",0.08,0.06); }
+function playCorrect(){ [523,659,784].forEach((f,i)=>tone(f,0.14,"triangle",0.12,i*0.08)); }
+function playWrong(){ tone(220,0.18,"sawtooth",0.08); tone(180,0.2,"sawtooth",0.07,0.08); }
+function playQuestComplete(){ [523,659,784,1046].forEach((f,i)=>tone(f,0.16,"triangle",0.12,i*0.09)); }
+function playAchievement(){ [659,784,988,1318].forEach((f,i)=>tone(f,0.18,"triangle",0.13,i*0.1)); }
+function playVictory(){ [523,659,784,1046,1318].forEach((f,i)=>tone(f,0.22,"square",0.12,i*0.12)); }
+function playBossFight(){ tone(110,0.3,"sawtooth",0.1); tone(146,0.3,"sawtooth",0.08,0.15); }
+function playLevelUp(){ [392,523,659,784,1046].forEach((f,i)=>tone(f,0.16,"triangle",0.13,i*0.08)); }
+</script>
+<script>
+/* ============================================================
+   CURRICULUM ENGINE — generates KSSR-aligned challenges
+   Each returns {q_en,q_ms, choices:[...], answer:index, subject}
+   ============================================================ */
+function ri(a,b){ return Math.floor(Math.random()*(b-a+1))+a; }
+function pick(a){ return a[Math.floor(Math.random()*a.length)]; }
+function shuffle(a){ a=a.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+
+function buildMC(qen,qms,correct,distract,subject){
+  const opts=shuffle([correct,...distract]);
+  return { q_en:qen, q_ms:qms, choices:opts.map(String), answer:opts.indexOf(correct), subject };
+}
+
+/* ---- MATH by year ---- */
+function genMath(year){
+  let a,b,c,d,ans,qen,qms;
+  if(year<=1){
+    a=ri(1,9); b=ri(1,9); ans=a+b;
+    return buildMC(`A farmer has ${a} mangoes and picks ${b} more. How many now?`,`Seorang petani ada ${a} mangga dan memetik ${b} lagi. Berapa semua?`,ans,[ans+1,ans-1,ans+2].map(x=>Math.max(0,x)),"math");
+  } else if(year==2){
+    if(Math.random()<.5){ a=ri(10,40); b=ri(5,20); ans=a-b; return buildMC(`There are ${a} coins. You spend ${b}. How many left?`,`Ada ${a} syiling. Anda belanja ${b}. Berapa baki?`,ans,[ans+2,ans-3,ans+5],"math"); }
+    a=ri(2,5); b=ri(2,5); ans=a*b; return buildMC(`${a} baskets with ${b} fruits each. Total fruits?`,`${a} bakul dengan ${b} buah setiap satu. Jumlah buah?`,ans,[ans+a,ans-b,ans+1],"math");
+  } else if(year==3){
+    if(Math.random()<.5){ a=ri(3,9); b=ri(3,9); ans=a*b; return buildMC(`${a} × ${b} = ?`,`${a} × ${b} = ?`,ans,[ans+a,ans-b,ans+2],"math"); }
+    a=ri(2,9); ans=a; const tot=a*ri(2,6); return buildMC(`${tot} apples shared into ${tot/a} bags equally. Apples per bag?`,`${tot} epal dibahagi sama rata ke ${tot/a} beg. Berapa setiap beg?`,ans,[ans+1,ans-1,ans+3],"math");
+  } else if(year==4){
+    if(Math.random()<.5){ a=ri(100,900); b=ri(50,400); ans=a+b; return buildMC(`Market sold RM${a} then RM${b}. Total sales?`,`Pasar jual RM${a} kemudian RM${b}. Jumlah jualan?`,"RM"+ans,["RM"+(ans+50),"RM"+(ans-30),"RM"+(ans+10)],"math"); }
+    a=ri(12,30); b=ri(3,9); ans=a*b; return buildMC(`A box holds ${a} pencils. ${b} boxes hold how many?`,`Sekotak ada ${a} pensel. ${b} kotak ada berapa?`,ans,[ans+a,ans-b,ans+10],"math");
+  } else if(year==5){
+    if(Math.random()<.5){ const w=ri(1,4),x=ri(5,9); const dec=(w+x/10).toFixed(1); ans=dec; return buildMC(`Add: ${w}.0 + 0.${x} = ?`,`Tambah: ${w}.0 + 0.${x} = ?`,ans,[(w+x/10+0.1).toFixed(1),(w+x/10-0.2).toFixed(1),(w+1).toFixed(1)],"math"); }
+    const p=ri(1,5)*10; a=ri(20,80); ans=Math.round(a*p/100); return buildMC(`${p}% of ${a} fruits are ripe. How many ripe?`,`${p}% daripada ${a} buah sudah masak. Berapa yang masak?`,ans,[ans+2,ans-3,ans+5],"math");
+  } else {
+    if(Math.random()<.5){ a=ri(2,6); b=ri(2,6); c=ri(2,6); ans=a+b*c; return buildMC(`Solve: ${a} + ${b} × ${c} = ?`,`Selesaikan: ${a} + ${b} × ${c} = ?`,ans,[(a+b)*c,ans+1,ans-2],"math"); }
+    const n=ri(2,5),den=ri(6,9); ans=(n/den).toFixed(2); return buildMC(`Express ${n}/${den} as a decimal (2 dp).`,`Nyatakan ${n}/${den} sebagai perpuluhan (2 t.p.).`,ans,[((n+1)/den).toFixed(2),((n-1)/den).toFixed(2),(n/den+0.1).toFixed(2)],"math");
+  }
+}
+
+/* ---- BAHASA MELAYU by year ---- */
+const BM_BANK = [
+  {y:1,en:"Which word means 'cat'?",ms:"Perkataan manakah bermaksud 'kucing'?",a:"Kucing",d:["Anjing","Burung","Ikan"]},
+  {y:1,en:"Opposite of 'besar' (big)?",ms:"Lawan bagi 'besar'?",a:"Kecil",d:["Tinggi","Panjang","Tebal"]},
+  {y:1,en:"Which is a fruit (buah)?",ms:"Manakah sejenis buah?",a:"Pisang",d:["Meja","Kereta","Baju"]},
+  {y:2,en:"Complete: Saya ___ ke sekolah. (go)",ms:"Lengkapkan: Saya ___ ke sekolah.",a:"pergi",d:["makan","tidur","baca"]},
+  {y:2,en:"Plural builder: 'buku-buku' shows?",ms:"'buku-buku' menunjukkan kata?",a:"Jamak",d:["Tunggal","Nama khas","Kerja"]},
+  {y:2,en:"Which is a colour (warna)?",ms:"Manakah sejenis warna?",a:"Merah",d:["Lari","Tinggi","Cepat"]},
+  {y:3,en:"Choose the correct 'kata kerja' (verb).",ms:"Pilih 'kata kerja' yang betul.",a:"berlari",d:["cantik","meja","biru"]},
+  {y:3,en:"'Rajin' is a type of?",ms:"'Rajin' ialah jenis kata?",a:"Kata adjektif",d:["Kata nama","Kata kerja","Kata hubung"]},
+  {y:3,en:"Synonym of 'pandai'?",ms:"Sinonim bagi 'pandai'?",a:"Bijak",d:["Malas","Lambat","Sedih"]},
+  {y:4,en:"Choose correct 'simpulan bahasa' for very happy.",ms:"Pilih simpulan bahasa untuk sangat gembira.",a:"Berbunga hati",d:["Kaki ayam","Buah tangan","Kepala batu"]},
+  {y:4,en:"'kerana' is a?",ms:"'kerana' ialah?",a:"Kata hubung",d:["Kata nama","Kata adjektif","Kata seru"]},
+  {y:4,en:"Antonym of 'gembira'?",ms:"Antonim bagi 'gembira'?",a:"Sedih",d:["Riang","Suka","Ceria"]},
+  {y:5,en:"'Bagai aur dengan tebing' bermaksud?",ms:"'Bagai aur dengan tebing' bermaksud?",a:"Saling membantu",d:["Bermusuhan","Bersendirian","Bertengkar"]},
+  {y:5,en:"Choose correct penjodoh bilangan: se___ kereta.",ms:"Pilih penjodoh bilangan: se___ kereta.",a:"buah",d:["ekor","orang","helai"]},
+  {y:5,en:"'Peribahasa' for united we stand?",ms:"Peribahasa untuk bersatu teguh?",a:"Bersatu teguh bercerai roboh",d:["Ada gula ada semut","Bagai pinang dibelah dua","Harapkan pagar"]},
+  {y:6,en:"Identify ayat pasif.",ms:"Kenal pasti ayat pasif.",a:"Buku itu dibaca oleh Ali",d:["Ali membaca buku","Ali pergi sekolah","Ali makan nasi"]},
+  {y:6,en:"'Membanting tulang' bermaksud?",ms:"'Membanting tulang' bermaksud?",a:"Bekerja keras",d:["Berehat","Bermain","Tidur lama"]},
+  {y:6,en:"Penjodoh bilangan: se___ kertas.",ms:"Penjodoh bilangan: se___ kertas.",a:"helai",d:["buah","ekor","biji"]}
+];
+function genBM(year){
+  const pool=BM_BANK.filter(x=>Math.abs(x.y-year)<=1); const it=pick(pool.length?pool:BM_BANK);
+  return buildMC(it.en,it.ms,it.a,it.d,"bm");
+}
+
+/* ---- ENGLISH by year ---- */
+const EN_BANK=[
+  {y:1,en:"Which word means a baby dog?",ms:"Perkataan untuk anak anjing?",a:"Puppy",d:["Kitten","Calf","Chick"]},
+  {y:1,en:"Pick the colour word.",ms:"Pilih perkataan warna.",a:"Blue",d:["Run","Jump","Tall"]},
+  {y:1,en:"The sun is ___.",ms:"Matahari itu ___.",a:"hot",d:["cold","wet","blue"]},
+  {y:2,en:"Plural of 'box'?",ms:"Jamak bagi 'box'?",a:"boxes",d:["boxs","box","boxies"]},
+  {y:2,en:"Choose the verb.",ms:"Pilih kata kerja.",a:"swim",d:["happy","table","red"]},
+  {y:2,en:"She ___ an apple. (present)",ms:"She ___ an apple.",a:"eats",d:["eat","eaten","eating"]},
+  {y:3,en:"Past tense of 'go'?",ms:"Kata lampau bagi 'go'?",a:"went",d:["goed","gone","going"]},
+  {y:3,en:"Opposite of 'happy'?",ms:"Lawan bagi 'happy'?",a:"sad",d:["glad","joyful","merry"]},
+  {y:3,en:"Choose the adjective.",ms:"Pilih kata adjektif.",a:"beautiful",d:["quickly","run","table"]},
+  {y:4,en:"Pick the correct sentence.",ms:"Pilih ayat yang betul.",a:"They are playing.",d:["They is playing.","They am play.","They plays is."]},
+  {y:4,en:"Synonym of 'big'?",ms:"Sinonim bagi 'big'?",a:"large",d:["tiny","small","short"]},
+  {y:4,en:"'___ you help me?' (polite request)",ms:"'___ you help me?'",a:"Could",d:["Does","Is","Am"]},
+  {y:5,en:"Choose correct: She has ___ her homework.",ms:"Pilih yang betul: She has ___ her homework.",a:"finished",d:["finish","finishing","finishes"]},
+  {y:5,en:"Antonym of 'ancient'?",ms:"Antonim bagi 'ancient'?",a:"modern",d:["old","past","historic"]},
+  {y:5,en:"Pick the adverb.",ms:"Pilih kata keterangan.",a:"quickly",d:["quick","quickness","quicker"]},
+  {y:6,en:"Identify the passive sentence.",ms:"Kenal pasti ayat pasif.",a:"The cake was eaten.",d:["She ate the cake.","She eats cake.","She is eating."]},
+  {y:6,en:"Choose the conjunction.",ms:"Pilih kata hubung.",a:"although",d:["happy","table","quickly"]},
+  {y:6,en:"Correct: If it rains, we ___ stay home.",ms:"Betul: If it rains, we ___ stay home.",a:"will",d:["would have","was","are been"]}
+];
+function genEng(year){
+  const pool=EN_BANK.filter(x=>Math.abs(x.y-year)<=1); const it=pick(pool.length?pool:EN_BANK);
+  return buildMC(it.en,it.ms,it.a,it.d,"eng");
+}
+
+function genChallenge(subject,year){
+  year=year||S.year||1;
+  if(subject==="math") return genMath(year);
+  if(subject==="bm") return genBM(year);
+  if(subject==="eng") return genEng(year);
+  return [genMath,genBM,genEng][ri(0,2)](year);
+}
+</script>
+<script>
+/* ============================================================
+   WORLD DATA — 6 regions, NPCs, quests, treasures, bosses
+   ============================================================ */
+const TILE=48;
+// tile codes: 0 grass,1 water,2 path,3 tree,4 flower,5 sand,6 bridge,7 floor,8 wall
+const REGIONS = {
+  kampung:{ name_en:"Kampung Ceria", name_ms:"Kampung Ceria", minLevel:1, color:"#86efac", accent:"#16a34a",
+    desc_en:"A cheerful starter village.", desc_ms:"Kampung permulaan yang ceria." },
+  hutan:{ name_en:"Hutan Ilmu", name_ms:"Hutan Ilmu", minLevel:2, color:"#4ade80", accent:"#15803d",
+    desc_en:"A lush forest of knowledge.", desc_ms:"Hutan ilmu yang menghijau." },
+  bandar:{ name_en:"Bandar Pintar", name_ms:"Bandar Pintar", minLevel:3, color:"#93c5fd", accent:"#2563eb",
+    desc_en:"A bright smart city.", desc_ms:"Bandar pintar yang cerah." },
+  akademi:{ name_en:"Akademi Wira", name_ms:"Akademi Wira", minLevel:4, color:"#c4b5fd", accent:"#7c3aed",
+    desc_en:"The academy of heroes.", desc_ms:"Akademi para wira." },
+  gunung:{ name_en:"Gunung Kebijaksanaan", name_ms:"Gunung Kebijaksanaan", minLevel:5, color:"#fda4af", accent:"#e11d48",
+    desc_en:"Mountain of wisdom & expert trials.", desc_ms:"Gunung kebijaksanaan & ujian pakar." },
+  istana:{ name_en:"Istana Legenda", name_ms:"Istana Legenda", minLevel:6, color:"#fcd34d", accent:"#d97706",
+    desc_en:"The legendary final palace.", desc_ms:"Istana legenda terakhir." }
+};
+const REGION_ORDER=["kampung","hutan","bandar","akademi","gunung","istana"];
+
+// deterministic pseudo-random for map gen
+function seeded(seed){ let s=seed; return ()=>{ s=(s*1103515245+12345)&0x7fffffff; return s/0x7fffffff; }; }
+
+function genMap(seed,w,h,opts){
+  const rnd=seeded(seed); const m=[]; opts=opts||{};
+  for(let y=0;y<h;y++){ const row=[]; for(let x=0;x<w;x++){
+    let tile=0;
+    if(x===0||y===0||x===w-1||y===h-1) tile=3; // border trees
+    else { const r=rnd();
+      if(r<(opts.water||0.05)) tile=1;
+      else if(r<(opts.water||0.05)+(opts.tree||0.10)) tile=3;
+      else if(r<0.20) tile=4;
+      else tile=0;
+    }
+    row.push(tile);
+  } m.push(row); }
+  // carve a path cross through center
+  const cy=Math.floor(h/2), cx=Math.floor(w/2);
+  for(let x=1;x<w-1;x++){ m[cy][x]=2; if(cy+1<h-1)m[cy+1][x]=2; }
+  for(let y=1;y<h-1;y++){ m[y][cx]=2; }
+  // ensure spawn area clear
+  for(let y=cy-1;y<=cy+2;y++)for(let x=cx-1;x<=cx+2;x++){ if(m[y]&&m[y][x]!==undefined&&m[y][x]!==2)m[y][x]=0; }
+  return m;
+}
+
+const WORLD_W=22, WORLD_H=15;
+const MAPS={
+  kampung:genMap(7,WORLD_W,WORLD_H,{water:0.04,tree:0.08}),
+  hutan:genMap(17,WORLD_W,WORLD_H,{water:0.05,tree:0.22}),
+  bandar:genMap(29,WORLD_W,WORLD_H,{water:0.03,tree:0.05}),
+  akademi:genMap(41,WORLD_W,WORLD_H,{water:0.06,tree:0.10}),
+  gunung:genMap(53,WORLD_W,WORLD_H,{water:0.04,tree:0.14}),
+  istana:genMap(67,WORLD_W,WORLD_H,{water:0.07,tree:0.06})
+};
+
+/* NPC + quest definitions per region */
+const NPCS = {
+  kampung:[
+    {id:"k_farmer",emoji:"👨‍🌾",name_en:"Pak Mat the Farmer",name_ms:"Pak Mat Petani",tx:5,ty:5,subject:"math",
+      line_en:"My durian stall needs help counting! Can you solve some sums?",
+      line_ms:"Gerai durian saya perlu bantuan mengira! Boleh tolong kira?",
+      quest:{id:"q_durian",title_en:"Durian Counting",title_ms:"Mengira Durian",type:"side",steps:3,reward:{xp:40,coins:30,stars:1,item:"🥭 Durian"}}},
+    {id:"k_teacher",emoji:"👩‍🏫",name_en:"Cikgu Aisyah",name_ms:"Cikgu Aisyah",tx:16,ty:6,subject:"bm",
+      line_en:"Welcome young hero! Help me with these Malay words.",
+      line_ms:"Selamat datang wira muda! Bantu saya dengan perkataan ini.",
+      quest:{id:"q_words",title_en:"Village Vocabulary",title_ms:"Kosa Kata Kampung",type:"main",steps:3,reward:{xp:50,coins:25,stars:1,pet:"rabbit"}}},
+    {id:"k_fisher",emoji:"🎣",name_en:"Abang Fisherman",name_ms:"Abang Nelayan",tx:6,ty:11,subject:"eng",
+      line_en:"Read my English fishing signs to find the big catch!",
+      line_ms:"Baca papan tanda Inggeris saya untuk tangkapan besar!",
+      quest:{id:"q_fish",title_en:"Fishing English",title_ms:"Bahasa Inggeris Memancing",type:"side",steps:3,reward:{xp:45,coins:35,stars:1,item:"🐟 Fish"}}},
+    {id:"k_mascot",emoji:"🦧",name_en:"Oren the Orangutan",name_ms:"Oren si Orangutan",tx:11,ty:8,subject:"any",mascot:true,
+      line_en:"Hi! I'm Oren, your guide. Explore, talk to everyone, and find treasures!",
+      line_ms:"Hai! Saya Oren, pemandu anda. Teroka, berbual, dan cari harta karun!"}
+  ],
+  hutan:[
+    {id:"h_scientist",emoji:"👩‍🔬",name_en:"Nova the Explorer",name_ms:"Nova Penjelajah",tx:6,ty:5,subject:"math",mascot:true,
+      line_en:"The forest hides number puzzles. Solve them to pass!",
+      line_ms:"Hutan menyembunyikan teka-teki nombor. Selesaikan untuk lalu!",
+      quest:{id:"q_forest_math",title_en:"Forest Multiplication",title_ms:"Pendaraban Hutan",type:"main",steps:4,reward:{xp:70,coins:40,stars:2,pet:"owl"}}},
+    {id:"h_wizard",emoji:"🧙",name_en:"The Word Wizard",name_ms:"Ahli Sihir Perkataan",tx:16,ty:9,subject:"bm",
+      line_en:"Cast spelling spells with me — choose the right words!",
+      line_ms:"Lafazkan jampi ejaan dengan saya — pilih perkataan betul!",
+      quest:{id:"q_spell",title_en:"Spelling Spells",title_ms:"Jampi Ejaan",type:"side",steps:3,reward:{xp:60,coins:30,stars:1,item:"📖 Spellbook"}}},
+    {id:"h_explorer",emoji:"🧭",name_en:"Captain Cerdik",name_ms:"Kapten Cerdik",tx:5,ty:11,subject:"eng",mascot:true,
+      line_en:"Decode my English map clues to find hidden paths!",
+      line_ms:"Tafsir petunjuk peta Inggeris saya untuk laluan tersembunyi!",
+      quest:{id:"q_mapclue",title_en:"Map Clues",title_ms:"Petunjuk Peta",type:"treasure",steps:3,reward:{xp:65,coins:45,stars:2,item:"🗺️ Map Piece"}}}
+  ],
+  bandar:[
+    {id:"b_merchant",emoji:"🧑‍💼",name_en:"Merchant Lim",name_ms:"Peniaga Lim",tx:6,ty:6,subject:"math",
+      line_en:"Run my shop! Calculate prices and change correctly.",
+      line_ms:"Uruskan kedai saya! Kira harga dan baki dengan betul.",
+      quest:{id:"q_shop",title_en:"Shop Manager",title_ms:"Pengurus Kedai",type:"main",steps:4,reward:{xp:90,coins:60,stars:2,pet:"parrot"}}},
+    {id:"b_doctor",emoji:"👨‍⚕️",name_en:"Doctor Siti",name_ms:"Doktor Siti",tx:15,ty:5,subject:"eng",
+      line_en:"Read English health instructions to help my patients.",
+      line_ms:"Baca arahan kesihatan Inggeris untuk bantu pesakit saya.",
+      quest:{id:"q_health",title_en:"Clinic Instructions",title_ms:"Arahan Klinik",type:"side",steps:3,reward:{xp:75,coins:40,stars:2,item:"💊 Med Kit"}}},
+    {id:"b_police",emoji:"👮",name_en:"Officer Rahman",name_ms:"Pegawai Rahman",tx:7,ty:11,subject:"bm",
+      line_en:"Help me write reports with correct Malay grammar.",
+      line_ms:"Bantu saya tulis laporan dengan tatabahasa betul.",
+      quest:{id:"q_report",title_en:"City Reports",title_ms:"Laporan Bandar",type:"side",steps:3,reward:{xp:70,coins:45,stars:1,item:"📋 Report"}}}
+  ],
+  akademi:[
+    {id:"a_inventor",emoji:"👩‍🔧",name_en:"Aisyah the Inventor",name_ms:"Aisyah Pencipta",tx:6,ty:6,subject:"math",mascot:true,
+      line_en:"Build my machine by solving advanced calculations!",
+      line_ms:"Bina mesin saya dengan menyelesaikan pengiraan lanjutan!",
+      quest:{id:"q_machine",title_en:"Build the Machine",title_ms:"Bina Mesin",type:"main",steps:5,reward:{xp:120,coins:80,stars:3,pet:"dragon"}}},
+    {id:"a_prof",emoji:"🧑‍🏫",name_en:"Professor Wira",name_ms:"Profesor Wira",tx:15,ty:7,subject:"eng",
+      line_en:"Master advanced English to graduate from the academy!",
+      line_ms:"Kuasai Bahasa Inggeris lanjutan untuk bergraduasi!",
+      quest:{id:"q_grad",title_en:"Graduation English",title_ms:"Inggeris Graduasi",type:"main",steps:4,reward:{xp:100,coins:60,stars:2,item:"🎓 Cap"}}},
+    {id:"a_poet",emoji:"📜",name_en:"Penyair Lela",name_ms:"Penyair Lela",tx:8,ty:11,subject:"bm",
+      line_en:"Recite peribahasa and master Bahasa Melayu!",
+      line_ms:"Lafazkan peribahasa dan kuasai Bahasa Melayu!",
+      quest:{id:"q_poem",title_en:"Peribahasa Master",title_ms:"Penguasa Peribahasa",type:"side",steps:4,reward:{xp:95,coins:55,stars:2,item:"🪶 Quill"}}}
+  ],
+  gunung:[
+    {id:"g_sage",emoji:"🧘",name_en:"Mountain Sage",name_ms:"Pendeta Gunung",tx:11,ty:5,subject:"any",
+      line_en:"Only true heroes solve my mixed-subject trials!",
+      line_ms:"Hanya wira sejati selesai ujian campuran saya!",
+      quest:{id:"q_trial",title_en:"Wisdom Trials",title_ms:"Ujian Kebijaksanaan",type:"challenge",steps:5,reward:{xp:150,coins:100,stars:3,pet:"tiger"}}},
+    {id:"g_climber",emoji:"🧗",name_en:"Climber Daud",name_ms:"Pendaki Daud",tx:6,ty:10,subject:"math",
+      line_en:"Calculate heights and distances to climb safely!",
+      line_ms:"Kira ketinggian dan jarak untuk mendaki selamat!",
+      quest:{id:"q_climb",title_en:"Summit Math",title_ms:"Matematik Puncak",type:"side",steps:4,reward:{xp:120,coins:70,stars:3,item:"⛏️ Pickaxe"}}}
+  ],
+  istana:[
+    {id:"i_king",emoji:"🤴",name_en:"King of Knowledge",name_ms:"Raja Ilmu",tx:11,ty:6,subject:"any",
+      line_en:"Prove yourself a Legend across all subjects!",
+      line_ms:"Buktikan diri sebagai Legenda dalam semua subjek!",
+      quest:{id:"q_legend",title_en:"The Legend's Path",title_ms:"Laluan Legenda",type:"main",steps:6,reward:{xp:250,coins:150,stars:5,item:"👑 Crown"}}},
+    {id:"i_keeper",emoji:"🛡️",name_en:"Royal Keeper",name_ms:"Penjaga Diraja",tx:6,ty:9,subject:"any",
+      line_en:"Guard the palace by mastering mixed challenges!",
+      line_ms:"Kawal istana dengan menguasai cabaran campuran!",
+      quest:{id:"q_guard",title_en:"Palace Guardian",title_ms:"Penjaga Istana",type:"challenge",steps:5,reward:{xp:200,coins:120,stars:4,item:"🏆 Royal Trophy"}}}
+  ]
+};
+
+/* Treasure chests per region */
+const TREASURES={
+  kampung:[{id:"t_k1",tx:18,ty:3,coins:20,xp:15,item:"⭐ Lucky Star"},{id:"t_k2",tx:3,ty:12,coins:15,xp:10,item:"🍬 Candy"}],
+  hutan:[{id:"t_h1",tx:18,ty:11,coins:30,xp:25,item:"💎 Gem"},{id:"t_h2",tx:9,ty:3,coins:25,xp:20,collectible:"🌟 Forest Badge"}],
+  bandar:[{id:"t_b1",tx:18,ty:9,coins:45,xp:30,item:"🔑 Golden Key"},{id:"t_b2",tx:3,ty:4,coins:35,xp:25,collectible:"🏅 City Medal"}],
+  akademi:[{id:"t_a1",tx:17,ty:12,coins:60,xp:45,item:"📚 Tome"},{id:"t_a2",tx:4,ty:8,coins:50,xp:40,collectible:"🎖️ Scholar Medal"}],
+  gunung:[{id:"t_g1",tx:17,ty:3,coins:80,xp:60,collectible:"🏔️ Summit Badge"}],
+  istana:[{id:"t_i1",tx:17,ty:11,coins:120,xp:90,collectible:"💠 Legend Crystal"}]
+};
+
+/* Boss per region (educational boss battle) */
+const BOSSES={
+  kampung:{id:"boss_k",name_en:"Grumpy Counting Crab",name_ms:"Ketam Pengira",emoji:"🦀",tx:11,ty:12,hp:3,subject:"math"},
+  hutan:{id:"boss_h",name_en:"Vocabulary Titan",name_ms:"Gergasi Kosa Kata",emoji:"🌳",tx:11,ty:11,hp:4,subject:"bm"},
+  bandar:{id:"boss_b",name_en:"Grammar Guardian",name_ms:"Penjaga Tatabahasa",emoji:"🤖",tx:11,ty:9,hp:4,subject:"eng"},
+  akademi:{id:"boss_a",name_en:"Dragon of Fractions",name_ms:"Naga Pecahan",emoji:"🐉",tx:11,ty:11,hp:5,subject:"math"},
+  gunung:{id:"boss_g",name_en:"King of Percentages",name_ms:"Raja Peratus",emoji:"👹",tx:15,ty:12,hp:5,subject:"any"},
+  istana:{id:"boss_i",name_en:"The Final Legend",name_ms:"Legenda Terakhir",emoji:"🐲",tx:15,ty:11,hp:6,subject:"any"}
+};
+
+const AVATARS=["🦸","🦸‍♀️","🧒","👧","🧑‍🚀","🦹","🥷","🧝"];
+const PET_INFO={
+  rabbit:{emoji:"🐰",name_en:"Bunny",name_ms:"Arnab"}, owl:{emoji:"🦉",name_en:"Owl",name_ms:"Burung Hantu"},
+  parrot:{emoji:"🦜",name_en:"Parrot",name_ms:"Burung Kakak Tua"}, dragon:{emoji:"🐲",name_en:"Dragon",name_ms:"Naga"},
+  tiger:{emoji:"🐯",name_en:"Tiger Cub",name_ms:"Anak Harimau"}, orangutan:{emoji:"🦧",name_en:"Orangutan",name_ms:"Orangutan"}
+};
+const RANKS=["Year 1 Explorer","Year 2 Adventurer","Year 3 Ranger","Year 4 Hero","Year 5 Master","Year 6 Legend"];
+const ACHIEVEMENTS={
+  first_adventure:{en:"First Adventure",ms:"Pengembaraan Pertama"},
+  math_hero:{en:"Math Hero",ms:"Wira Matematik"},
+  bm_champion:{en:"BM Champion",ms:"Juara BM"},
+  english_master:{en:"English Master",ms:"Penguasa Inggeris"},
+  treasure_hunter:{en:"Treasure Hunter",ms:"Pemburu Harta"},
+  boss_slayer:{en:"Boss Slayer",ms:"Penakluk Bos"},
+  pet_friend:{en:"Animal Friend",ms:"Sahabat Haiwan"},
+  legend_explorer:{en:"Legend Explorer",ms:"Penjelajah Legenda"}
+};
+</script>
+<script>
+/* ============================================================
+   RENDER ENGINE + INPUT + GAME LOOP
+   ============================================================ */
+const cv=document.getElementById("cv"), ctx=cv.getContext("2d");
+let VW=0,VH=0,DPR=1;
+function resize(){
+  DPR=Math.min(window.devicePixelRatio||1,2); VW=window.innerWidth; VH=window.innerHeight;
+  cv.width=VW*DPR; cv.height=VH*DPR; ctx.setTransform(DPR,0,0,DPR,0,0);
+}
+window.addEventListener("resize",resize); resize();
+
+const player={x:0,y:0,dir:"down",moving:false,speed:170,frame:0,anim:0};
+let curRegion="kampung", curMap=null, entities=[], cam={x:0,y:0};
+let gameActive=false;
+
+function regionEntities(rk){
+  const list=[];
+  (NPCS[rk]||[]).forEach(n=>{ if(!S.completedQuests.includes(n.quest&&n.quest.id) || n.mascot) list.push({type:"npc",data:n,x:n.tx*TILE+TILE/2,y:n.ty*TILE+TILE/2}); else list.push({type:"npc",data:n,x:n.tx*TILE+TILE/2,y:n.ty*TILE+TILE/2,done:true}); });
+  (TREASURES[rk]||[]).forEach(tr=>{ if(!S.chests.includes(tr.id)) list.push({type:"chest",data:tr,x:tr.tx*TILE+TILE/2,y:tr.ty*TILE+TILE/2}); });
+  const b=BOSSES[rk]; if(b) list.push({type:"boss",data:b,x:b.tx*TILE+TILE/2,y:b.ty*TILE+TILE/2,done:S.bosses.includes(b.id)});
+  return list;
+}
+
+function enterRegion(rk,keepPos){
+  curRegion=rk; S.region=rk; curMap=MAPS[rk]; entities=regionEntities(rk);
+  if(!keepPos){ player.x=Math.floor(WORLD_W/2)*TILE+TILE/2; player.y=Math.floor(WORLD_H/2)*TILE+TILE/2; }
+  S.px=player.x; S.py=player.y; updateHUD(); save();
+}
+
+function blocked(px,py){
+  const tx=Math.floor(px/TILE), ty=Math.floor(py/TILE);
+  if(tx<0||ty<0||tx>=WORLD_W||ty>=WORLD_H) return true;
+  const tile=curMap[ty][tx];
+  return tile===1||tile===3||tile===8;
+}
+
+/* ---- INPUT ---- */
+const keys={};
+let joyVec={x:0,y:0};
+addEventListener("keydown",e=>{ keys[e.key.toLowerCase()]=true;
+  if([" ","arrowup","arrowdown","arrowleft","arrowright"].includes(e.key.toLowerCase())) e.preventDefault();
+  if(e.key.toLowerCase()==="e"||e.key===" ") doInteract();
+  if(e.key.toLowerCase()==="i") toggleInventory();
+  if(e.key.toLowerCase()==="h") doHint();
+  if(e.key==="Escape") closeModal();
+});
+addEventListener("keyup",e=>{ keys[e.key.toLowerCase()]=false; });
+
+/* Joystick */
+const joy=document.getElementById("joy"), knob=document.getElementById("joyKnob");
+let joyId=null;
+function joyStart(e){ const t=e.changedTouches?e.changedTouches[0]:e; joyId=e.changedTouches?t.identifier:"mouse"; joyMove(e); }
+function joyMove(e){
+  if(joyId===null) return; let t;
+  if(e.changedTouches){ for(const tc of e.changedTouches){ if(tc.identifier===joyId){t=tc;break;} } if(!t) return; }
+  else t=e;
+  const r=joy.getBoundingClientRect(); const cx=r.left+r.width/2, cy=r.top+r.height/2;
+  let dx=t.clientX-cx, dy=t.clientY-cy; const mag=Math.hypot(dx,dy), max=r.width/2;
+  if(mag>max){ dx=dx/mag*max; dy=dy/mag*max; }
+  knob.style.transform=`translate(${dx}px,${dy}px)`;
+  joyVec.x=dx/max; joyVec.y=dy/max;
+}
+function joyEnd(e){ if(e.changedTouches){ for(const tc of e.changedTouches){ if(tc.identifier===joyId){ joyId=null; } } } else joyId=null;
+  if(joyId===null){ joyVec.x=0; joyVec.y=0; knob.style.transform="translate(0,0)"; } }
+joy.addEventListener("touchstart",e=>{e.preventDefault();joyStart(e);},{passive:false});
+joy.addEventListener("touchmove",e=>{e.preventDefault();joyMove(e);},{passive:false});
+joy.addEventListener("touchend",e=>{e.preventDefault();joyEnd(e);},{passive:false});
+joy.addEventListener("mousedown",joyStart); addEventListener("mousemove",e=>{if(joyId==="mouse")joyMove(e);}); addEventListener("mouseup",e=>{if(joyId==="mouse")joyEnd(e);});
+
+/* Action buttons */
+function bind(id,fn){ const el=document.getElementById(id); el.addEventListener("touchstart",e=>{e.preventDefault();fn();},{passive:false}); el.addEventListener("click",e=>{e.preventDefault();fn();}); }
+bind("btnA",()=>{playClick();doInteract();});
+bind("btnB",()=>{playClick();closeModal();});
+bind("btnX",()=>{playClick();doHint();});
+bind("btnY",()=>{playClick();toggleInventory();});
+
+/* Tap-to-move on canvas (mouse) */
+let moveTarget=null;
+cv.addEventListener("click",e=>{
+  if(!gameActive) return; if(document.getElementById("modal").classList.contains("show")) return;
+  const wx=e.clientX+cam.x, wy=e.clientY+cam.y; moveTarget={x:wx,y:wy};
+});
+
+/* ---- GAME LOOP ---- */
+let last=0, playTimer=0;
+function loop(ts){
+  const dt=Math.min((ts-last)/1000,0.05); last=ts;
+  if(gameActive){ update(dt); render(); 
+    playTimer+=dt; if(playTimer>=5){ S.timePlayed+=Math.round(playTimer); playTimer=0; save(); }
+  }
+  requestAnimationFrame(loop);
+}
+
+function update(dt){
+  if(document.getElementById("modal").classList.contains("show")){ player.moving=false; return; }
+  let vx=0,vy=0;
+  if(keys["arrowup"]||keys["w"]) vy-=1;
+  if(keys["arrowdown"]||keys["s"]) vy+=1;
+  if(keys["arrowleft"]||keys["a"]) vx-=1;
+  if(keys["arrowright"]||keys["d"]) vx+=1;
+  if(Math.abs(joyVec.x)>0.18||Math.abs(joyVec.y)>0.18){ vx+=joyVec.x; vy+=joyVec.y; moveTarget=null; }
+  if(moveTarget){ const dx=moveTarget.x-player.x, dy=moveTarget.y-player.y; const m=Math.hypot(dx,dy);
+    if(m<6){ moveTarget=null; } else { vx+=dx/m; vy+=dy/m; } }
+  const mag=Math.hypot(vx,vy);
+  player.moving=mag>0.05;
+  if(player.moving){
+    vx/=mag||1; vy/=mag||1;
+    if(Math.abs(vx)>Math.abs(vy)) player.dir=vx>0?"right":"left"; else player.dir=vy>0?"down":"up";
+    const nx=player.x+vx*player.speed*dt, ny=player.y+vy*player.speed*dt;
+    if(!blocked(nx,player.y)) player.x=nx;
+    if(!blocked(player.x,ny)) player.y=ny;
+    player.anim+=dt*8; player.frame=Math.floor(player.anim)%4;
+    S.px=player.x; S.py=player.y;
+  } else { player.anim=0; player.frame=0; }
+  // camera
+  cam.x=player.x-VW/2; cam.y=player.y-VH/2;
+  cam.x=Math.max(0,Math.min(cam.x,WORLD_W*TILE-VW));
+  cam.y=Math.max(0,Math.min(cam.y,WORLD_H*TILE-VH));
+  if(WORLD_W*TILE<VW) cam.x=(WORLD_W*TILE-VW)/2;
+  if(WORLD_H*TILE<VH) cam.y=(WORLD_H*TILE-VH)/2;
+  updatePrompt();
+}
+
+let nearEntity=null;
+function updatePrompt(){
+  nearEntity=null; let best=70*70;
+  for(const e of entities){ if(e.type==="chest"&&S.chests.includes(e.data.id)) continue;
+    const d=(e.x-player.x)**2+(e.y-player.y)**2; if(d<best){ best=d; nearEntity=e; } }
+  // portals (edges) - check region travel near border path
+  const p=document.getElementById("prompt"), txt=document.getElementById("promptTxt");
+  if(nearEntity){
+    let label=t("interact");
+    if(nearEntity.type==="npc") label=(LANG==="ms"?nearEntity.data.name_ms:nearEntity.data.name_en);
+    if(nearEntity.type==="chest") label=t("chest");
+    if(nearEntity.type==="boss") label=t("boss")+": "+(LANG==="ms"?nearEntity.data.name_ms:nearEntity.data.name_en);
+    txt.textContent="[A] "+label; p.style.display="block";
+  } else p.style.display="none";
+}
+
+/* ---- RENDER ---- */
+let waterAnim=0;
+function render(){
+  waterAnim+=0.03;
+  const reg=REGIONS[curRegion];
+  ctx.fillStyle=reg.color; ctx.fillRect(0,0,VW,VH);
+  const x0=Math.max(0,Math.floor(cam.x/TILE)), y0=Math.max(0,Math.floor(cam.y/TILE));
+  const x1=Math.min(WORLD_W,Math.ceil((cam.x+VW)/TILE)), y1=Math.min(WORLD_H,Math.ceil((cam.y+VH)/TILE));
+  for(let ty=y0;ty<y1;ty++)for(let tx=x0;tx<x1;tx++){
+    const sx=tx*TILE-cam.x, sy=ty*TILE-cam.y, tile=curMap[ty][tx];
+    drawTile(tile,sx,sy,tx,ty,reg);
+  }
+  // sort entities by y for depth
+  const drawables=entities.slice().sort((a,b)=>a.y-b.y);
+  let drewPlayer=false;
+  for(const e of drawables){
+    if(!drewPlayer && e.y>player.y){ drawPlayer(); drewPlayer=true; }
+    drawEntity(e);
+  }
+  if(!drewPlayer) drawPlayer();
+}
+
+function drawTile(tile,sx,sy,tx,ty,reg){
+  // base grass
+  ctx.fillStyle=reg.color; ctx.fillRect(sx,sy,TILE,TILE);
+  // subtle checker
+  if((tx+ty)%2===0){ ctx.fillStyle="rgba(0,0,0,0.04)"; ctx.fillRect(sx,sy,TILE,TILE); }
+  if(tile===2){ // path
+    ctx.fillStyle="#d6b98c"; ctx.fillRect(sx,sy,TILE,TILE);
+    ctx.fillStyle="rgba(0,0,0,0.05)"; ctx.fillRect(sx+4,sy+4,6,6);
+  } else if(tile===1){ // water animated
+    const w=Math.sin(waterAnim+tx*0.6+ty*0.4)*3;
+    ctx.fillStyle="#38bdf8"; ctx.fillRect(sx,sy,TILE,TILE);
+    ctx.fillStyle="rgba(255,255,255,0.35)";
+    ctx.beginPath(); ctx.ellipse(sx+TILE/2,sy+TILE/2+w,TILE/3,5,0,0,7); ctx.fill();
+  } else if(tile===4){ // flowers
+    const colors=["#f472b6","#fde047","#fb923c","#a78bfa"];
+    ctx.fillStyle=colors[(tx*3+ty)%4];
+    const ox=Math.sin(waterAnim+tx)*1.5;
+    ctx.beginPath(); ctx.arc(sx+14+ox,sy+30,4,0,7); ctx.arc(sx+30+ox,sy+16,4,0,7); ctx.fill();
+  } else if(tile===3){ // tree
+    ctx.fillStyle="#7c4a1e"; ctx.fillRect(sx+TILE/2-4,sy+TILE-18,8,16);
+    const sway=Math.sin(waterAnim+tx*0.5)*2;
+    ctx.fillStyle=reg.accent;
+    ctx.beginPath(); ctx.arc(sx+TILE/2+sway,sy+18,16,0,7); ctx.fill();
+    ctx.fillStyle="rgba(255,255,255,0.12)";
+    ctx.beginPath(); ctx.arc(sx+TILE/2-4+sway,sy+13,6,0,7); ctx.fill();
+  }
+}
+
+function drawShadow(x,y,r){ ctx.fillStyle="rgba(0,0,0,0.22)"; ctx.beginPath(); ctx.ellipse(x,y,r,r*0.4,0,0,7); ctx.fill(); }
+
+function drawEntity(e){
+  const sx=e.x-cam.x, sy=e.y-cam.y;
+  if(e.type==="npc"){
+    drawShadow(sx,sy+18,16);
+    const bob=Math.sin(waterAnim*1.5+e.x)*2;
+    ctx.font="34px serif"; ctx.textAlign="center"; ctx.textBaseline="middle";
+    ctx.fillText(e.data.emoji,sx,sy+bob);
+    // name + indicator
+    if(e.data.quest && !S.completedQuests.includes(e.data.quest.id) && !S.quests[e.data.quest.id]){
+      ctx.fillStyle="#fbbf24"; ctx.font="bold 20px serif"; ctx.fillText("❗",sx+14,sy-22+bob);
+    } else if(e.data.quest && S.quests[e.data.quest.id]&&!S.quests[e.data.quest.id].done){
+      ctx.fillStyle="#3b82f6"; ctx.font="bold 18px serif"; ctx.fillText("…",sx+14,sy-22+bob);
+    }
+  } else if(e.type==="chest"){
+    drawShadow(sx,sy+14,14);
+    ctx.font="30px serif"; ctx.textAlign="center"; ctx.textBaseline="middle";
+    ctx.fillText("🎁",sx,sy);
+    ctx.fillStyle="#fbbf24"; ctx.font="bold 16px serif"; ctx.fillText("✨",sx+12,sy-16);
+  } else if(e.type==="boss"){
+    drawShadow(sx,sy+22,24);
+    const bob=Math.sin(waterAnim*2+e.x)*3;
+    ctx.font=(e.done?"40px":"48px")+" serif"; ctx.globalAlpha=e.done?0.5:1; ctx.textAlign="center"; ctx.textBaseline="middle";
+    ctx.fillText(e.data.emoji,sx,sy+bob); ctx.globalAlpha=1;
+    if(!e.done){ ctx.fillStyle="#ef4444"; ctx.font="bold 22px serif"; ctx.fillText("⚔️",sx+20,sy-26+bob); }
+  }
+}
+
+function drawPlayer(){
+  const sx=player.x-cam.x, sy=player.y-cam.y;
+  drawShadow(sx,sy+18,15);
+  const bob=player.moving?Math.abs(Math.sin(player.anim*1.5))*3:Math.sin(waterAnim)*1;
+  // body
+  ctx.font="36px serif"; ctx.textAlign="center"; ctx.textBaseline="middle";
+  ctx.fillText(AVATARS[S.avatar]||"🦸",sx,sy-bob);
+  // direction arrow indicator
+  ctx.fillStyle="rgba(255,255,255,0.5)";
+  // pet follows
+  if(S.activePet && PET_INFO[S.activePet]){
+    const px=sx-22, py=sy+10+Math.sin(waterAnim*2)*2;
+    drawShadow(px,py+10,9);
+    ctx.font="22px serif"; ctx.fillText(PET_INFO[S.activePet].emoji,px,py);
+  }
+}
+requestAnimationFrame(loop);
+</script>
+<script>
+/* ============================================================
+   PROGRESSION + REWARDS + HUD
+   ============================================================ */
+function xpForLevel(lv){ return 100+lv*60; }
+function updateHUD(){
+  document.getElementById("hudName").textContent=S.name;
+  document.getElementById("hudStars").textContent=S.stars;
+  document.getElementById("hudCoins").textContent=S.coins;
+  document.getElementById("hudLvl").textContent=S.level;
+  document.getElementById("hudRank").textContent=RANKS[Math.min(S.year-1,5)];
+  const need=xpForLevel(S.level), cur=S.xp;
+  document.getElementById("xpfill").style.width=Math.min(100,(cur/need)*100)+"%";
+  document.getElementById("langBtn").textContent=LANG==="en"?"EN":"BM";
+}
+function toast(msg,color){
+  const el=document.getElementById("toast"); el.textContent=msg;
+  el.style.background=color||"linear-gradient(135deg,#22c55e,#16a34a)";
+  el.classList.remove("show"); void el.offsetWidth; el.classList.add("show");
+}
+function addXP(n){
+  S.xp+=n;
+  while(S.xp>=xpForLevel(S.level)){ S.xp-=xpForLevel(S.level); S.level++; onLevelUp(); }
+  updateHUD(); save();
+}
+function onLevelUp(){
+  playLevelUp(); toast(t("levelUp")+" Lv"+S.level,"linear-gradient(135deg,#06b6d4,#3b82f6)");
+  // year advances every 2 levels up to 6
+  const newYear=Math.min(6,Math.floor(S.level/2)+1);
+  if(newYear>S.year){ S.year=newYear; toast(RANKS[S.year-1],"linear-gradient(135deg,#7c3aed,#2563eb)"); }
+}
+function reward(r){
+  if(!r) return; let parts=[];
+  if(r.xp){ addXP(r.xp); parts.push("+"+r.xp+" XP"); }
+  if(r.coins){ S.coins+=r.coins; parts.push("+"+r.coins+" 🪙"); playCoin(); }
+  if(r.stars){ S.stars+=r.stars; parts.push("+"+r.stars+" ⭐"); }
+  if(r.item){ if(!S.questItems.includes(r.item)) S.questItems.push(r.item); parts.push(r.item); }
+  if(r.collectible){ if(!S.collectibles.includes(r.collectible)) S.collectibles.push(r.collectible); parts.push(r.collectible); }
+  if(r.pet){ unlockPet(r.pet); }
+  updateHUD(); save();
+  return parts.join("  ");
+}
+function unlockPet(p){
+  if(!S.pets.includes(p)){ S.pets.push(p); S.activePet=p;
+    const info=PET_INFO[p]; toast(t("newPet")+" "+info.emoji,"linear-gradient(135deg,#f59e0b,#d97706)");
+    unlockAch("pet_friend");
+  }
+}
+function unlockAch(id){
+  if(S.achievements.includes(id)) return; S.achievements.push(id); save(); playAchievement();
+  const a=ACHIEVEMENTS[id]; document.getElementById("achLabel").textContent=t("badges");
+  document.getElementById("achName").textContent=LANG==="ms"?a.ms:a.en;
+  const pop=document.getElementById("achPop"); pop.classList.add("show");
+  setTimeout(()=>pop.classList.remove("show"),3200);
+}
+function recordAnswer(subject,correct){
+  if(subject==="any") subject=["math","bm","eng"][ri(0,2)];
+  if(S.stats[subject]){ S.stats[subject].a++; if(correct)S.stats[subject].c++; }
+  if(correct){
+    const total={math:S.stats.math.c,bm:S.stats.bm.c,eng:S.stats.eng.c};
+    if(total.math>=15) unlockAch("math_hero");
+    if(total.bm>=15) unlockAch("bm_champion");
+    if(total.eng>=15) unlockAch("english_master");
+  }
+  save();
+}
+
+/* ============================================================
+   MODAL SYSTEM
+   ============================================================ */
+const modal=document.getElementById("modal"), modalPanel=document.getElementById("modalPanel");
+function openModal(html){ modalPanel.innerHTML=html; modal.classList.add("show"); modalPanel.classList.remove("fade"); void modalPanel.offsetWidth; modalPanel.classList.add("fade"); }
+function closeModal(){ modal.classList.remove("show"); modalPanel.innerHTML=""; }
+modal.addEventListener("click",e=>{ if(e.target===modal) closeModal(); });
+
+/* ============================================================
+   INTERACTION
+   ============================================================ */
+function doInteract(){
+  if(!gameActive) return;
+  if(modal.classList.contains("show")) return;
+  if(!nearEntity) return;
+  playClick();
+  if(nearEntity.type==="npc") talkNPC(nearEntity.data);
+  else if(nearEntity.type==="chest") openChest(nearEntity);
+  else if(nearEntity.type==="boss") startBoss(nearEntity);
+}
+
+function npcName(n){ return LANG==="ms"?n.name_ms:n.name_en; }
+function npcLine(n){ return LANG==="ms"?n.line_ms:n.line_en; }
+function qTitle(q){ return LANG==="ms"?q.title_ms:q.title_en; }
+
+function talkNPC(n){
+  const hasQuest=n.quest;
+  const accepted=hasQuest && S.quests[n.quest.id];
+  const completed=hasQuest && S.completedQuests.includes(n.quest.id);
+  let body=`<div class="flex items-center gap-3 mb-3">
+      <div class="text-5xl float">${n.emoji}</div>
+      <div><div class="font-black text-lg">${npcName(n)}</div>
+      <div class="pill" style="background:rgba(255,255,255,.12);display:inline-block">${n.mascot?"⭐ Mascot":t("talk")}</div></div></div>
+    <div class="glass" style="border-radius:14px;padding:14px;font-size:16px;line-height:1.5">${npcLine(n)}</div>`;
+  if(hasQuest && !completed){
+    body+=`<div class="mt-3 glass" style="border-radius:14px;padding:12px">
+      <div class="font-bold text-yellow-300"><i class="fa-solid fa-scroll"></i> ${qTitle(n.quest)}</div>
+      <div class="text-sm opacity-80 mt-1">${t("reward")}: +${n.quest.reward.xp} XP, +${n.quest.reward.coins}🪙${n.quest.reward.pet?", "+PET_INFO[n.quest.reward.pet].emoji:""}${n.quest.reward.item?", "+n.quest.reward.item:""}</div>
+    </div>`;
+  }
+  let btns=`<div class="mt-4 flex gap-2 flex-wrap">`;
+  if(hasQuest && !completed){
+    btns+=`<button class="btn grad" style="flex:1;padding:14px;border-radius:14px;font-weight:800;font-size:16px" onclick="startQuest('${n.id}','${n.quest.id}')">
+      <i class="fa-solid fa-play"></i> ${accepted?t("continue"):t("accept")}</button>`;
+  }
+  if(completed){ body+=`<div class="mt-3 text-center text-green-300 font-bold"><i class="fa-solid fa-circle-check"></i> ${t("done")}</div>`; }
+  btns+=`<button class="btn glass" style="padding:14px 20px;border-radius:14px;font-weight:800" onclick="closeModal()">${t("close")}</button></div>`;
+  openModal(body+btns);
+}
+
+function startQuest(npcId,questId){
+  playClick();
+  let npc=null; for(const rk in NPCS){ const f=NPCS[rk].find(x=>x.id===npcId); if(f){npc=f;break;} }
+  if(!npc) return;
+  if(!S.quests[questId]){ S.quests[questId]={progress:0,done:false,npc:npcId,region:curRegion}; toast(t("questAccepted")); playQuestComplete(); save(); }
+  runQuestStep(npc);
+}
+
+let activeChallenge=null;
+function runQuestStep(npc){
+  const q=npc.quest, st=S.quests[q.id];
+  if(st.progress>=q.steps){ completeQuest(npc); return; }
+  const ch=genChallenge(npc.subject, S.year);
+  activeChallenge={ch,npc,onDone:(ok)=>{
+    if(ok){ st.progress++; save(); }
+  }};
+  showChallenge(ch,{
+    title:`${qTitle(q)} (${st.progress+1}/${q.steps})`,
+    subjectBadge:true, npc,
+    onCorrect:()=>{ st.progress++; save();
+      setTimeout(()=>{ if(st.progress>=q.steps) completeQuest(npc); else runQuestStep(npc); },650);
+    },
+    onWrong:()=>{}
+  });
+}
+
+function completeQuest(npc){
+  const q=npc.quest;
+  if(!S.completedQuests.includes(q.id)){
+    S.completedQuests.push(q.id); S.questsCompleted++; delete S.quests[q.id];
+    const got=reward(q.reward); playQuestComplete();
+    unlockAch("first_adventure");
+    if(S.questsCompleted>=8) unlockAch("legend_explorer");
+    entities=regionEntities(curRegion);
+    openModal(`<div class="text-center">
+      <div class="text-6xl mb-2 float">🎉</div>
+      <div class="text-2xl font-black text-yellow-300">${t("questComplete")}</div>
+      <div class="text-lg mt-1">${qTitle(q)}</div>
+      <div class="glass mt-3" style="border-radius:14px;padding:14px;font-size:18px;font-weight:800">${got}</div>
+      <button class="btn grad mt-4" style="padding:14px 28px;border-radius:14px;font-weight:800;font-size:16px" onclick="closeModal()">${t("confirm")}</button>
+    </div>`);
+  } else closeModal();
+}
+</script>
+<script>
+/* ============================================================
+   CHALLENGE UI + HINT
+   ============================================================ */
+const SUBJ_META={ math:{icon:"fa-calculator",c:"#3b82f6",label_en:"Mathematics",label_ms:"Matematik"},
+  bm:{icon:"fa-book",c:"#22c55e",label_en:"Bahasa Melayu",label_ms:"Bahasa Melayu"},
+  eng:{icon:"fa-language",c:"#f59e0b",label_en:"English",label_ms:"English"},
+  any:{icon:"fa-star",c:"#a855f7",label_en:"Mixed",label_ms:"Campuran"} };
+let curChallengeState=null;
+function subjLabel(s){ const m=SUBJ_META[s]||SUBJ_META.any; return LANG==="ms"?m.label_ms:m.label_en; }
+
+function showChallenge(ch,opts){
+  opts=opts||{}; const meta=SUBJ_META[ch.subject]||SUBJ_META.any;
+  curChallengeState={ch,opts,attempts:0,answered:false};
+  const q=LANG==="ms"?ch.q_ms:ch.q_en;
+  const subjBadge=`<span class="pill" style="background:${meta.c}"><i class="fa-solid ${meta.icon}"></i> ${subjLabel(ch.subject)}</span>`;
+  let html=`<div class="flex items-center justify-between mb-2">
+      <div class="font-black text-lg">${opts.title||t("interact")}</div>${subjBadge}</div>`;
+  if(opts.npc) html+=`<div class="flex items-center gap-2 mb-2"><div class="text-3xl">${opts.npc.emoji}</div><div class="text-sm opacity-80">${npcName(opts.npc)}</div></div>`;
+  html+=`<div class="glass" style="border-radius:14px;padding:16px;font-size:19px;font-weight:700;line-height:1.5;margin-bottom:6px">${q}</div>
+    <div id="choiceWrap">`;
+  ch.choices.forEach((c,i)=>{ html+=`<button class="choice btn" data-i="${i}" onclick="answer(${i})">${String.fromCharCode(65+i)}. ${c}</button>`; });
+  html+=`</div><div id="chFeedback" class="text-center font-black text-xl mt-2" style="min-height:28px"></div>
+    <div class="mt-2 flex gap-2"><button class="btn glass" style="flex:1;padding:12px;border-radius:12px;font-weight:800" onclick="doHint()"><i class="fa-solid fa-lightbulb text-yellow-300"></i> ${t("hint")}</button>
+    <button class="btn glass" style="padding:12px 18px;border-radius:12px;font-weight:800" onclick="closeChallenge()">${t("close")}</button></div>`;
+  openModal(html);
+}
+function closeChallenge(){ curChallengeState=null; closeModal(); }
+
+function answer(i){
+  const st=curChallengeState; if(!st||st.answered) return;
+  const ch=st.ch; const correct=i===ch.answer;
+  const btns=document.querySelectorAll("#choiceWrap .choice");
+  recordAnswer(ch.subject,correct);
+  if(correct){
+    st.answered=true;
+    btns[i].classList.add("correct"); playCorrect();
+    document.getElementById("chFeedback").innerHTML=`<span style="color:#4ade80">✓ ${praise()}</span>`;
+    btns.forEach(b=>b.disabled=true);
+    if(st.opts.onCorrect) setTimeout(()=>st.opts.onCorrect(),700);
+    else { toast(praise()); }
+  } else {
+    st.attempts++;
+    btns[i].classList.add("wrong"); playWrong();
+    document.getElementById("chFeedback").innerHTML=`<span style="color:#fca5a5">${encourage()}</span>`;
+    setTimeout(()=>{ btns[i].classList.remove("wrong"); btns[i].disabled=true; },800);
+    if(st.attempts>=2) setTimeout(()=>showMascotHint(ch),900);
+    if(st.opts.onWrong) st.opts.onWrong();
+  }
+}
+
+function doHint(){
+  if(curChallengeState){ showMascotHint(curChallengeState.ch); return; }
+  toast(t("hintMsg"),"linear-gradient(135deg,#3b82f6,#1d4ed8)");
+}
+function showMascotHint(ch){
+  // scaffolding hint: eliminate one wrong option + guidance, never the answer directly
+  const wrongIdx=ch.choices.map((c,i)=>i).filter(i=>i!==ch.answer);
+  const elim=pick(wrongIdx);
+  const btns=document.querySelectorAll("#choiceWrap .choice");
+  if(btns[elim]){ btns[elim].style.opacity="0.35"; btns[elim].disabled=true; btns[elim].innerHTML+=" ❌"; }
+  const fb=document.getElementById("chFeedback");
+  if(fb) fb.innerHTML=`<div class="text-sm" style="color:#fcd34d"><i class="fa-solid fa-lightbulb"></i> 🦧 ${t("hintMsg")}</div>`;
+  playClick();
+}
+
+/* ============================================================
+   TREASURE CHEST
+   ============================================================ */
+function openChest(e){
+  const tr=e.data; if(S.chests.includes(tr.id)) return;
+  S.chests.push(tr.id); playCoin();
+  const got=reward({xp:tr.xp,coins:tr.coins,item:tr.item,collectible:tr.collectible});
+  if(S.chests.length>=4) unlockAch("treasure_hunter");
+  entities=regionEntities(curRegion);
+  openModal(`<div class="text-center">
+    <div class="text-7xl mb-2 float">🎁</div>
+    <div class="text-2xl font-black text-yellow-300">${t("chest")}</div>
+    <div class="glass mt-3" style="border-radius:14px;padding:16px;font-size:18px;font-weight:800">${t("found")}: ${got}</div>
+    <button class="btn grad mt-4" style="padding:14px 28px;border-radius:14px;font-weight:800" onclick="closeModal()">${t("confirm")}</button>
+  </div>`);
+}
+
+/* ============================================================
+   BOSS BATTLE
+   ============================================================ */
+let bossState=null;
+function startBoss(e){
+  const b=e.data; if(S.bosses.includes(b.id)){ toast(t("done")); return; }
+  playBossFight();
+  bossState={boss:b,hp:b.hp,maxhp:b.hp,entity:e};
+  renderBoss();
+}
+function renderBoss(){
+  const b=bossState.boss; const meta=SUBJ_META[b.subject]||SUBJ_META.any;
+  const ch=genChallenge(b.subject,S.year);
+  bossState.ch=ch;
+  const q=LANG==="ms"?ch.q_ms:ch.q_en;
+  const hpPct=(bossState.hp/bossState.maxhp)*100;
+  let html=`<div class="text-center mb-2">
+      <div class="pill" style="background:#ef4444;display:inline-block"><i class="fa-solid fa-skull"></i> ${t("boss")}</div>
+      <div class="text-xl font-black mt-1">${LANG==="ms"?b.name_ms:b.name_en}</div></div>
+    <div class="text-center text-6xl mb-2" id="bossEmoji">${b.emoji}</div>
+    <div class="flex items-center gap-2 mb-1"><span class="text-sm font-bold">${t("hp")}</span>
+      <div class="hpbar" style="flex:1"><div class="hpfill" style="width:${hpPct}%"></div></div>
+      <span class="text-sm font-bold">${bossState.hp}/${bossState.maxhp}</span></div>
+    <div class="text-xs opacity-70 mb-2 text-center">${t("bossDefeat")}</div>
+    <div class="glass" style="border-radius:14px;padding:16px;font-size:18px;font-weight:700;line-height:1.5">
+      <span class="pill" style="background:${meta.c};font-size:11px"><i class="fa-solid ${meta.icon}"></i> ${subjLabel(ch.subject)}</span>
+      <div class="mt-2">${q}</div></div>
+    <div id="choiceWrap" class="mt-2">`;
+  ch.choices.forEach((c,i)=>{ html+=`<button class="choice btn" data-i="${i}" onclick="bossAnswer(${i})">${String.fromCharCode(65+i)}. ${c}</button>`; });
+  html+=`</div><div id="chFeedback" class="text-center font-black text-lg mt-1" style="min-height:24px"></div>
+    <div class="mt-1 flex gap-2"><button class="btn glass" style="flex:1;padding:10px;border-radius:12px;font-weight:800" onclick="doHint()"><i class="fa-solid fa-lightbulb text-yellow-300"></i> ${t("hint")}</button>
+    <button class="btn glass" style="padding:10px 16px;border-radius:12px;font-weight:800" onclick="bossFlee()">${t("back")}</button></div>`;
+  curChallengeState={ch,opts:{},attempts:0,answered:false};
+  openModal(html);
+}
+function bossFlee(){ bossState=null; curChallengeState=null; closeModal(); }
+function bossAnswer(i){
+  const st=curChallengeState; if(!st||st.answered) return;
+  const ch=bossState.ch; const correct=i===ch.answer;
+  const btns=document.querySelectorAll("#choiceWrap .choice");
+  recordAnswer(ch.subject,correct);
+  if(correct){
+    st.answered=true; btns.forEach(b=>b.disabled=true); btns[i].classList.add("correct"); playCorrect();
+    bossState.hp--; 
+    document.getElementById("chFeedback").innerHTML=`<span style="color:#4ade80">✓ ${t("yourTurn")}</span>`;
+    const be=document.getElementById("bossEmoji"); if(be){ be.style.transition="transform .2s"; be.style.transform="translateX(-12px) rotate(-8deg)"; setTimeout(()=>be.style.transform="",250); }
+    setTimeout(()=>{ if(bossState.hp<=0) winBoss(); else renderBoss(); },800);
+  } else {
+    st.attempts++; btns[i].classList.add("wrong"); playWrong();
+    document.getElementById("chFeedback").innerHTML=`<span style="color:#fca5a5">${encourage()}</span>`;
+    setTimeout(()=>{ btns[i].classList.remove("wrong"); btns[i].disabled=true; },700);
+    if(st.attempts>=2) setTimeout(()=>showMascotHint(ch),800);
+  }
+}
+function winBoss(){
+  const b=bossState.boss;
+  if(!S.bosses.includes(b.id)) S.bosses.push(b.id);
+  unlockAch("boss_slayer"); playVictory();
+  const rw=reward({xp:80+S.year*20,coins:60,stars:2});
+  // grant a certificate for the boss subject
+  grantCertificate(b.subject);
+  bossState=null; curChallengeState=null; entities=regionEntities(curRegion);
+  openModal(`<div class="text-center">
+    <div class="text-7xl mb-2 float">🏆</div>
+    <div class="text-3xl font-black text-yellow-300">${t("victory")}</div>
+    <div class="text-lg mt-1">${LANG==="ms"?b.name_ms:b.name_en} ✓</div>
+    <div class="glass mt-3" style="border-radius:14px;padding:14px;font-weight:800;font-size:18px">${rw}</div>
+    <button class="btn grad mt-4" style="padding:14px 28px;border-radius:14px;font-weight:800" onclick="closeModal()">${t("confirm")}</button>
+  </div>`);
+}
+function grantCertificate(subject){
+  if(subject==="any") subject="math";
+  const id=subject+"_y"+S.year;
+  if(!S.certificates.find(c=>c.id===id)){
+    S.certificates.push({id,subject,year:S.year,date:new Date().toLocaleDateString()}); save();
+  }
+}
+</script>
+<script>
+/* ============================================================
+   MENU SCREENS
+   ============================================================ */
+function header(title,icon){ return `<div class="flex items-center justify-between mb-3">
+  <div class="font-black text-xl"><i class="fa-solid ${icon} text-purple-300"></i> ${title}</div>
+  <button class="btn glass" style="width:38px;height:38px;border-radius:10px" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button></div>`; }
+
+/* ---- INVENTORY ---- */
+function toggleInventory(){ if(modal.classList.contains("show")) closeModal(); else openInventory(); }
+function openInventory(){ playClick();
+  const tabs=[["items",t("items"),S.questItems],["pets",t("pets"),S.pets.map(p=>PET_INFO[p].emoji+" "+(LANG==="ms"?PET_INFO[p].name_ms:PET_INFO[p].name_en))],
+    ["badges",t("badges"),S.collectibles],["certs",t("certs"),S.certificates.map(c=>"📜 "+subjLabel(c.subject)+" Y"+c.year)]];
+  let html=header(t("inventory"),"fa-bag-shopping");
+  html+=`<div class="grid grid-cols-2 gap-3">`;
+  tabs.forEach(([k,label,arr])=>{
+    html+=`<div class="glass" style="border-radius:14px;padding:12px">
+      <div class="font-bold mb-2 text-yellow-200">${label} <span class="opacity-60">(${arr.length})</span></div>`;
+    if(arr.length===0) html+=`<div class="text-sm opacity-60">${t("emptyInv")}</div>`;
+    else html+=`<div class="flex flex-wrap gap-2">`+arr.map(x=>`<span class="pill" style="background:rgba(255,255,255,.1);font-size:14px">${x}</span>`).join("")+`</div>`;
+    html+=`</div>`;
+  });
+  html+=`</div>`;
+  // pet selector
+  if(S.pets.length){
+    html+=`<div class="mt-3 glass" style="border-radius:14px;padding:12px"><div class="font-bold mb-2">${t("pets")} — ${t("active")}</div><div class="flex flex-wrap gap-2">`;
+    html+=`<button class="av ${!S.activePet?'sel':''}" onclick="setPet(null)">🚫</button>`;
+    S.pets.forEach(p=>{ html+=`<button class="av ${S.activePet===p?'sel':''}" onclick="setPet('${p}')">${PET_INFO[p].emoji}</button>`; });
+    html+=`</div></div>`;
+  }
+  openModal(html);
+}
+function setPet(p){ S.activePet=p; playClick(); save(); openInventory(); }
+
+/* ---- QUESTS ---- */
+function openQuests(){ playClick();
+  let html=header(t("quests"),"fa-scroll");
+  const active=Object.keys(S.quests);
+  if(active.length===0 && S.completedQuests.length===0) html+=`<div class="glass" style="border-radius:14px;padding:16px;text-align:center;opacity:.8">${t("noQuest")}</div>`;
+  if(active.length){
+    html+=`<div class="font-bold text-yellow-300 mb-2">${t("active")}</div>`;
+    active.forEach(qid=>{ const st=S.quests[qid]; let npc=null;
+      for(const rk in NPCS){ const f=NPCS[rk].find(x=>x.quest&&x.quest.id===qid); if(f){npc=f;break;} }
+      if(!npc) return; const q=npc.quest;
+      html+=`<div class="glass mb-2" style="border-radius:14px;padding:12px">
+        <div class="flex justify-between"><div class="font-bold">${npc.emoji} ${qTitle(q)}</div>
+        <span class="pill" style="background:${SUBJ_META[npc.subject].c};font-size:11px">${subjLabel(npc.subject)}</span></div>
+        <div class="text-xs opacity-70 mt-1">${t("region")}: ${LANG==="ms"?REGIONS[st.region].name_ms:REGIONS[st.region].name_en} • ${st.progress}/${q.steps}</div>
+        <div class="hpbar mt-1" style="height:8px"><div class="hpfill" style="width:${st.progress/q.steps*100}%;background:linear-gradient(90deg,#22c55e,#06b6d4)"></div></div></div>`;
+    });
+  }
+  if(S.completedQuests.length){
+    html+=`<div class="font-bold text-green-300 mb-2 mt-3">${t("done")} (${S.completedQuests.length})</div><div class="flex flex-wrap gap-2">`;
+    S.completedQuests.forEach(qid=>{ let q=null; for(const rk in NPCS){ const f=NPCS[rk].find(x=>x.quest&&x.quest.id===qid); if(f){q=f.quest;break;} } if(q) html+=`<span class="pill" style="background:rgba(34,197,94,.25)">✓ ${qTitle(q)}</span>`; });
+    html+=`</div>`;
+  }
+  openModal(html);
+}
+
+/* ---- WORLD MAP / TRAVEL ---- */
+function openMap(){ playClick();
+  let html=header(t("map"),"fa-map");
+  html+=`<div class="grid grid-cols-1 gap-3">`;
+  REGION_ORDER.forEach(rk=>{ const r=REGIONS[rk]; const unlocked=S.level>=(r.minLevel-1) || rk==="kampung" || S.year>=r.minLevel;
+    const isUnlocked = rk==="kampung" || S.level>= (r.minLevel*2-2) || S.year>=r.minLevel;
+    const open = rk==="kampung" || S.year>=r.minLevel || S.level>=(r.minLevel-1)*2+1;
+    const ok = canEnter(rk);
+    html+=`<div class="glass btn" style="border-radius:16px;padding:14px;border-left:6px solid ${r.accent};${ok?'':'opacity:.55'}" ${ok?`onclick="travelTo('${rk}')"`:""}>
+      <div class="flex items-center justify-between">
+        <div><div class="font-black">${LANG==="ms"?r.name_ms:r.name_en} ${curRegion===rk?'<i class="fa-solid fa-location-dot text-green-400"></i>':''}</div>
+        <div class="text-xs opacity-70">${LANG==="ms"?r.desc_ms:r.desc_en}</div></div>
+        <div>${ok?`<span class="pill grad">${t("travel")}</span>`:`<span class="pill" style="background:#475569"><i class="fa-solid fa-lock"></i> ${t("locked")} Lv${(r.minLevel-1)*2+1}</span>`}</div>
+      </div></div>`;
+  });
+  html+=`</div>`;
+  openModal(html);
+}
+function canEnter(rk){ if(rk==="kampung") return true; const r=REGIONS[rk]; return S.level>=((r.minLevel-1)*2+1) || S.year>=r.minLevel; }
+function travelTo(rk){ if(!canEnter(rk)){ toast(t("locked")); return; } playClick(); closeModal(); enterRegion(rk); toast((LANG==="ms"?REGIONS[rk].name_ms:REGIONS[rk].name_en)); }
+
+/* ---- PARENT DASHBOARD ---- */
+function openParent(){ playClick();
+  const acc=s=>{ const d=S.stats[s]; return d.a?Math.round(d.c/d.a*100):0; };
+  const totalA=S.stats.math.a+S.stats.bm.a+S.stats.eng.a;
+  const totalC=S.stats.math.c+S.stats.bm.c+S.stats.eng.c;
+  const overall=totalA?Math.round(totalC/totalA*100):0;
+  const mins=Math.floor(S.timePlayed/60), secs=S.timePlayed%60;
+  let html=header(t("parent"),"fa-chart-line");
+  html+=`<div class="grid grid-cols-2 gap-3 mb-3">
+    ${statCard("fa-clock",t("timePlayed"),mins+"m "+secs+"s","#3b82f6")}
+    ${statCard("fa-bolt",t("xpEarned"),(S.level-1)*200+S.xp+"","#06b6d4")}
+    ${statCard("fa-bullseye",t("accuracy"),overall+"%","#22c55e")}
+    ${statCard("fa-scroll",t("questsDone"),S.questsCompleted+"","#f59e0b")}
+  </div>`;
+  html+=`<div class="glass" style="border-radius:16px;padding:14px;margin-bottom:12px">
+    <div class="font-bold mb-2">${t("progBySubj")}</div>`;
+  [["math",t("math")],["bm",t("bm")],["eng",t("eng")]].forEach(([k,lbl])=>{
+    const a=acc(k); html+=`<div class="mb-2"><div class="flex justify-between text-sm"><span>${lbl}</span><span>${a}% (${S.stats[k].c}/${S.stats[k].a})</span></div>
+      <div class="hpbar" style="height:10px"><div class="hpfill" style="width:${a}%;background:${SUBJ_META[k].c}"></div></div></div>`;
+  });
+  html+=`</div>`;
+  html+=`<div class="glass" style="border-radius:16px;padding:14px;margin-bottom:12px">
+    <div class="font-bold mb-2">${t("skills")} & ${t("subjects")}</div>
+    <div class="text-sm opacity-85">${t("region")}: ${LANG==="ms"?REGIONS[curRegion].name_ms:REGIONS[curRegion].name_en} • ${RANKS[S.year-1]}</div>
+    <div class="text-sm opacity-85 mt-1">${t("badges")}: ${S.achievements.length}/8 • ${t("certs")}: ${S.certificates.length} • ${t("pets")}: ${S.pets.length}</div>
+    <div class="text-sm opacity-85 mt-2"><b>${t("insights")}:</b> ${insightText(overall)}</div>
+  </div>`;
+  // certificates list with print
+  if(S.certificates.length){
+    html+=`<div class="font-bold mb-2">${t("certs")}</div><div class="flex flex-wrap gap-2 mb-2">`;
+    S.certificates.forEach(c=>{ html+=`<button class="btn pill grad" onclick='showCertificate(${JSON.stringify(c).replace(/'/g,"&#39;")})'>📜 ${subjLabel(c.subject)} Y${c.year}</button>`; });
+    html+=`</div>`;
+  } else html+=`<div class="text-sm opacity-60 mb-2">${t("noData")}</div>`;
+  openModal(html);
+}
+function statCard(icon,label,val,color){ return `<div class="glass" style="border-radius:16px;padding:14px;text-align:center">
+  <div style="font-size:26px;color:${color}"><i class="fa-solid ${icon}"></i></div>
+  <div class="text-2xl font-black">${val}</div><div class="text-xs opacity-70">${label}</div></div>`; }
+function insightText(o){
+  if(o>=80) return LANG==="ms"?"Prestasi cemerlang! Teruskan pengembaraan.":"Excellent performance! Keep up the great adventure.";
+  if(o>=50) return LANG==="ms"?"Kemajuan baik. Berlatih lagi untuk menguasai.":"Good progress. Practice more to master skills.";
+  if(o>0) return LANG==="ms"?"Permulaan yang baik. Galakkan latihan harian.":"Good start. Encourage daily practice.";
+  return t("noData");
+}
+
+/* ---- CERTIFICATE ---- */
+function showCertificate(c){ playClick();
+  const html=`<div id="certPrint"><div class="cert">
+    <div style="position:absolute;top:10px;left:10px;font-size:30px">🎓</div>
+    <div style="position:absolute;top:10px;right:10px;font-size:30px">⭐</div>
+    <div style="font-family:Georgia,serif;color:#d4af37;font-size:14px;letter-spacing:3px">${t("seal").toUpperCase()}</div>
+    <div style="font-size:26px;font-weight:900;color:#7c3aed;margin:6px 0">${t("certTitle")}</div>
+    <div style="font-size:13px;color:#475569">${t("presented")}</div>
+    <div style="font-size:30px;font-weight:900;color:#1e293b;margin:6px 0;border-bottom:2px dashed #d4af37;display:inline-block;padding:0 20px">${S.name}</div>
+    <div style="font-size:13px;color:#475569;margin-top:8px">${t("hasCompleted")}</div>
+    <div style="font-size:22px;font-weight:800;color:#2563eb;margin:4px 0">${subjLabel(c.subject)} — ${t("year")} ${c.year}</div>
+    <div style="font-size:34px;margin:8px 0">🏆 🌟 🎖️</div>
+    <div style="display:flex;justify-content:space-between;margin-top:14px;font-size:12px;color:#475569">
+      <div>${t("date")}: ${c.date}</div><div>${RANKS[c.year-1]}</div></div>
+    <div style="margin-top:8px;font-size:40px">🦧</div>
+  </div></div>
+  <div class="flex gap-2 mt-3">
+    <button class="btn grad" style="flex:1;padding:12px;border-radius:12px;font-weight:800" onclick="printCert()"><i class="fa-solid fa-print"></i> ${t("printCert")}</button>
+    <button class="btn glass" style="padding:12px 18px;border-radius:12px;font-weight:800" onclick="openParent()">${t("back")}</button></div>`;
+  openModal(html);
+}
+function printCert(){ playClick();
+  const node=document.getElementById("certPrint"); if(!node) return;
+  const w=window.open("","_blank","width=900,height=650");
+  w.document.write(`<html><head><title>Certificate</title><style>
+    body{font-family:Georgia,serif;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0;background:#eee}
+    .cert{background:#fffef8;color:#1e293b;border:14px solid #d4af37;border-radius:8px;padding:40px;text-align:center;max-width:700px;position:relative}
+  </style></head><body>`+node.innerHTML+`</body></html>`);
+  w.document.close(); setTimeout(()=>{ w.print(); },400);
+}
+
+/* ---- MENU / SETTINGS ---- */
+function openMenu(){ playClick();
+  let html=header(t("menu"),"fa-bars");
+  html+=`<div class="glass" style="border-radius:16px;padding:14px;margin-bottom:12px">
+    <div class="flex items-center justify-between mb-3"><span class="font-bold">${t("language")}</span>
+      <div class="flex gap-2"><button class="btn pill ${LANG==='en'?'grad':'glass'}" onclick="setLang('en')">English</button>
+      <button class="btn pill ${LANG==='ms'?'grad':'glass'}" onclick="setLang('ms')">Bahasa Melayu</button></div></div>
+    <div class="flex items-center justify-between"><span class="font-bold">${t("audio")}</span>
+      <button class="btn pill ${S.audio?'grad':'glass'}" onclick="toggleAudio()">${S.audio?t("on"):t("off")}</button></div>
+  </div>
+  <div class="flex flex-col gap-2">
+    <button class="btn grad" style="padding:14px;border-radius:14px;font-weight:800" onclick="save();toast('${t("save")} ✓')"><i class="fa-solid fa-floppy-disk"></i> ${t("save")}</button>
+    <button class="btn glass" style="padding:14px;border-radius:14px;font-weight:800;color:#fca5a5" onclick="resetGame()"><i class="fa-solid fa-trash"></i> ${t("reset")}</button>
+  </div>`;
+  openModal(html);
+}
+function setLang(l){ LANG=l; S.lang=l; playClick(); save(); updateHUD(); openMenu(); }
+function toggleAudio(){ S.audio=!S.audio; save(); openMenu(); }
+function resetGame(){ if(confirm(t("resetSure"))){ localStorage.removeItem(SAVE_KEY); location.reload(); } }
+</script>
+<script>
+/* ============================================================
+   TITLE SCREEN + CHARACTER CREATION + BOOT
+   ============================================================ */
+// HUD buttons
+document.getElementById("langBtn").addEventListener("click",()=>{ LANG=LANG==="en"?"ms":"en"; S.lang=LANG; playClick(); save(); updateHUD(); });
+document.getElementById("mapBtn").addEventListener("click",openMap);
+document.getElementById("questBtn").addEventListener("click",openQuests);
+document.getElementById("invBtn").addEventListener("click",openInventory);
+document.getElementById("parentBtn").addEventListener("click",openParent);
+document.getElementById("menuBtn").addEventListener("click",openMenu);
+
+let creationAvatar=0;
+function showTitle(){
+  gameActive=false;
+  const hasSave=S.created;
+  const html=`<div class="overlay show" id="titleScreen" style="background:radial-gradient(circle at 50% 30%,#312e81,#0b1020);z-index:80">
+    <div class="text-center" style="max-width:560px;padding:20px">
+      <div class="text-7xl mb-2 float">🦧🎓</div>
+      <div class="text-4xl font-black grad" style="-webkit-background-clip:text;background-clip:text;color:transparent">KSSR Adventure Academy</div>
+      <div class="opacity-80 mt-1 mb-6">${LANG==="ms"?"Pengembaraan Pembelajaran Malaysia":"A Malaysian Learning Adventure"}</div>
+      <div class="flex flex-col gap-3" style="width:280px;margin:0 auto">
+        ${hasSave?`<button class="btn grad" style="padding:16px;border-radius:16px;font-weight:900;font-size:18px" onclick="continueGame()"><i class="fa-solid fa-play"></i> ${t("continue")} — ${S.name}</button>`:""}
+        <button class="btn glass" style="padding:16px;border-radius:16px;font-weight:900;font-size:18px" onclick="showCreation()"><i class="fa-solid fa-wand-magic-sparkles"></i> ${t("newGame")}</button>
+        <button class="btn pill glass" style="padding:10px" onclick="LANG=LANG==='en'?'ms':'en';save();showTitle()">${LANG==="en"?"Bahasa Melayu":"English"}</button>
+      </div>
+      <div class="opacity-50 text-xs mt-6">Math • Bahasa Melayu • English • Darjah 1-6</div>
+    </div></div>`;
+  removeTitle(); document.getElementById("game").insertAdjacentHTML("beforeend",html);
+}
+function removeTitle(){ const e=document.getElementById("titleScreen"); if(e) e.remove(); }
+function continueGame(){ playClick(); ac(); removeTitle(); startGame(); }
+
+function showCreation(){ playClick(); ac();
+  creationAvatar=S.avatar||0;
+  const html=`<div class="overlay show" id="titleScreen" style="background:radial-gradient(circle at 50% 30%,#312e81,#0b1020);z-index:80">
+    <div class="panel glass" style="text-align:center">
+      <div class="text-2xl font-black mb-3">${t("chooseAvatar")}</div>
+      <div id="avGrid" class="flex flex-wrap justify-center gap-2 mb-4"></div>
+      <div class="text-lg font-bold mb-2">${t("chooseName")}</div>
+      <input id="nameInput" class="input mb-4" maxlength="14" placeholder="${LANG==='ms'?'Nama anda':'Your name'}" value="${S.name!=='Hero'?S.name:''}"/>
+      <div class="text-lg font-bold mb-2">${t("selectSubject")}</div>
+      <div class="flex flex-wrap justify-center gap-2 mb-4" id="yrGrid"></div>
+      <button class="btn grad" style="padding:16px 32px;border-radius:16px;font-weight:900;font-size:18px" onclick="finishCreation()"><i class="fa-solid fa-flag-checkered"></i> ${t("start")}</button>
+      <div class="mt-3"><button class="btn pill glass" onclick="showTitle()">${t("back")}</button></div>
+    </div></div>`;
+  removeTitle(); document.getElementById("game").insertAdjacentHTML("beforeend",html);
+  const grid=document.getElementById("avGrid");
+  AVATARS.forEach((a,i)=>{ const b=document.createElement("button"); b.className="av btn"+(i===creationAvatar?" sel":""); b.textContent=a;
+    b.onclick=()=>{ creationAvatar=i; playClick(); document.querySelectorAll("#avGrid .av").forEach((x,j)=>x.classList.toggle("sel",j===i)); }; grid.appendChild(b); });
+  // year select
+  const yg=document.getElementById("yrGrid"); creationYear=S.year||1;
+  for(let y=1;y<=6;y++){ const b=document.createElement("button"); b.className="btn pill "+(y===creationYear?"grad":"glass"); b.style.padding="10px 14px"; b.textContent=t("year")+" "+y;
+    b.onclick=()=>{ creationYear=y; playClick(); document.querySelectorAll("#yrGrid button").forEach((x,j)=>{ x.className="btn pill "+(j+1===y?"grad":"glass"); x.style.padding="10px 14px"; }); }; yg.appendChild(b); }
+}
+let creationYear=1;
+function finishCreation(){ playClick();
+  const nm=(document.getElementById("nameInput").value||"").trim();
+  S=JSON.parse(JSON.stringify(DEFAULT_STATE));
+  S.name=nm||(LANG==="ms"?"Wira":"Hero"); S.avatar=creationAvatar; S.year=creationYear; S.level=Math.max(1,(creationYear-1)*2+1); S.created=true; S.lang=LANG;
+  save(); removeTitle(); startGame();
+  setTimeout(()=>{ toast(t("welcome"),"linear-gradient(135deg,#7c3aed,#06b6d4)"); unlockAch("first_adventure"); },300);
+}
+
+function startGame(){
+  gameActive=true;
+  player.x=S.px||Math.floor(WORLD_W/2)*TILE+TILE/2;
+  player.y=S.py||Math.floor(WORLD_H/2)*TILE+TILE/2;
+  if(!S.px){ enterRegion(S.region||"kampung"); }
+  else { enterRegion(S.region||"kampung",true); player.x=S.px; player.y=S.py; }
+  updateHUD();
+}
+
+/* BOOT */
+load();
+updateHUD();
+showTitle();
+window.addEventListener("beforeunload",save);
+document.addEventListener("visibilitychange",()=>{ if(document.hidden) save(); });
+</script>
+</body>
+</html>

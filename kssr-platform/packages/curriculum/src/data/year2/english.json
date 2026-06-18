@@ -1,0 +1,63 @@
+{
+  "subject": "english",
+  "year": 2,
+  "schemaVersion": 1,
+  "topics": [
+    {
+      "id": "y2-en-plurals",
+      "subject": "english",
+      "year": 2,
+      "order": 1,
+      "icon": "🔁",
+      "title": { "en": "Plurals", "ms": "Kata Jamak" },
+      "description": { "en": "Make words mean more than one.", "ms": "Menjadikan perkataan bermaksud lebih daripada satu." },
+      "flashcards": [
+        {
+          "id": "y2-en-fc-plurals",
+          "topicId": "y2-en-plurals",
+          "title": { "en": "Adding -s and -es", "ms": "Menambah -s dan -es" },
+          "definition": { "en": "Most words add -s; words ending in x, s, ch add -es.", "ms": "Kebanyakan perkataan tambah -s; yang berakhir x, s, ch tambah -es." },
+          "example": { "en": "box → boxes", "ms": "box → boxes" },
+          "illustration": "📦",
+          "pronunciation": { "text": "boxes", "locale": "en" },
+          "hint": { "en": "Listen for an extra 'iz' sound.", "ms": "Dengar bunyi tambahan 'iz'." },
+          "funFact": { "en": "'mouse' becomes 'mice'!", "ms": "'mouse' menjadi 'mice'!" }
+        }
+      ],
+      "challenges": [
+        {
+          "id": "y2-en-c1",
+          "topicId": "y2-en-plurals",
+          "subject": "english",
+          "year": 2,
+          "difficulty": "core",
+          "mechanic": "gate-pass",
+          "prompt": { "en": "Plural of 'box'?", "ms": "Jamak bagi 'box'?" },
+          "options": [
+            { "id": "a", "label": "boxes", "correct": true },
+            { "id": "b", "label": "boxs", "correct": false },
+            { "id": "c", "label": "boxies", "correct": false }
+          ],
+          "hint": { "en": "Words ending in -x take -es.", "ms": "Perkataan berakhir -x ambil -es." },
+          "skills": ["plurals"]
+        },
+        {
+          "id": "y2-en-c2",
+          "topicId": "y2-en-plurals",
+          "subject": "english",
+          "year": 2,
+          "difficulty": "core",
+          "mechanic": "lane-select",
+          "prompt": { "en": "She ___ an apple. (now)", "ms": "She ___ an apple. (sekarang)" },
+          "options": [
+            { "id": "a", "label": "eats", "correct": true },
+            { "id": "b", "label": "eat", "correct": false },
+            { "id": "c", "label": "eaten", "correct": false }
+          ],
+          "hint": { "en": "After he/she/it, add -s.", "ms": "Selepas he/she/it, tambah -s." },
+          "skills": ["verb-agreement"]
+        }
+      ]
+    }
+  ]
+}

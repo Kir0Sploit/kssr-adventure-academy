@@ -1,0 +1,62 @@
+{
+  "subject": "bm",
+  "year": 2,
+  "schemaVersion": 1,
+  "topics": [
+    {
+      "id": "y2-bm-imbuhan",
+      "subject": "bm",
+      "year": 2,
+      "order": 1,
+      "icon": "🧩",
+      "title": { "en": "Prefixes (Imbuhan)", "ms": "Imbuhan Awalan" },
+      "description": { "en": "Add prefixes like 'me-' to base words.", "ms": "Menambah imbuhan seperti 'me-' pada kata dasar." },
+      "flashcards": [
+        {
+          "id": "y2-bm-fc-imbuhan",
+          "topicId": "y2-bm-imbuhan",
+          "title": { "en": "The prefix 'me-'", "ms": "Imbuhan 'me-'" },
+          "definition": { "en": "'me-' turns a base word into an action.", "ms": "'me-' menjadikan kata dasar sebagai perbuatan." },
+          "example": { "en": "makan → memakan", "ms": "makan → memakan" },
+          "illustration": "🧩",
+          "hint": { "en": "Put the prefix in front of the base word.", "ms": "Letak imbuhan di hadapan kata dasar." },
+          "funFact": { "en": "Imbuhan can change a word's meaning.", "ms": "Imbuhan boleh menukar maksud perkataan." }
+        }
+      ],
+      "challenges": [
+        {
+          "id": "y2-bm-c1",
+          "topicId": "y2-bm-imbuhan",
+          "subject": "bm",
+          "year": 2,
+          "difficulty": "core",
+          "mechanic": "build",
+          "prompt": { "en": "Add 'me-' to 'baca'.", "ms": "Tambah 'me-' pada 'baca'." },
+          "options": [
+            { "id": "a", "label": "membaca", "correct": true },
+            { "id": "b", "label": "mebaca", "correct": false },
+            { "id": "c", "label": "berbaca", "correct": false }
+          ],
+          "hint": { "en": "'me-' before 'b' becomes 'mem-'.", "ms": "'me-' sebelum 'b' menjadi 'mem-'." },
+          "skills": ["imbuhan"]
+        },
+        {
+          "id": "y2-bm-c2",
+          "topicId": "y2-bm-imbuhan",
+          "subject": "bm",
+          "year": 2,
+          "difficulty": "core",
+          "mechanic": "lane-select",
+          "prompt": { "en": "Complete: Saya ___ ke sekolah.", "ms": "Lengkapkan: Saya ___ ke sekolah." },
+          "options": [
+            { "id": "a", "label": "pergi", "correct": true },
+            { "id": "b", "label": "makan", "correct": false },
+            { "id": "c", "label": "tidur", "correct": false }
+          ],
+          "hint": { "en": "How do you travel to school?", "ms": "Bagaimana anda ke sekolah?" },
+          "skills": ["sentence"]
+        }
+      ]
+    }
+  ]
+}

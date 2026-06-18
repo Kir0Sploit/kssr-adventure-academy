@@ -1,0 +1,157 @@
+// KSSR Adventure Academy — backend data model (optional sync/classroom layer).
+// The game is offline-first; this schema powers cross-device sync, parent/teacher
+// dashboards, classrooms and leaderboards when a backend is connected.
+//
+// Apply with: npx prisma migrate dev   (requires DATABASE_URL to a Postgres instance)
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum SubjectId {
+  math
+  bm
+  english
+}
+
+enum AccountRole {
+  parent
+  teacher
+  admin
+}
+
+enum MasteryLevel {
+  Bronze
+  Silver
+  Gold
+}
+
+// A guardian/teacher account (authenticated via NextAuth).
+model Account {
+  id        String      @id @default(cuid())
+  email     String      @unique
+  name      String?
+  role      AccountRole @default(parent)
+  createdAt DateTime    @default(now())
+
+  players    Player[]
+  classrooms Classroom[] @relation("TeacherClassrooms")
+}
+
+// A child profile. Device-local by default; linked to an Account when synced.
+model Player {
+  id        String   @id @default(cuid())
+  name      String
+  avatar    String   @default("hero")
+  locale    String   @default("en") // "en" | "ms"
+  year      Int // Darjah 1-6
+  level     Int      @default(1)
+  rank      String   @default("Year 1 Explorer")
+  xp        Int      @default(0)
+  coins     Int      @default(0)
+  stars     Int      @default(0)
+  knowledgePoints Int @default(0)
+  timePlayedSec   Int @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  accountId String?
+  account   Account? @relation(fields: [accountId], references: [id], onDelete: SetNull)
+
+  mastery       TopicMastery[]
+  events        LearningEvent[]
+  achievements  PlayerAchievement[]
+  certificates  Certificate[]
+  enrollments   Enrollment[]
+
+  @@index([accountId])
+}
+
+// Per-topic mastery snapshot (mirrors @kssr/shared TopicMastery).
+model TopicMastery {
+  id        String    @id @default(cuid())
+  player    Player    @relation(fields: [playerId], references: [id], onDelete: Cascade)
+  playerId  String
+  topicId   String
+  subject   SubjectId
+  year      Int
+  attempts  Int       @default(0)
+  correct   Int       @default(0)
+  mastery   Float     @default(0) // 0..1
+  lastPlayedAt DateTime @default(now())
+
+  @@unique([playerId, topicId])
+  @@index([playerId, subject])
+}
+
+// Append-only analytics stream (mirrors @kssr/shared LearningEvent).
+model LearningEvent {
+  id         String   @id @default(cuid())
+  player     Player   @relation(fields: [playerId], references: [id], onDelete: Cascade)
+  playerId   String
+  sessionId  String
+  type       String // "challenge_answered" | "topic_completed" | ...
+  ts         DateTime @default(now())
+  // Flexible payload validated against the typed event union in the app layer.
+  payload    Json
+
+  @@index([playerId, ts])
+  @@index([type])
+}
+
+model Achievement {
+  id          String   @id // matches AchievementDef.id
+  titleEn     String
+  titleMs     String
+  icon        String
+  players     PlayerAchievement[]
+}
+
+model PlayerAchievement {
+  player        Player      @relation(fields: [playerId], references: [id], onDelete: Cascade)
+  playerId      String
+  achievement   Achievement @relation(fields: [achievementId], references: [id], onDelete: Cascade)
+  achievementId String
+  unlockedAt    DateTime    @default(now())
+
+  @@id([playerId, achievementId])
+}
+
+model Certificate {
+  id           String       @id @default(cuid())
+  player       Player       @relation(fields: [playerId], references: [id], onDelete: Cascade)
+  playerId     String
+  subject      SubjectId
+  year         Int
+  masteryLevel MasteryLevel @default(Bronze)
+  awardedAt    DateTime     @default(now())
+
+  @@index([playerId])
+}
+
+// Classroom / tuition-centre grouping for teachers.
+model Classroom {
+  id        String   @id @default(cuid())
+  name      String
+  joinCode  String   @unique
+  teacher   Account  @relation("TeacherClassrooms", fields: [teacherId], references: [id], onDelete: Cascade)
+  teacherId String
+  createdAt DateTime @default(now())
+
+  enrollments Enrollment[]
+}
+
+model Enrollment {
+  classroom   Classroom @relation(fields: [classroomId], references: [id], onDelete: Cascade)
+  classroomId String
+  player      Player    @relation(fields: [playerId], references: [id], onDelete: Cascade)
+  playerId    String
+  joinedAt    DateTime  @default(now())
+
+  @@id([classroomId, playerId])
+}

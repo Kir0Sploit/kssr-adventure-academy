@@ -1,0 +1,14 @@
+# Dependencies & build output (also covered per-package)
+node_modules/
+**/node_modules/
+**/dist/
+**/out/
+**/.next/
+**/*.tsbuildinfo
+**/next-env.d.ts
+
+# Env & OS
+.env
+.env.*
+.DS_Store
+Thumbs.db

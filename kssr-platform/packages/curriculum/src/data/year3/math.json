@@ -1,0 +1,62 @@
+{
+  "subject": "math",
+  "year": 3,
+  "schemaVersion": 1,
+  "topics": [
+    {
+      "id": "y3-math-times-tables",
+      "subject": "math",
+      "year": 3,
+      "order": 1,
+      "icon": "✖️",
+      "title": { "en": "Multiplication Tables", "ms": "Sifir" },
+      "description": { "en": "Master multiplication facts up to 9 × 9.", "ms": "Menguasai fakta pendaraban hingga 9 × 9." },
+      "flashcards": [
+        {
+          "id": "y3-math-fc-times",
+          "topicId": "y3-math-times-tables",
+          "title": { "en": "What is multiplication?", "ms": "Apa itu pendaraban?" },
+          "definition": { "en": "Multiplication is repeated addition of equal groups.", "ms": "Pendaraban ialah penambahan berulang kumpulan yang sama." },
+          "example": { "en": "3 × 4 = 4 + 4 + 4 = 12", "ms": "3 × 4 = 4 + 4 + 4 = 12" },
+          "illustration": "✖️",
+          "hint": { "en": "Skip-count in equal steps.", "ms": "Kira lompat dalam langkah sama." },
+          "funFact": { "en": "Any number × 0 is 0.", "ms": "Sebarang nombor × 0 ialah 0." }
+        }
+      ],
+      "challenges": [
+        {
+          "id": "y3-math-c1",
+          "topicId": "y3-math-times-tables",
+          "subject": "math",
+          "year": 3,
+          "difficulty": "core",
+          "mechanic": "gate-pass",
+          "prompt": { "en": "7 × 6 = ?", "ms": "7 × 6 = ?" },
+          "options": [
+            { "id": "a", "label": "42", "correct": true },
+            { "id": "b", "label": "36", "correct": false },
+            { "id": "c", "label": "48", "correct": false }
+          ],
+          "hint": { "en": "7 × 6 is 7 × 5 plus one more 7.", "ms": "7 × 6 ialah 7 × 5 tambah 7." },
+          "skills": ["multiplication"]
+        },
+        {
+          "id": "y3-math-c2",
+          "topicId": "y3-math-times-tables",
+          "subject": "math",
+          "year": 3,
+          "difficulty": "stretch",
+          "mechanic": "lane-select",
+          "prompt": { "en": "24 apples shared into 4 bags. Per bag?", "ms": "24 epal dibahagi 4 beg. Setiap beg?" },
+          "options": [
+            { "id": "a", "label": "6", "correct": true },
+            { "id": "b", "label": "8", "correct": false },
+            { "id": "c", "label": "5", "correct": false }
+          ],
+          "hint": { "en": "Which number × 4 = 24?", "ms": "Nombor mana × 4 = 24?" },
+          "skills": ["division"]
+        }
+      ]
+    }
+  ]
+}
