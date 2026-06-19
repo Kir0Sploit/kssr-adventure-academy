@@ -41,6 +41,7 @@ model Account {
 
   players    Player[]
   classrooms Classroom[] @relation("TeacherClassrooms")
+  socialEvents SocialProofEvent[]
 }
 
 // A child profile. Device-local by default; linked to an Account when synced.
@@ -132,6 +133,47 @@ model Certificate {
   awardedAt    DateTime     @default(now())
 
   @@index([playerId])
+}
+
+// ---------------------------------------------------------------------------
+// Social proof — REAL events only. A toast is shown ONLY when consentToDisplay
+// is true. No row is ever fabricated; the UI falls back to real analytics
+// (computed from events below) when there is nothing consented to show.
+// PDPA 2010: store the minimum, display per the account's chosen privacy mode.
+// ---------------------------------------------------------------------------
+enum SocialEventType {
+  purchase // a completed, paid subscription
+  registration // a new child profile created after signup
+  achievement // a real badge/module completion by a real player
+}
+
+enum DisplayMode {
+  firstName // "Farhan"
+  firstNameInitial // "Farhan A."
+  stateOnly // "Seorang ibu bapa dari Selangor"
+  hidden // never display (consent withdrawn)
+}
+
+model SocialProofEvent {
+  id              String          @id @default(cuid())
+  type            SocialEventType
+  // Raw fields are stored privately; the API only ever emits the redacted form
+  // permitted by `displayMode`.
+  customerName    String? // full name, kept private
+  state           String? // Malaysian state, optional
+  packageName     String? // e.g. "Pakej Lengkap"
+  detail          String? // e.g. "Lencana Raja Sifir", "Modul Pecahan Tahun 4"
+  childYear       Int?
+  // Consent + privacy — display is impossible without explicit opt-in.
+  consentToDisplay Boolean        @default(false)
+  displayMode     DisplayMode     @default(firstNameInitial)
+  createdAt       DateTime        @default(now())
+  // Linkage for auditing / consent withdrawal.
+  accountId       String?
+  account         Account?        @relation(fields: [accountId], references: [id], onDelete: SetNull)
+
+  @@index([type, consentToDisplay, createdAt])
+  @@index([accountId])
 }
 
 // Classroom / tuition-centre grouping for teachers.

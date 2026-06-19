@@ -4,12 +4,14 @@ import type { Catalog } from "@/lib/catalog";
 import { useProgress } from "@/lib/store";
 import { audio } from "@/lib/audio";
 import { confetti } from "@/lib/confetti";
+import { pushSocialEvent } from "@/lib/socialProof";
 import type { SubjectId, Topic, Year } from "@kssr/shared";
 import Hud from "./Hud";
 import Landing from "./Landing";
 import LearnMode from "./LearnMode";
 import GameSelect from "./GameSelect";
 import ParentDashboard from "./ParentDashboard";
+import SocialProofToaster from "./SocialProofToaster";
 import { getMode } from "@/lib/games";
 import type { GameSummary } from "@/lib/gameUtils";
 
@@ -120,6 +122,7 @@ export default function Academy({ catalog }: { catalog: Catalog }) {
   const beginPlay = () => { click(); playStart.current = Date.now(); setScreen("play"); };
   const handleComplete = (sum: GameSummary) => {
     s.addTime(Math.round((Date.now() - playStart.current) / 1000));
+    const before = useProgress.getState().achievements.slice();
     s.unlock("first-play");
     s.touchStreak();
     const level = sum.accuracy >= 0.9 ? "Gold" : sum.accuracy >= 0.7 ? "Silver" : "Bronze";
@@ -129,6 +132,23 @@ export default function Academy({ catalog }: { catalog: Catalog }) {
     if (subject === "english") s.unlock("english_master");
     audio.victory();
     confetti(40);
+    // Real, player-driven social-proof events (self-progress — never fabricated).
+    if (topic) {
+      pushSocialEvent({ text: isMs ? `Anda menamatkan ${topic.title.ms}! ⭐` : `You finished ${topic.title.en}! ⭐`, icon: "🎮" });
+    }
+    const after = useProgress.getState().achievements;
+    const badgeLabel: Record<string, { en: string; ms: string }> = {
+      math_hero: { en: "Math Hero badge", ms: "Lencana Wira Matematik" },
+      bm_champion: { en: "BM Champion badge", ms: "Lencana Juara BM" },
+      english_master: { en: "English Master badge", ms: "Lencana Penguasa English" },
+      "first-play": { en: "First Game badge", ms: "Lencana Main Pertama" },
+    };
+    after
+      .filter((a) => !before.includes(a))
+      .forEach((a) => {
+        const lbl = badgeLabel[a];
+        if (lbl) pushSocialEvent({ text: isMs ? `Anda membuka ${lbl.ms}!` : `You unlocked the ${lbl.en}!`, icon: "🏅" });
+      });
     setSummary(sum);
     setScreen("summary");
   };
@@ -293,6 +313,7 @@ export default function Academy({ catalog }: { catalog: Catalog }) {
       )}
 
       {parentOpen && <ParentDashboard onClose={() => { click(); setParentOpen(false); }} />}
+      <SocialProofToaster />
     </main>
   );
 }
