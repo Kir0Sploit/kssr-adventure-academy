@@ -14,3 +14,6 @@ coverage/
 # Local SQLite database (do not commit data)
 *.db
 *.db-journal
+
+# Admin-uploaded media (user content, not source)
+apps/web/public/uploads/

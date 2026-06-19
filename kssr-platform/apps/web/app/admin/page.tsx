@@ -2,7 +2,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { SUBJECTS } from "@kssr/shared";
 
-type Tab = "overview" | "users" | "reviews" | "questions" | "subscribers";
+type Tab = "overview" | "users" | "payments" | "reviews" | "questions" | "media" | "settings" | "subscribers";
 
 async function jget(url: string) { return (await fetch(url, { cache: "no-store" })).json(); }
 async function jsend(url: string, method: string, body: unknown) {
@@ -23,18 +23,7 @@ export default function AdminPage() {
 
   if (me === "loading") return <div className="min-h-screen grid place-items-center font-display">…</div>;
 
-  if (!me) {
-    return (
-      <Shell>
-        <div className="card p-6 max-w-md mx-auto text-center">
-          <div className="text-4xl">🔒</div>
-          <h1 className="font-display text-xl mt-2">Admin</h1>
-          <p className="text-soft text-sm mt-1">Sila log masuk sebagai ibu bapa dahulu di halaman utama, kemudian kembali ke /admin.</p>
-          <a href="/" className="btn btn-primary rounded-2xl px-6 py-3 font-display inline-block mt-4">Ke Halaman Utama</a>
-        </div>
-      </Shell>
-    );
-  }
+  if (!me) return <Shell><AdminLogin onLoggedIn={loadMe} /></Shell>;
 
   if (me.role !== "admin") {
     return (
@@ -60,21 +49,54 @@ export default function AdminPage() {
     <Shell>
       <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
         <h1 className="font-display text-2xl text-violet-700">🛠️ Admin CMS</h1>
-        <div className="text-sm text-soft">Log masuk sebagai <b>{me.name}</b> · admin</div>
+        <div className="flex items-center gap-3">
+          <div className="text-sm text-soft">Log masuk sebagai <b>{me.name}</b> · admin</div>
+          <button className="btn !min-h-0 rounded-xl px-3 py-2 text-sm" onClick={async () => { await fetch("/api/auth/logout", { method: "POST" }); loadMe(); }}>Log keluar</button>
+        </div>
       </div>
       <div className="flex gap-2 flex-wrap mb-4">
-        {(["overview", "users", "reviews", "questions", "subscribers"] as Tab[]).map((t) => (
+        {(["overview", "users", "payments", "reviews", "questions", "media", "settings", "subscribers"] as Tab[]).map((t) => (
           <button key={t} className={`btn !min-h-0 rounded-2xl px-4 py-2 text-sm font-display ${tab === t ? "btn-primary" : ""}`} onClick={() => setTab(t)}>
-            {({ overview: "Ringkasan", users: "Pengguna", reviews: "Ulasan", questions: "Soalan", subscribers: "E-mel" } as Record<Tab, string>)[t]}
+            {({ overview: "Ringkasan", users: "Pengguna", payments: "Pembayaran", reviews: "Ulasan", questions: "Soalan", media: "Gambar", settings: "Tetapan", subscribers: "E-mel" } as Record<Tab, string>)[t]}
           </button>
         ))}
       </div>
       {tab === "overview" && <Overview />}
       {tab === "users" && <Users />}
+      {tab === "payments" && <Payments />}
       {tab === "reviews" && <Reviews />}
       {tab === "questions" && <Questions />}
+      {tab === "media" && <MediaManager />}
+      {tab === "settings" && <Settings />}
       {tab === "subscribers" && <Subscribers />}
     </Shell>
+  );
+}
+
+function AdminLogin({ onLoggedIn }: { onLoggedIn: () => void }) {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [err, setErr] = useState("");
+  const [busy, setBusy] = useState(false);
+  const submit = async () => {
+    if (busy) return;
+    setBusy(true); setErr("");
+    const r = await jsend("/api/auth/login", "POST", { email, password });
+    setBusy(false);
+    if (r.ok) onLoggedIn(); else setErr(r.error || "Log masuk gagal");
+  };
+  return (
+    <div className="card p-6 max-w-md mx-auto">
+      <div className="text-center"><div className="text-4xl">🔒</div><h1 className="font-display text-xl mt-2">Log Masuk Admin</h1>
+        <p className="text-soft text-sm mt-1">Masukkan e-mel & kata laluan akaun admin.</p></div>
+      <div className="space-y-2 mt-4">
+        <input className="w-full rounded-2xl px-4 py-3 bg-slate-50 border-2 border-slate-200 font-semibold outline-none focus:border-violet-400" type="email" placeholder="admin@email.com" value={email} onChange={(e) => setEmail(e.target.value)} />
+        <input className="w-full rounded-2xl px-4 py-3 bg-slate-50 border-2 border-slate-200 font-semibold outline-none focus:border-violet-400" type="password" placeholder="Kata laluan" value={password} onChange={(e) => setPassword(e.target.value)} onKeyDown={(e) => e.key === "Enter" && submit()} />
+        <button className="btn btn-primary rounded-2xl px-6 py-3 font-display w-full" disabled={busy} onClick={submit}>{busy ? "…" : "Log Masuk"}</button>
+        {err && <div className="text-red-500 text-sm text-center">{err}</div>}
+      </div>
+      <p className="text-soft text-xs text-center mt-3">Belum jadi admin? Log masuk akaun biasa, kemudian masukkan kod persediaan di skrin seterusnya.</p>
+    </div>
   );
 }
 
@@ -215,6 +237,121 @@ function Subscribers() {
       {list.length === 0 ? <div className="text-soft text-sm p-2">Tiada langganan e-mel.</div> : (
         <ul className="text-sm divide-y divide-slate-100">{list.map((s) => <li key={s.id} className="p-2 flex justify-between"><span>{s.email}</span><span className="text-soft text-xs">{new Date(s.createdAt).toLocaleDateString()}</span></li>)}</ul>
       )}
+    </div>
+  );
+}
+
+interface PayRow { id: string; email: string; name: string; createdAt: string }
+function Payments() {
+  const [list, setList] = useState<PayRow[]>([]);
+  const [email, setEmail] = useState("");
+  const [msg, setMsg] = useState("");
+  const load = () => jget("/api/admin/grant").then((r) => setList(r.accounts ?? []));
+  useEffect(() => { void load(); }, []);
+  const grant = async (plan: "free" | "bundle", e?: string) => {
+    const target = e ?? email;
+    if (!target) return;
+    const r = await jsend("/api/admin/grant", "POST", { email: target, plan });
+    setMsg(r.ok ? `✓ ${target} → ${plan}` : (r.error || "Ralat"));
+    if (r.ok) { setEmail(""); load(); }
+  };
+  return (
+    <div className="space-y-3">
+      <div className="card p-4">
+        <div className="font-display mb-1">Berikan Akses Bundle (pembayaran manual)</div>
+        <p className="text-soft text-xs mb-2">Selepas sahkan pembayaran, masukkan e-mel pelanggan untuk membuka akses penuh.</p>
+        <div className="flex gap-2">
+          <input className="flex-1 rounded-xl px-3 py-2 bg-slate-50 border-2 border-slate-200" type="email" placeholder="emel@pelanggan.com" value={email} onChange={(e) => setEmail(e.target.value)} />
+          <button className="btn btn-go rounded-xl px-4 py-2 text-sm font-display" onClick={() => grant("bundle")}>Beri Bundle</button>
+        </div>
+        {msg && <div className="text-sm mt-2 text-violet-700">{msg}</div>}
+      </div>
+      <div className="card p-3 overflow-x-auto">
+        <div className="font-display text-sm mb-2 px-1">Pelanggan Bundle ({list.length})</div>
+        <table className="w-full text-sm">
+          <thead><tr className="text-left text-soft"><th className="p-2">E-mel</th><th className="p-2">Nama</th><th className="p-2">Tarikh</th><th className="p-2"></th></tr></thead>
+          <tbody>
+            {list.map((u) => (
+              <tr key={u.id} className="border-t border-slate-100">
+                <td className="p-2">{u.email}</td><td className="p-2">{u.name}</td>
+                <td className="p-2 text-soft text-xs">{new Date(u.createdAt).toLocaleDateString()}</td>
+                <td className="p-2 text-right"><button className="btn !min-h-0 rounded-lg px-2 py-1 text-xs text-red-500" onClick={() => grant("free", u.email)}>Tarik balik</button></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        {list.length === 0 && <div className="text-soft text-sm p-2">Belum ada pelanggan bundle.</div>}
+      </div>
+    </div>
+  );
+}
+
+interface MediaRow { id: string; filename: string; url: string; mimeType: string; size: number }
+function MediaManager() {
+  const [list, setList] = useState<MediaRow[]>([]);
+  const [busy, setBusy] = useState(false);
+  const [err, setErr] = useState("");
+  const load = () => jget("/api/admin/media").then((r) => setList(r.media ?? []));
+  useEffect(() => { void load(); }, []);
+  const upload = async (file: File) => {
+    setBusy(true); setErr("");
+    const fd = new FormData(); fd.append("file", file);
+    const r = await (await fetch("/api/admin/media", { method: "POST", body: fd })).json();
+    setBusy(false);
+    if (r.ok) load(); else setErr(r.error || "Muat naik gagal");
+  };
+  return (
+    <div className="space-y-3">
+      <div className="card p-4">
+        <div className="font-display mb-1">Muat Naik Gambar</div>
+        <p className="text-soft text-xs mb-2">PNG/JPG/WebP/GIF/SVG, maks 5MB. Salin URL untuk guna sebagai foto ulasan atau galeri.</p>
+        <input type="file" accept="image/*" disabled={busy} onChange={(e) => { const f = e.target.files?.[0]; if (f) upload(f); }} />
+        {busy && <div className="text-soft text-sm mt-1">Memuat naik…</div>}
+        {err && <div className="text-red-500 text-sm mt-1">{err}</div>}
+      </div>
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        {list.map((m) => (
+          <div key={m.id} className="card p-2">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={m.url} alt={m.filename} className="w-full h-28 object-cover rounded-xl bg-slate-100" />
+            <div className="text-[10px] text-soft truncate mt-1" title={m.url}>{m.url}</div>
+            <div className="flex gap-1 mt-1">
+              <button className="btn !min-h-0 rounded-lg px-2 py-1 text-[11px] flex-1" onClick={() => navigator.clipboard?.writeText(m.url)}>Salin URL</button>
+              <button className="btn !min-h-0 rounded-lg px-2 py-1 text-[11px] text-red-500" onClick={async () => { if (confirm("Padam gambar?")) { await jsend("/api/admin/media", "DELETE", { id: m.id }); load(); } }}>Padam</button>
+            </div>
+          </div>
+        ))}
+      </div>
+      {list.length === 0 && <div className="text-soft text-sm">Belum ada gambar dimuat naik.</div>}
+    </div>
+  );
+}
+
+/** Convert epoch-ms to a value for <input type="datetime-local"> (local time). */
+function toLocalInput(ms: number): string {
+  if (!ms) return "";
+  const d = new Date(ms - new Date().getTimezoneOffset() * 60000);
+  return d.toISOString().slice(0, 16);
+}
+function Settings() {
+  const [promo, setPromo] = useState("");
+  const [saved, setSaved] = useState(false);
+  useEffect(() => { void jget("/api/admin/settings").then((r) => { const v = Number(r.settings?.promoEndsAt || 0); if (v) setPromo(toLocalInput(v)); }); }, []);
+  const save = async () => {
+    const ms = promo ? new Date(promo).getTime() : 0;
+    const r = await jsend("/api/admin/settings", "PUT", { promoEndsAt: String(ms) });
+    if (r.ok) { setSaved(true); setTimeout(() => setSaved(false), 2000); }
+  };
+  return (
+    <div className="card p-4 max-w-lg">
+      <div className="font-display mb-1">Pemasa Promosi</div>
+      <p className="text-soft text-xs mb-3">Tetapkan tarikh/masa tamat promosi sebenar. Pemasa di halaman utama akan mengira detik ke masa ini dan hilang bila tamat. Kosongkan untuk menyembunyikan pemasa.</p>
+      <div className="flex flex-wrap gap-2 items-center">
+        <input type="datetime-local" className="rounded-xl px-3 py-2 bg-slate-50 border-2 border-slate-200" value={promo} onChange={(e) => setPromo(e.target.value)} />
+        <button className="btn btn-go rounded-xl px-4 py-2 text-sm font-display" onClick={save}>Simpan</button>
+        {promo && <button className="btn !min-h-0 rounded-xl px-3 py-2 text-sm text-red-500" onClick={() => setPromo("")}>Kosongkan</button>}
+        {saved && <span className="text-green-600 text-sm">✓ Disimpan</span>}
+      </div>
     </div>
   );
 }

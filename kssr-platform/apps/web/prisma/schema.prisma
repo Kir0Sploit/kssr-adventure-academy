@@ -65,6 +65,26 @@ model Review {
   @@index([published, createdAt])
 }
 
+// Site-wide settings as simple key/value pairs (managed in the Admin CMS).
+// e.g. key="promoEndsAt" value="<epoch-ms>" drives the honest promo countdown.
+model Setting {
+  key       String   @id
+  value     String
+  updatedAt DateTime @updatedAt
+}
+
+// Uploaded media (pictures) shown on the site — managed in the Media CMS.
+model Media {
+  id        String   @id @default(cuid())
+  filename  String
+  url       String
+  mimeType  String
+  size      Int      @default(0)
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+}
+
 // Admin-authored questions merged into the games (the content CMS).
 model CustomChallenge {
   id        String   @id @default(cuid())

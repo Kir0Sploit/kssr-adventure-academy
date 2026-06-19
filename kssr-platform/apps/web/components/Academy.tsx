@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import type { Catalog } from "@/lib/catalog";
 import { useProgress } from "@/lib/store";
 import { audio } from "@/lib/audio";
@@ -7,7 +8,6 @@ import { confetti } from "@/lib/confetti";
 import { pushSocialEvent, recordPlayEvent, setSocialEndpoint } from "@/lib/socialProof";
 import type { SubjectId, Topic, Year } from "@kssr/shared";
 import Hud from "./Hud";
-import Landing from "./Landing";
 import LearnMode from "./LearnMode";
 import GameSelect from "./GameSelect";
 import ParentDashboard from "./ParentDashboard";
@@ -19,8 +19,7 @@ import type { GameSummary } from "@/lib/gameUtils";
 import { setCustomChallenges } from "@/lib/gameUtils";
 import { getMe, logout as apiLogout, saveChildProgress, type AccountDTO, type ChildDTO } from "@/lib/account";
 
-const AVATARS = ["🦸", "🦸‍♀️", "🧒", "👧", "🧑‍🚀", "🥷", "🧝", "🦹"];
-type Screen = "home" | "auth" | "profiles" | "onboard" | "select" | "choose" | "learn" | "play" | "summary";
+type Screen = "auth" | "profiles" | "select" | "choose" | "learn" | "play" | "summary";
 
 function Mascot({ size = 84 }: { size?: number }) {
   return (
@@ -32,8 +31,9 @@ function Mascot({ size = 84 }: { size?: number }) {
 
 export default function Academy({ catalog }: { catalog: Catalog }) {
   const s = useProgress();
+  const router = useRouter();
   const [mounted, setMounted] = useState(false);
-  const [screen, setScreen] = useState<Screen>("home");
+  const [screen, setScreen] = useState<Screen>("auth");
   const [subject, setSubject] = useState<SubjectId>("math");
   const [topicId, setTopicId] = useState<string | null>(null);
   const [modeId, setModeId] = useState<string>("quiz");
@@ -54,6 +54,7 @@ export default function Academy({ catalog }: { catalog: Catalog }) {
       if (me.account) {
         setAccount(me.account);
         setChildren(me.children ?? []);
+        setScreen("profiles");
       }
     });
     const unlock = () => {
@@ -71,6 +72,13 @@ export default function Academy({ catalog }: { catalog: Catalog }) {
   }, []);
 
   const isMs = s.locale === "ms";
+
+  // Keep screen consistent with auth state (avoids setState-during-render).
+  useEffect(() => {
+    if (!account && screen !== "auth") setScreen("auth");
+    else if (account && !activeChildId && screen !== "auth" && screen !== "profiles") setScreen("profiles");
+  }, [account, activeChildId, screen]);
+
   const subjectMeta = useMemo(() => catalog.subjects.find((x) => x.id === subject)!, [catalog.subjects, subject]);
   const topics: Topic[] = catalog.topicsByKey[`${s.year}:${subject}`] ?? [];
   const topic = topics.find((t) => t.id === topicId) ?? null;
@@ -80,19 +88,14 @@ export default function Academy({ catalog }: { catalog: Catalog }) {
     return <div className="min-h-screen grid place-items-center text-2xl font-display animate-bobble">🦧 …</div>;
   }
 
-  /* ---------- Landing ---------- */
-  // Security: playing requires a logged-in parent + a selected child profile.
-  const enterApp = () => setScreen(account ? "profiles" : "auth");
-  if (screen === "home") {
-    return <Landing onStart={enterApp} onParent={enterApp} />;
-  }
+  const goHome = () => router.push("/");
 
   /* ---------- Parent auth ---------- */
   if (screen === "auth") {
     return (
       <ParentAuth
         onAuthed={(acc, kids) => { setAccount(acc); setChildren(kids); setScreen("profiles"); }}
-        onBack={() => setScreen("home")}
+        onBack={goHome}
       />
     );
   }
@@ -115,14 +118,14 @@ export default function Academy({ catalog }: { catalog: Catalog }) {
         }}
         onChildAdded={(child) => setChildren((c) => [...c, child])}
         onUpgraded={() => setAccount((a) => (a ? { ...a, plan: "bundle" } : a))}
-        onLogout={async () => { await apiLogout(); setAccount(null); setChildren([]); setActiveChildId(null); setScreen("home"); }}
+        onLogout={async () => { await apiLogout(); setAccount(null); setChildren([]); setActiveChildId(null); goHome(); }}
       />
     );
   }
 
   /* ---------- Guard: in-app screens require auth + a selected child ---------- */
   if (!account || !activeChildId) {
-    return <Landing onStart={enterApp} onParent={enterApp} />;
+    return <div className="min-h-screen grid place-items-center text-2xl font-display animate-bobble">🦧 …</div>;
   }
 
   const startTopic = (t: Topic) => { click(); setTopicId(t.id); setScreen("choose"); };
@@ -168,7 +171,7 @@ export default function Academy({ catalog }: { catalog: Catalog }) {
 
   return (
     <main className="min-h-screen flex flex-col">
-      <Hud onParent={() => { click(); setParentOpen(true); }} onHome={() => { click(); setScreen("home"); }} />
+      <Hud onParent={() => { click(); setParentOpen(true); }} onHome={() => { click(); setScreen("profiles"); }} />
 
       {/* ---------- Topic selection ---------- */}
       {screen === "select" && (

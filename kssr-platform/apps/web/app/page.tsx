@@ -1,9 +1,6 @@
-import { getCatalog } from "@/lib/catalog";
-import Academy from "@/components/Academy";
+import Landing from "@/components/Landing";
 
-// Curriculum is loaded at the server boundary and passed to the client as
-// serializable props — the browser never touches Node `fs`.
+// Marketing landing page. The actual app lives at /main, admin at /admin.
 export default function Page() {
-  const catalog = getCatalog();
-  return <Academy catalog={catalog} />;
+  return <Landing />;
 }

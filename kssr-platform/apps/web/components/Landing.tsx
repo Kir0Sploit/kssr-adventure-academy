@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { useProgress } from "@/lib/store";
 import { audio } from "@/lib/audio";
 import { GAME_MODES } from "@/lib/games";
@@ -10,6 +11,28 @@ import { SUBJECTS, YEARS } from "@kssr/shared";
 import { getTopicMetas, TOPIC_COUNT } from "@kssr/curriculum";
 
 const MODES = GAME_MODES.length;
+
+/** Live countdown to a real promo end time (set in the admin panel). */
+function PromoCountdown({ endsAt, isMs }: { endsAt: number; isMs: boolean }) {
+  const [left, setLeft] = useState(Math.max(0, endsAt - Date.now()));
+  useEffect(() => {
+    const t = setInterval(() => setLeft(Math.max(0, endsAt - Date.now())), 1000);
+    return () => clearInterval(t);
+  }, [endsAt]);
+  if (left <= 0) return null;
+  const h = Math.floor(left / 3600000);
+  const m = Math.floor((left % 3600000) / 60000);
+  const s = Math.floor((left % 60000) / 1000);
+  const pad = (n: number) => String(n).padStart(2, "0");
+  return (
+    <div className="flex items-center justify-center gap-2 mb-4">
+      <span className="text-sm font-bold text-soft">{isMs ? "Tawaran tamat dalam" : "Offer ends in"}</span>
+      {[h, m, s].map((v, i) => (
+        <span key={i} className="font-display text-lg px-2.5 py-1 rounded-xl text-white" style={{ background: "#7c5cff" }}>{pad(v)}</span>
+      ))}
+    </div>
+  );
+}
 function subjectGames(subject: string): number {
   let n = 0;
   for (const y of YEARS) n += getTopicMetas(y, subject as never).length;
@@ -81,18 +104,22 @@ function EmailCapture({ isMs }: { isMs: boolean }) {
   );
 }
 
-export default function Landing({ onStart, onParent }: { onStart: () => void; onParent: () => void }) {
+export default function Landing() {
   const s = useProgress();
+  const router = useRouter();
   const isMs = s.locale === "ms";
-  const go = () => { audio.unlock(); audio.click(); onStart(); };
-  const parent = () => { audio.click(); onParent(); };
+  const go = () => { audio.unlock(); audio.click(); router.push("/main"); };
+  const parent = () => { audio.click(); router.push("/main"); };
   const totalGames = TOPIC_COUNT * MODES;
 
-  // Pull real, published reviews from the CMS; fall back to sample copy.
+  // Pull real, published reviews from the CMS; fall back to sample copy until 3+.
   const [realReviews, setRealReviews] = useState<{ id: string; name: string; place?: string; text: string; rating: number; photoUrl?: string }[]>([]);
+  const [promoEndsAt, setPromoEndsAt] = useState<number>(0);
   useEffect(() => {
     fetch("/api/reviews").then((r) => r.json()).then((d) => { if (Array.isArray(d.reviews)) setRealReviews(d.reviews); }).catch(() => {});
+    fetch("/api/settings").then((r) => r.json()).then((d) => { if (d.promoEndsAt) setPromoEndsAt(Number(d.promoEndsAt)); }).catch(() => {});
   }, []);
+  const useReal = realReviews.length >= 3;
   const COLORS = ["#7c5cff", "#18b6e8", "#16b45b", "#f0883e", "#e0567a", "#2fb39a"];
 
   const features = [
@@ -234,11 +261,11 @@ export default function Landing({ onStart, onParent }: { onStart: () => void; on
       {/* Testimonials */}
       <section className="px-4 py-6 max-w-5xl mx-auto">
         <h2 className="font-display text-3xl text-center text-slate-800 mb-1">{isMs ? "Apa Kata Ibu Bapa" : "What Parents Say"}</h2>
-        {realReviews.length === 0 && (
-          <p className="text-center text-soft text-xs mb-6">{isMs ? "Contoh paparan — akan digantikan dengan ulasan sebenar melalui panel admin." : "Sample layout — replaced by real reviews via the admin panel."}</p>
+        {!useReal && (
+          <p className="text-center text-soft text-xs mb-6">{isMs ? "Sebahagian paparan contoh — ulasan sebenar ditambah melalui panel admin." : "Some sample copy — real reviews are added via the admin panel."}</p>
         )}
-        <div className={`grid grid-cols-1 sm:grid-cols-3 gap-4 ${realReviews.length === 0 ? "" : "mt-6"}`}>
-          {(realReviews.length > 0
+        <div className={`grid grid-cols-1 sm:grid-cols-3 gap-4 ${!useReal ? "" : "mt-6"}`}>
+          {(useReal
             ? realReviews.map((r, i) => ({ key: r.id, name: r.name, place: r.place ?? "", text: r.text, rating: r.rating || 5, src: r.photoUrl, initial: (r.name[0] || "?").toUpperCase(), color: COLORS[i % COLORS.length]! }))
             : SAMPLE_REVIEWS.map((r, i) => ({ key: r.name, name: r.name, place: r.place, text: isMs ? r.text_ms : r.text_en, rating: 5, src: `/reviews/${i + 1}.jpg`, initial: r.initial, color: r.color }))
           ).map((r) => (
@@ -287,6 +314,7 @@ export default function Landing({ onStart, onParent }: { onStart: () => void; on
         <p className="text-center text-soft mb-6">
           {isMs ? "Bantu anak yang suka skrin belajar sambil bermain — pada harga mesra ibu bapa." : "Help screen-loving kids learn through play — at a parent-friendly price."}
         </p>
+        {promoEndsAt > Date.now() && <PromoCountdown endsAt={promoEndsAt} isMs={isMs} />}
         <div className="grid sm:grid-cols-2 gap-4 items-stretch">
           {/* Free */}
           <div className="card p-6 flex flex-col">
