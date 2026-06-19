@@ -37,7 +37,7 @@ export async function POST(req: NextRequest): Promise<Response> {
   await mkdir(UPLOAD_DIR, { recursive: true });
   await writeFile(path.join(UPLOAD_DIR, filename), buf);
 
-  const url = `/uploads/${filename}`;
+  const url = `/api/media/${filename}`;
   const media = await prisma.media.create({ data: { filename, url, mimeType: file.type, size: file.size } });
   return NextResponse.json({ ok: true, media });
 }
