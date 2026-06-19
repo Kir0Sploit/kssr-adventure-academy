@@ -1,0 +1,52 @@
+// Local/offline database for KSSR Adventure Academy.
+//
+// Uses SQLite (a single file, no server to install) so it runs fully offline.
+// For production on a VPS you can keep SQLite for an MVP, or switch `provider`
+// to "mysql" (Hostinger/Exabytes) / "postgresql" and re-run migrations.
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// Real gameplay analytics — written by the client when a game is completed.
+// Powers the honest social-proof fallback ("X permainan minggu ini").
+model PlayEvent {
+  id        String   @id @default(cuid())
+  subject   String
+  topicId   String
+  year      Int
+  correct   Int
+  total     Int
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+}
+
+// Consent-gated social proof. A row is shown ONLY when consentToDisplay = true.
+// Names are redacted server-side per displayMode. No row is ever fabricated.
+model SocialProofEvent {
+  id               String   @id @default(cuid())
+  type             String // "purchase" | "registration" | "achievement"
+  customerName     String?
+  state            String?
+  packageName      String?
+  detail           String?
+  childYear        Int?
+  consentToDisplay Boolean  @default(false)
+  displayMode      String   @default("firstNameInitial") // firstName|firstNameInitial|stateOnly|hidden
+  createdAt        DateTime @default(now())
+
+  @@index([type, consentToDisplay, createdAt])
+}
+
+// PDPA-compliant email leads (explicit opt-in, easy unsubscribe).
+model Subscriber {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  consent   Boolean  @default(true)
+  createdAt DateTime @default(now())
+}

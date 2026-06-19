@@ -7,5 +7,10 @@ next-env.d.ts
 .turbo/
 .env
 .env.*
+!.env.example
 .DS_Store
 coverage/
+
+# Local SQLite database (do not commit data)
+*.db
+*.db-journal

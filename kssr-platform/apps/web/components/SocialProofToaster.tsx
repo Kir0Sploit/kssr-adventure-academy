@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
+import { useProgress } from "@/lib/store";
 import { fetchSocialProof, iconForType, subscribeSocial, type SocialItem } from "@/lib/socialProof";
 
 const VISIBLE_MS = 5000; // within the 4–6s window
@@ -24,9 +25,28 @@ export default function SocialProofToaster() {
     let stop = false;
     const poll = async () => {
       const payload = await fetchSocialProof();
-      if (!stop && payload) {
+      if (stop || !payload) return;
+      const isMs = useProgress.getState().locale === "ms";
+      if (payload.events.length) {
         for (const e of payload.events.slice(0, 6)) {
           enqueue({ id: e.id, text: e.text, icon: iconForType(e.type) });
+        }
+      } else {
+        // No consented customer events → show REAL analytics (only if non-zero).
+        const st = payload.stats;
+        if (st.gamesThisWeek > 0) {
+          enqueue({
+            id: `stat-games-${st.gamesThisWeek}`,
+            icon: "🎮",
+            text: isMs ? `${st.gamesThisWeek} permainan dimainkan minggu ini` : `${st.gamesThisWeek} games played this week`,
+          });
+        }
+        if (st.gamesToday > 0) {
+          enqueue({
+            id: `stat-today-${st.gamesToday}`,
+            icon: "📅",
+            text: isMs ? `${st.gamesToday} permainan dimainkan hari ini` : `${st.gamesToday} games played today`,
+          });
         }
       }
     };

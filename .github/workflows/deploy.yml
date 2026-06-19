@@ -1,19 +1,10 @@
-name: Deploy KSSR Adventure Academy to GitHub Pages
+name: Build (KSSR Adventure Academy)
 
+# The app is now a serverful Next.js app (Prisma + SQLite/MySQL), so it is no
+# longer deployed to static GitHub Pages. It runs offline locally and on a VPS
+# (Hostinger/Exabytes). This workflow only verifies the build on demand.
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
-
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-# Allow one concurrent deployment, cancel in-progress runs.
-concurrency:
-  group: pages
-  cancel-in-progress: true
 
 jobs:
   build:
@@ -22,40 +13,21 @@ jobs:
       run:
         working-directory: kssr-platform
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
           cache-dependency-path: kssr-platform/package-lock.json
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build workspace packages
-        run: npm run build:packages
-
-      - name: Build web (static export)
-        # GitHub Pages project sites are served from /<repo-name>.
+      - run: npm ci
+      - run: npm run build:packages
+      - name: Prisma generate
+        working-directory: kssr-platform/apps/web
         env:
-          NEXT_PUBLIC_BASE_PATH: /${{ github.event.repository.name }}
-        run: npm run build:web
-
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: kssr-platform/apps/web/out
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+          DATABASE_URL: "file:./dev.db"
+        run: npx prisma generate
+      - name: Build web (serverful)
+        working-directory: kssr-platform/apps/web
+        env:
+          DATABASE_URL: "file:./dev.db"
+        run: npm run build

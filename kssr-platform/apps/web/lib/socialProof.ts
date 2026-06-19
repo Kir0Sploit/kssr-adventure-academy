@@ -40,7 +40,7 @@ export function setSocialEndpoint(url: string | null): void {
 
 export interface SocialProofPayload {
   events: Array<{ id: string; type: string; text: string; createdAt: string }>;
-  stats: { gamesPlayedThisWeek: number; badgesThisWeek: number; activeStudentsToday: number };
+  stats: { gamesThisWeek: number; gamesToday: number; perfectThisWeek: number };
 }
 
 /** Fetch consented, server-redacted events + real analytics (live phase). */
@@ -52,6 +52,20 @@ export async function fetchSocialProof(): Promise<SocialProofPayload | null> {
     return (await r.json()) as SocialProofPayload;
   } catch {
     return null;
+  }
+}
+
+/** Records a real, anonymous gameplay completion to the backend (if present). */
+export function recordPlayEvent(data: { subject: string; topicId: string; year: number; correct: number; total: number }): void {
+  try {
+    void fetch("/api/play-event", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(data),
+      keepalive: true,
+    });
+  } catch {
+    /* offline / no backend — ignore */
   }
 }
 

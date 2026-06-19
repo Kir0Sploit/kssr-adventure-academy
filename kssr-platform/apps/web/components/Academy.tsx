@@ -4,7 +4,7 @@ import type { Catalog } from "@/lib/catalog";
 import { useProgress } from "@/lib/store";
 import { audio } from "@/lib/audio";
 import { confetti } from "@/lib/confetti";
-import { pushSocialEvent } from "@/lib/socialProof";
+import { pushSocialEvent, recordPlayEvent, setSocialEndpoint } from "@/lib/socialProof";
 import type { SubjectId, Topic, Year } from "@kssr/shared";
 import Hud from "./Hud";
 import Landing from "./Landing";
@@ -39,6 +39,7 @@ export default function Academy({ catalog }: { catalog: Catalog }) {
 
   useEffect(() => {
     setMounted(true);
+    setSocialEndpoint("/api/social-proof");
     const unlock = () => {
       audio.unlock();
       if (useProgress.getState().audioOn) audio.startMusic();
@@ -132,6 +133,8 @@ export default function Academy({ catalog }: { catalog: Catalog }) {
     if (subject === "english") s.unlock("english_master");
     audio.victory();
     confetti(40);
+    // Persist a real, anonymous play event (powers honest analytics).
+    if (topic) recordPlayEvent({ subject, topicId: topic.id, year: s.year, correct: sum.correct, total: sum.answered });
     // Real, player-driven social-proof events (self-progress — never fabricated).
     if (topic) {
       pushSocialEvent({ text: isMs ? `Anda menamatkan ${topic.title.ms}! ⭐` : `You finished ${topic.title.en}! ⭐`, icon: "🎮" });
