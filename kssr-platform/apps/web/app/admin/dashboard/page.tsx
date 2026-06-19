@@ -9,6 +9,25 @@ async function jsend(url: string, method: string, body: unknown) {
   return (await fetch(url, { method, headers: { "content-type": "application/json" }, body: JSON.stringify(body) })).json();
 }
 
+/** Copy text to clipboard with a fallback for insecure (http LAN) origins. */
+async function copyText(text: string) {
+  try {
+    if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(text);
+    } else {
+      const ta = document.createElement("textarea");
+      ta.value = text; ta.style.position = "fixed"; ta.style.opacity = "0";
+      document.body.appendChild(ta); ta.focus(); ta.select();
+      document.execCommand("copy");
+      document.body.removeChild(ta);
+    }
+    alert("URL disalin:\n" + text);
+  } catch {
+    // Last resort: show it so the admin can copy manually.
+    window.prompt("Salin URL ini:", text);
+  }
+}
+
 export default function AdminPage() {
   const [me, setMe] = useState<{ role?: string; name?: string } | null | "loading">("loading");
   const [tab, setTab] = useState<Tab>("overview");
@@ -307,7 +326,7 @@ function MediaManager() {
             <img src={m.url} alt={m.filename} className="w-full h-28 object-cover rounded-xl bg-slate-100" />
             <div className="text-[10px] text-soft truncate mt-1" title={m.url}>{m.url}</div>
             <div className="flex gap-1 mt-1">
-              <button className="btn !min-h-0 rounded-lg px-2 py-1 text-[11px] flex-1" onClick={() => navigator.clipboard?.writeText(m.url)}>Salin URL</button>
+              <button className="btn !min-h-0 rounded-lg px-2 py-1 text-[11px] flex-1" onClick={() => copyText(window.location.origin + m.url)}>Salin URL</button>
               <button className="btn !min-h-0 rounded-lg px-2 py-1 text-[11px] text-red-500" onClick={async () => { if (confirm("Padam gambar?")) { await jsend("/api/admin/media", "DELETE", { id: m.id }); load(); } }}>Padam</button>
             </div>
           </div>

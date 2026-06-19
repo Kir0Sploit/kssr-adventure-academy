@@ -189,6 +189,6 @@ export const useProgress = create<ProgressState>()(
           certificates: snap.certificates ?? s.certificates,
         })),
     }),
-    { name: "kssr-progress-v1" },
+    { name: "kssr-progress-v1", skipHydration: true },
   ),
 );
