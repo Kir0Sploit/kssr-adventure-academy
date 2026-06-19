@@ -22,7 +22,13 @@ export async function POST(req: NextRequest): Promise<Response> {
     const { name, avatar, year } = (await req.json()) as { name?: string; avatar?: string; year?: number };
     if (!name) return NextResponse.json({ ok: false, error: "Nama diperlukan" }, { status: 400 });
     const count = await prisma.childProfile.count({ where: { accountId: account.id } });
-    if (count >= 6) return NextResponse.json({ ok: false, error: "Had profil dicapai" }, { status: 400 });
+    const maxProfiles = account.plan === "bundle" ? 4 : 1;
+    if (count >= maxProfiles) {
+      return NextResponse.json(
+        { ok: false, error: account.plan === "bundle" ? "Had 4 profil dicapai" : "Versi percuma hanya 1 profil. Naik taraf untuk 4 profil." },
+        { status: 400 },
+      );
+    }
     const child = await prisma.childProfile.create({
       data: {
         accountId: account.id,

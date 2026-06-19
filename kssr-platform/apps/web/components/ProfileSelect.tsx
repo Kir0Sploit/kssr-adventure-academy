@@ -2,33 +2,44 @@
 import { useState } from "react";
 import { useProgress } from "@/lib/store";
 import { audio } from "@/lib/audio";
-import { addChild, type ChildDTO } from "@/lib/account";
+import { addChild, upgradePlan, type ChildDTO } from "@/lib/account";
 
 const AVATARS = ["🦸", "🦸‍♀️", "🧒", "👧", "🧑‍🚀", "🥷", "🧝", "🦹"];
 
 export default function ProfileSelect({
   accountName,
+  plan,
   children,
   onSelect,
   onChildAdded,
   onLogout,
+  onUpgraded,
 }: {
   accountName: string;
+  plan: string;
   children: ChildDTO[];
   onSelect: (child: ChildDTO) => void;
   onChildAdded: (child: ChildDTO) => void;
   onLogout: () => void;
+  onUpgraded: () => void;
 }) {
   const isMs = useProgress((s) => s.locale === "ms");
+  const isBundle = plan === "bundle";
+  const maxProfiles = isBundle ? 4 : 1;
   const [adding, setAdding] = useState(children.length === 0);
   const [name, setName] = useState("");
   const [avatar, setAvatar] = useState("🦸");
   const [year, setYear] = useState(1);
   const [busy, setBusy] = useState(false);
+  const [err, setErr] = useState("");
+  const [showRedeem, setShowRedeem] = useState(false);
+  const [code, setCode] = useState("");
+  const [redeemErr, setRedeemErr] = useState("");
 
   const submit = async () => {
     if (busy || !name.trim()) return;
     setBusy(true);
+    setErr("");
     audio.click();
     const res = await addChild(name.trim(), avatar, year);
     setBusy(false);
@@ -36,21 +47,56 @@ export default function ProfileSelect({
       onChildAdded(res.child);
       setAdding(false);
       setName("");
+    } else {
+      setErr(res.error || (isMs ? "Ralat." : "Error."));
+    }
+  };
+
+  const redeem = async () => {
+    audio.click();
+    setRedeemErr("");
+    const res = await upgradePlan(code.trim());
+    if (res.ok) {
+      onUpgraded();
+      setShowRedeem(false);
+    } else {
+      setRedeemErr(res.error || (isMs ? "Kod tidak sah." : "Invalid code."));
     }
   };
 
   return (
     <main className="min-h-screen p-4 max-w-2xl mx-auto">
-      <div className="card p-4 mb-4 flex items-center gap-3 sticker">
+      <div className="card p-4 mb-4 flex items-center gap-3">
         <span className="text-3xl">👨‍👩‍👧</span>
         <div className="flex-1">
           <div className="font-display text-violet-700">{isMs ? "Selamat datang" : "Welcome"}, {accountName}!</div>
-          <div className="text-xs text-soft">{isMs ? "Pilih profil anak" : "Choose a child profile"}</div>
+          <span className="chip inline-block px-2.5 py-0.5 text-xs mt-1" style={isBundle ? { color: "#7c5cff" } : {}}>
+            {isBundle ? (isMs ? "🌟 Pakej Lengkap" : "🌟 Complete Bundle") : (isMs ? "Versi Percuma" : "Free Version")}
+          </span>
         </div>
         <button className="btn !min-h-0 rounded-2xl px-3 py-2 text-sm" onClick={() => { audio.click(); onLogout(); }}>
           {isMs ? "Log Keluar" : "Log Out"}
         </button>
       </div>
+
+      {!isBundle && (
+        <div className="card p-4 mb-4" style={{ borderTop: "4px solid #7c5cff" }}>
+          <div className="font-display text-violet-700">{isMs ? "Naik taraf ke Pakej Lengkap" : "Upgrade to the Complete Bundle"}</div>
+          <p className="text-soft text-sm mt-1">{isMs ? "Buka soalan tanpa had, lembaran kerja, sijil & sehingga 4 profil anak." : "Unlock unlimited questions, worksheets, certificates & up to 4 child profiles."}</p>
+          {!showRedeem ? (
+            <button className="btn btn-primary rounded-2xl px-5 py-2.5 font-display mt-3 text-sm" onClick={() => { audio.click(); setShowRedeem(true); }}>
+              {isMs ? "Masukkan Kod Akses" : "Enter Access Code"}
+            </button>
+          ) : (
+            <div className="flex gap-2 mt-3">
+              <input className="flex-1 rounded-2xl px-4 py-2.5 bg-slate-50 border-2 border-slate-200 font-bold text-slate-800 outline-none focus:border-violet-400"
+                placeholder={isMs ? "Kod akses" : "Access code"} value={code} onChange={(e) => setCode(e.target.value)} onKeyDown={(e) => e.key === "Enter" && redeem()} />
+              <button className="btn btn-go rounded-2xl px-5 py-2.5 font-display text-sm" onClick={redeem}>{isMs ? "Tebus" : "Redeem"}</button>
+            </div>
+          )}
+          {redeemErr && <div className="text-red-500 text-sm mt-1">{redeemErr}</div>}
+        </div>
+      )}
 
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
         {children.map((c) => (
@@ -60,7 +106,7 @@ export default function ProfileSelect({
             <div className="chip inline-block px-2 py-0.5 text-xs mt-1">{isMs ? "Tahun" : "Year"} {c.year}</div>
           </button>
         ))}
-        {!adding && children.length < 6 && (
+        {!adding && children.length < maxProfiles && (
           <button className="btn card p-4 text-center grid place-items-center text-soft" onClick={() => { audio.click(); setAdding(true); }}>
             <div className="text-4xl">➕</div>
             <div className="font-display mt-1 text-sm">{isMs ? "Tambah Anak" : "Add Child"}</div>
@@ -76,7 +122,7 @@ export default function ProfileSelect({
               <button key={a} className={`btn !min-h-0 text-2xl w-12 h-12 rounded-2xl grid place-items-center ${avatar === a ? "btn-primary scale-110" : ""}`} onClick={() => { audio.click(); setAvatar(a); }}>{a}</button>
             ))}
           </div>
-          <input className="w-full rounded-2xl px-4 py-3 bg-amber-50 border-[3px] border-amber-200 font-bold text-violet-800 mb-3 outline-none focus:border-amber-400"
+          <input className="w-full rounded-2xl px-4 py-3 bg-slate-50 border-2 border-slate-200 font-bold text-slate-800 mb-3 outline-none focus:border-violet-400"
             placeholder={isMs ? "Nama anak" : "Child's name"} value={name} maxLength={20} onChange={(e) => setName(e.target.value)} />
           <div className="flex flex-wrap gap-2 mb-3">
             {[1, 2, 3, 4, 5, 6].map((y) => (
@@ -85,6 +131,7 @@ export default function ProfileSelect({
               </button>
             ))}
           </div>
+          {err && <div className="text-red-500 text-sm mb-2">{err}</div>}
           <button className="btn btn-primary rounded-2xl px-6 py-3 font-display w-full" disabled={busy} onClick={submit}>
             {busy ? "…" : isMs ? "Simpan" : "Save"}
           </button>

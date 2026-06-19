@@ -47,6 +47,7 @@ export interface SessionAccount {
   id: string;
   email: string;
   name: string;
+  plan: string;
 }
 
 /** Resolve the logged-in account from the request's session cookie, or null. */
@@ -55,7 +56,7 @@ export async function accountFromRequest(req: NextRequest): Promise<SessionAccou
   if (!token) return null;
   const session = await prisma.session.findUnique({ where: { token }, include: { account: true } });
   if (!session || session.expiresAt < new Date()) return null;
-  return { id: session.account.id, email: session.account.email, name: session.account.name };
+  return { id: session.account.id, email: session.account.email, name: session.account.name, plan: session.account.plan };
 }
 
 export function isValidEmail(email: string): boolean {

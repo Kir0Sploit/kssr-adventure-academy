@@ -3,7 +3,7 @@ import { useProgress } from "@/lib/store";
 import { SUBJECTS } from "@kssr/shared";
 import type { SubjectId } from "@kssr/shared";
 
-export default function ParentDashboard({ onClose }: { onClose: () => void }) {
+export default function ParentDashboard({ onClose, plan = "free" }: { onClose: () => void; plan?: string }) {
   const s = useProgress();
   const acc = (st: { attempts: number; correct: number }) => (st.attempts ? Math.round((st.correct / st.attempts) * 100) : 0);
   const stats = Object.values(s.stats) as { attempts: number; correct: number }[];
@@ -103,7 +103,9 @@ export default function ParentDashboard({ onClose }: { onClose: () => void }) {
 
         <div className="panel rounded-2xl p-4">
           <h3 className="font-display mb-2">🎓 {isMs ? "Sijil" : "Certificates"}</h3>
-          {s.certificates.length === 0 ? (
+          {plan !== "bundle" ? (
+            <p className="text-sm text-soft">🔒 {isMs ? "Sijil tersedia dalam Pakej Lengkap. Naik taraf untuk membuka." : "Certificates are part of the Complete Bundle. Upgrade to unlock."}</p>
+          ) : s.certificates.length === 0 ? (
             <p className="text-sm text-soft">{isMs ? "Selesaikan permainan untuk memperoleh sijil." : "Finish a game to earn certificates."}</p>
           ) : (
             <div className="flex flex-wrap gap-2">

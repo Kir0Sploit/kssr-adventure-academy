@@ -5,9 +5,10 @@ import type { ChallengeOption } from "@kssr/shared";
 import { audio } from "@/lib/audio";
 import { getQuestions, optionLabel, promptText, rewardFor, shuffle, type GameModeProps } from "@/lib/gameUtils";
 
-const TOTAL = 8;
+const DEFAULT_TOTAL = 8;
 
-export default function QuizGame({ topic, locale, accent, onAnswer, onReward, onComplete, onBack }: GameModeProps) {
+export default function QuizGame({ topic, locale, accent, rounds, onAnswer, onReward, onComplete, onBack }: GameModeProps) {
+  const TOTAL = rounds ?? DEFAULT_TOTAL;
   const questions = useMemo(() => getQuestions(topic, TOTAL), [topic]);
   const [idx, setIdx] = useState(0);
   const [opts, setOpts] = useState<ChallengeOption[]>(() => shuffle(questions[0]?.options ?? []));

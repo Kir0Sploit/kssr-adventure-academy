@@ -12,5 +12,5 @@ export async function GET(req: NextRequest): Promise<Response> {
     orderBy: { createdAt: "asc" },
     select: { id: true, name: true, avatar: true, year: true, progress: true },
   });
-  return NextResponse.json({ ok: true, account, children });
+  return NextResponse.json({ ok: true, account: { id: account.id, email: account.email, name: account.name, plan: account.plan }, children });
 }

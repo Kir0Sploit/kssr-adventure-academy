@@ -29,6 +29,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <div className="scene" aria-hidden>
           <span className="dots" />
+          <span className="shape s1" />
+          <span className="shape s2" />
+          <span className="shape s3" />
+          <span className="shape s4" />
         </div>
         {children}
       </body>

@@ -7,11 +7,12 @@ import { confetti } from "@/lib/confetti";
 import { speak, stopSpeaking } from "@/lib/speak";
 import { getQuestions, optionLabel, promptText, rewardFor, shuffle, type GameModeProps } from "@/lib/gameUtils";
 
-const TOTAL = 6; // shorter for little learners
+const DEFAULT_TOTAL = 6; // shorter for little learners
 const TILE = ["🟦", "🟩", "🟧", "🟪"];
 
-export default function TapGame({ topic, locale, accent, onAnswer, onReward, onComplete, onBack }: GameModeProps) {
+export default function TapGame({ topic, locale, accent, rounds, onAnswer, onReward, onComplete, onBack }: GameModeProps) {
   const isMs = locale === "ms";
+  const TOTAL = rounds ?? DEFAULT_TOTAL;
   const questions = useMemo(() => getQuestions(topic, TOTAL), [topic]);
   const [idx, setIdx] = useState(0);
   const [opts, setOpts] = useState<ChallengeOption[]>(() => shuffle(questions[0]?.options ?? []));

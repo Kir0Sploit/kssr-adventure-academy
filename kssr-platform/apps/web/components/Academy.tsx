@@ -99,6 +99,7 @@ export default function Academy({ catalog }: { catalog: Catalog }) {
     return (
       <ProfileSelect
         accountName={account.name}
+        plan={account.plan}
         children={children}
         onSelect={(child) => {
           try {
@@ -110,6 +111,7 @@ export default function Academy({ catalog }: { catalog: Catalog }) {
           setScreen("select");
         }}
         onChildAdded={(child) => setChildren((c) => [...c, child])}
+        onUpgraded={() => setAccount((a) => (a ? { ...a, plan: "bundle" } : a))}
         onLogout={async () => { await apiLogout(); setAccount(null); setChildren([]); setActiveChildId(null); setScreen("home"); }}
       />
     );
@@ -279,6 +281,7 @@ export default function Academy({ catalog }: { catalog: Catalog }) {
               locale={s.locale}
               accent={subjectMeta.color}
               initialMastery={s.mastery[topic.id] ?? 0}
+              rounds={account?.plan === "bundle" ? undefined : 5}
               onAnswer={(_c, correct) => s.recordAnswer(subject, topic.id, correct)}
               onReward={(r) => s.addReward(r)}
               onComplete={handleComplete}
@@ -320,7 +323,7 @@ export default function Academy({ catalog }: { catalog: Catalog }) {
         </section>
       )}
 
-      {parentOpen && <ParentDashboard onClose={() => { click(); setParentOpen(false); }} />}
+      {parentOpen && <ParentDashboard onClose={() => { click(); setParentOpen(false); }} plan={account?.plan ?? "free"} />}
       <SocialProofToaster />
     </main>
   );

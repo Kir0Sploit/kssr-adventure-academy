@@ -9,6 +9,7 @@ export default function GameCanvas({
   locale,
   accent,
   initialMastery,
+  rounds,
   onAnswer,
   onReward,
   onComplete,
@@ -41,7 +42,7 @@ export default function GameCanvas({
       handleRef.current = mountRunner({
         parent: host,
         locale,
-        gates: 8,
+        gates: rounds ?? 8,
         accent,
         nextChallenge: provider,
         callbacks: {

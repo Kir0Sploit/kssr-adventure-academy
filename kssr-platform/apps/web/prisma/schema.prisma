@@ -60,6 +60,7 @@ model Account {
   email        String         @unique
   name         String
   passwordHash String
+  plan         String         @default("free") // "free" | "bundle"
   createdAt    DateTime       @default(now())
   children     ChildProfile[]
   sessions     Session[]

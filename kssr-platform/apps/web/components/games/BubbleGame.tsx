@@ -4,11 +4,12 @@ import { PRAISE, ENCOURAGE } from "@kssr/shared";
 import { audio } from "@/lib/audio";
 import { getQuestions, optionLabel, promptText, rewardFor, shuffle, type GameModeProps } from "@/lib/gameUtils";
 
-const TOTAL = 8;
+const DEFAULT_TOTAL = 8;
 const BUBBLE_COLORS = ["#8b5cf6", "#3b82f6", "#06b6d4", "#ec4899", "#f59e0b"];
 
-export default function BubbleGame({ topic, locale, accent, onAnswer, onReward, onComplete, onBack }: GameModeProps) {
+export default function BubbleGame({ topic, locale, accent, rounds, onAnswer, onReward, onComplete, onBack }: GameModeProps) {
   const isMs = locale === "ms";
+  const TOTAL = rounds ?? DEFAULT_TOTAL;
   const questions = useMemo(() => getQuestions(topic, TOTAL), [topic]);
   const [round, setRound] = useState(0);
   const [nonce, setNonce] = useState(0);

@@ -5,6 +5,7 @@ import { audio } from "@/lib/audio";
 import { GAME_MODES } from "@/lib/games";
 import SocialProofToaster from "./SocialProofToaster";
 import { Logo, Icon } from "./Brand";
+import { ImageWithFallback } from "./ImageWithFallback";
 import { SUBJECTS, YEARS } from "@kssr/shared";
 import { getTopicMetas, TOPIC_COUNT } from "@kssr/curriculum";
 
@@ -35,6 +36,16 @@ function Stars() {
       {Array.from({ length: 5 }).map((_, i) => <Icon key={i} name="star" size={16} color="#ffb300" />)}
     </span>
   );
+}
+
+/** Review avatar: shows a real photo from /reviews/N.jpg, else a colored initial. */
+function ReviewAvatar({ index, initial, color }: { index: number; initial: string; color: string }) {
+  const [failed, setFailed] = useState(false);
+  if (failed) {
+    return <span className="w-11 h-11 rounded-full grid place-items-center font-display text-white shrink-0" style={{ background: color }}>{initial}</span>;
+  }
+  // eslint-disable-next-line @next/next/no-img-element
+  return <img src={`/reviews/${index}.jpg`} alt="" onError={() => setFailed(true)} className="w-11 h-11 rounded-full object-cover shrink-0" />;
 }
 
 function EmailCapture({ isMs }: { isMs: boolean }) {
@@ -218,15 +229,26 @@ export default function Landing({ onStart, onParent }: { onStart: () => void; on
         <h2 className="font-display text-3xl text-center text-slate-800 mb-1">{isMs ? "Apa Kata Ibu Bapa" : "What Parents Say"}</h2>
         <p className="text-center text-soft text-xs mb-6">{isMs ? "Contoh paparan — akan digantikan dengan ulasan sebenar yang disahkan." : "Sample layout — to be replaced with real, verified reviews."}</p>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          {SAMPLE_REVIEWS.map((r) => (
+          {SAMPLE_REVIEWS.map((r, i) => (
             <div key={r.name} className="card p-5">
               <Stars />
               <p className="text-sm mt-2 text-slate-700">“{isMs ? r.text_ms : r.text_en}”</p>
               <div className="flex items-center gap-3 mt-4">
-                <span className="w-10 h-10 rounded-full grid place-items-center font-display text-white" style={{ background: r.color }}>{r.initial}</span>
+                <ReviewAvatar index={i + 1} initial={r.initial} color={r.color} />
                 <div><div className="font-display text-sm text-slate-800">{r.name}</div><div className="text-[11px] text-soft">{r.place}</div></div>
               </div>
             </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Gallery — drop real screenshots into /public/gallery/N.jpg */}
+      <section className="px-4 py-6 max-w-5xl mx-auto">
+        <h2 className="font-display text-3xl text-center text-slate-800 mb-1">{isMs ? "Lihat Dalam Aplikasi" : "See It In Action"}</h2>
+        <p className="text-center text-soft mb-6">{isMs ? "Tangkap layar sebenar daripada permainan" : "Real screenshots from the games"}</p>
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+          {[1, 2, 3, 4, 5, 6].map((n) => (
+            <ImageWithFallback key={n} src={`/gallery/${n}.jpg`} alt={`Screenshot ${n}`} label={isMs ? "Muat naik tangkap layar" : "Upload screenshot"} />
           ))}
         </div>
       </section>

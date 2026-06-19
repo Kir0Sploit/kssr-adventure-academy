@@ -7,10 +7,11 @@ import { confetti } from "@/lib/confetti";
 import { speak, stopSpeaking } from "@/lib/speak";
 import { getQuestions, optionLabel, promptText, rewardFor, shuffle, type GameModeProps } from "@/lib/gameUtils";
 
-const STEPS = 5;
+const DEFAULT_STEPS = 5;
 
-export default function HopGame({ topic, locale, accent, onAnswer, onReward, onComplete, onBack }: GameModeProps) {
+export default function HopGame({ topic, locale, accent, rounds, onAnswer, onReward, onComplete, onBack }: GameModeProps) {
   const isMs = locale === "ms";
+  const STEPS = rounds ?? DEFAULT_STEPS;
   const questions = useMemo(() => getQuestions(topic, STEPS), [topic]);
   const [pos, setPos] = useState(0); // current star index (0..STEPS)
   const [opts, setOpts] = useState<ChallengeOption[]>(() => shuffle(questions[0]?.options ?? []));

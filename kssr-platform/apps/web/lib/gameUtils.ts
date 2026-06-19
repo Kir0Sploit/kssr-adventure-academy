@@ -17,6 +17,8 @@ export interface GameModeProps {
   locale: Locale;
   accent: string;
   initialMastery: number;
+  /** Max rounds/questions for this session (free plan limits this). */
+  rounds?: number;
   onAnswer: (challenge: Challenge, correct: boolean) => void;
   onReward: (r: { coins: number; xp: number; stars: number }) => void;
   onComplete: (summary: GameSummary) => void;

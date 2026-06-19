@@ -30,9 +30,9 @@ export default function ParentAuth({
       setErr(res.error || (isMs ? "Ralat. Cuba lagi." : "Error. Try again."));
       return;
     }
-    // load children
+    // load children + plan-aware account
     const me = await fetch("/api/auth/me", { credentials: "include", cache: "no-store" }).then((r) => r.json());
-    onAuthed(res.account, me.children ?? []);
+    onAuthed(me.account ?? res.account, me.children ?? []);
   };
 
   return (
