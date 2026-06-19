@@ -22,8 +22,11 @@ function subjectGames(subject: string): number {
 interface Review { name: string; place: string; text_ms: string; text_en: string; initial: string; color: string }
 const SAMPLE_REVIEWS: Review[] = [
   { name: "Encik Farhan", place: "Shah Alam, Selangor", initial: "F", color: "#7c5cff", text_ms: "Anak saya darjah 2 kini minta sendiri nak main setiap petang. Sifirnya makin laju!", text_en: "My Year 2 child now asks to play every evening. Times tables improved fast!" },
-  { name: "Puan Aishah", place: "Johor Bahru, Johor", initial: "A", color: "#19b6e8", text_ms: "Suka sangat susunan ikut KSSR. Soalan pendek, anak tak rasa terbeban.", text_en: "Love the KSSR-aligned structure. Short questions, no pressure for my kid." },
-  { name: "Cikgu Roslan", place: "Alor Setar, Kedah", initial: "R", color: "#36b14f", text_ms: "Saya guna untuk kelas pemulihan. Suara BM & Jawi sangat membantu murid.", text_en: "I use it for remedial class. The Malay & Jawi voice really helps pupils." },
+  { name: "Puan Aishah", place: "Johor Bahru, Johor", initial: "A", color: "#18b6e8", text_ms: "Suka sangat susunan ikut KSSR. Soalan pendek, anak tak rasa terbeban.", text_en: "Love the KSSR-aligned structure. Short questions, no pressure for my kid." },
+  { name: "Cikgu Roslan", place: "Alor Setar, Kedah", initial: "R", color: "#16b45b", text_ms: "Saya guna untuk kelas pemulihan. Suara BM & Jawi sangat membantu murid.", text_en: "I use it for remedial class. The Malay & Jawi voice really helps pupils." },
+  { name: "Puan Mei Ling", place: "Petaling Jaya, Selangor", initial: "M", color: "#f0883e", text_ms: "Dua anak guna satu akaun. Dashboard tunjuk siapa perlu lebih latihan.", text_en: "Two kids on one account. The dashboard shows who needs more practice." },
+  { name: "Encik Hafiz", place: "Kuantan, Pahang", initial: "H", color: "#e0567a", text_ms: "Sebelum ni anak main game je. Sekarang dia belajar Sains & Sejarah sambil main.", text_en: "He used to just play games. Now he learns Science & History while playing." },
+  { name: "Puan Nurul", place: "Kota Bharu, Kelantan", initial: "N", color: "#2fb39a", text_ms: "Boleh main offline masa dalam kereta. Sangat membantu untuk perjalanan jauh.", text_en: "Works offline in the car. A lifesaver for long journeys." },
 ];
 
 function Stars() {
@@ -241,6 +244,55 @@ export default function Landing({ onStart, onParent }: { onStart: () => void; on
           ).map(([q, a]) => (
             <details key={q} className="card p-4"><summary className="font-display cursor-pointer text-slate-800">{q}</summary><p className="text-soft text-sm mt-2">{a}</p></details>
           ))}
+        </div>
+      </section>
+
+      {/* Pricing / Bundle */}
+      <section id="pricing" className="px-4 py-8 max-w-4xl mx-auto">
+        <h2 className="font-display text-3xl text-center text-slate-800 mb-1">{isMs ? "Pilih Pakej Anda" : "Choose Your Plan"}</h2>
+        <p className="text-center text-soft mb-6">
+          {isMs ? "Bantu anak yang suka skrin belajar sambil bermain — pada harga mesra ibu bapa." : "Help screen-loving kids learn through play — at a parent-friendly price."}
+        </p>
+        <div className="grid sm:grid-cols-2 gap-4 items-stretch">
+          {/* Free */}
+          <div className="card p-6 flex flex-col">
+            <div className="font-display text-xl text-slate-800">{isMs ? "Percuma" : "Free"}</div>
+            <div className="font-display text-4xl text-slate-800 mt-1">RM0</div>
+            <div className="text-soft text-sm mb-4">{isMs ? "Untuk mula mencuba" : "To get started"}</div>
+            <ul className="space-y-2 text-sm text-slate-700 flex-1">
+              <li className="flex items-center gap-2"><Icon name="check" size={16} color="#16a34a" /> {isMs ? "Semua 7 subjek" : "All 7 subjects"}</li>
+              <li className="flex items-center gap-2"><Icon name="check" size={16} color="#16a34a" /> {isMs ? "Soalan & cabaran terhad" : "Limited questions & challenges"}</li>
+              <li className="flex items-center gap-2 text-soft"><span className="w-4 text-center">✕</span> {isMs ? "Tiada lembaran kerja" : "No worksheets"}</li>
+              <li className="flex items-center gap-2"><Icon name="check" size={16} color="#16a34a" /> {isMs ? "1 profil anak" : "1 child profile"}</li>
+            </ul>
+            <button className="btn rounded-2xl px-6 py-3 font-display w-full mt-5" onClick={go}>{isMs ? "Mula Percuma" : "Start Free"}</button>
+          </div>
+
+          {/* Bundle */}
+          <div className="card p-6 flex flex-col relative ring-2" style={{ borderColor: "#7c5cff", boxShadow: "0 16px 40px rgba(109,92,255,.22)" }}>
+            <span className="absolute -top-3 left-1/2 -translate-x-1/2 chip px-3 py-1 text-xs font-display" style={{ background: "#7c5cff", color: "#fff", border: "none" }}>
+              {isMs ? "Paling Berbaloi · Jimat RM240" : "Best Value · Save RM240"}
+            </span>
+            <div className="font-display text-xl text-violet-700">{isMs ? "Pakej Lengkap" : "Complete Bundle"}</div>
+            <div className="flex items-end gap-2 mt-1">
+              <span className="font-display text-4xl text-slate-800">RM59</span>
+              <span className="text-soft line-through text-lg">RM299</span>
+            </div>
+            <div className="text-soft text-xs mb-4">{isMs ? "Nilai penuh RM299 — harga membantu ibu bapa" : "Full value RM299 — a parent-help price"}</div>
+            <ul className="space-y-2 text-sm text-slate-700 flex-1">
+              <li className="flex items-center gap-2"><Icon name="check" size={16} color="#16a34a" /> {isMs ? "Semua subjek & semua pakej" : "All subjects & all packages"}</li>
+              <li className="flex items-center gap-2"><Icon name="check" size={16} color="#16a34a" /> {isMs ? "Soalan & cabaran tanpa had" : "Unlimited questions & challenges"}</li>
+              <li className="flex items-center gap-2"><Icon name="check" size={16} color="#16a34a" /> {isMs ? "Lembaran kerja boleh cetak" : "Printable worksheets"}</li>
+              <li className="flex items-center gap-2"><Icon name="check" size={16} color="#16a34a" /> {isMs ? "Dashboard penuh & sijil" : "Full dashboard & certificates"}</li>
+              <li className="flex items-center gap-2"><Icon name="check" size={16} color="#16a34a" /> {isMs ? "Sehingga 4 profil anak · semua akses" : "Up to 4 child profiles · all access"}</li>
+            </ul>
+            <button className="btn btn-primary rounded-2xl px-6 py-3 font-display w-full mt-5 inline-flex items-center justify-center gap-2" onClick={parent}>
+              <Icon name="star" size={16} color="#fff" /> {isMs ? "Dapatkan Sekarang" : "Get the Bundle"}
+            </button>
+            <div className="text-[11px] text-soft text-center mt-2 inline-flex items-center justify-center gap-1">
+              <Icon name="lock" size={12} /> {isMs ? "Bayaran selamat (FPX/kad) — akan datang" : "Secure payment (FPX/card) — coming soon"}
+            </div>
+          </div>
         </div>
       </section>
 

@@ -3,9 +3,11 @@
 @tailwind utilities;
 
 :root {
-  --ink: #3a2f6b; /* primary text on light surfaces */
-  --ink-soft: #6b6390;
-  --paper: #fffdf7;
+  --ink: #232a3d; /* primary text */
+  --ink-soft: #6b7488;
+  --paper: #ffffff;
+  --brand: #6d5cff;
+  --brand-2: #18b6e8;
 }
 
 * {
@@ -19,7 +21,7 @@ body {
   color: var(--ink);
   font-family: var(--font-body), system-ui, "Segoe UI", sans-serif;
   font-weight: 600;
-  background: #bdecff;
+  background: #eef1fb;
   overscroll-behavior: none;
   -webkit-font-smoothing: antialiased;
 }
@@ -28,167 +30,123 @@ body {
   font-family: var(--font-display), var(--font-body), sans-serif;
 }
 
-/* ---------- Daytime adventure scene (fixed background) ---------- */
+/* ---------- Professional soft background with floating shapes ---------- */
 .scene {
   position: fixed;
   inset: 0;
   z-index: -1;
   overflow: hidden;
-  background: linear-gradient(180deg, #8fd9ff 0%, #c5efff 45%, #fff3d6 100%);
+  background:
+    radial-gradient(1100px 620px at 82% -12%, #e7ebff 0%, transparent 60%),
+    radial-gradient(900px 520px at -12% 112%, #ffe9f4 0%, transparent 55%),
+    linear-gradient(180deg, #f8faff 0%, #eef1fb 60%, #f4f1fb 100%);
 }
-.sun {
-  position: absolute;
-  top: 5%;
-  right: 8%;
-  width: 110px;
-  height: 110px;
-  border-radius: 50%;
-  background: radial-gradient(circle, #fff3a8 0%, #ffd84d 60%, #ffc83d 100%);
-  box-shadow: 0 0 60px 18px rgba(255, 210, 80, 0.55);
-  animation: floaty 6s ease-in-out infinite;
-}
-.cloud {
-  position: absolute;
-  background: #ffffff;
-  border-radius: 100px;
-  opacity: 0.92;
-  filter: drop-shadow(0 8px 10px rgba(120, 170, 210, 0.25));
-}
-.cloud::before,
-.cloud::after {
+.scene::before,
+.scene::after {
   content: "";
   position: absolute;
-  background: #fff;
   border-radius: 50%;
+  filter: blur(36px);
+  opacity: 0.55;
 }
-.cloud-1 {
-  width: 120px;
-  height: 36px;
-  top: 14%;
-  left: -140px;
-  animation: clouds 38s linear infinite;
+.scene::before {
+  width: 48vmax;
+  height: 48vmax;
+  top: -12vmax;
+  right: -8vmax;
+  background: radial-gradient(circle, rgba(109, 92, 255, 0.28), transparent 60%);
+  animation: drift 24s ease-in-out infinite alternate;
 }
-.cloud-2 {
-  width: 90px;
-  height: 28px;
-  top: 26%;
-  left: -120px;
-  animation: clouds 52s linear infinite;
-  animation-delay: -10s;
+.scene::after {
+  width: 44vmax;
+  height: 44vmax;
+  bottom: -14vmax;
+  left: -10vmax;
+  background: radial-gradient(circle, rgba(24, 182, 232, 0.26), transparent 60%);
+  animation: drift 30s ease-in-out infinite alternate-reverse;
 }
-.cloud-3 {
-  width: 150px;
-  height: 44px;
-  top: 8%;
-  left: -180px;
-  animation: clouds 64s linear infinite;
-  animation-delay: -28s;
-}
-.cloud::before {
-  width: 55%;
-  height: 180%;
-  top: -55%;
-  left: 12%;
-}
-.cloud::after {
-  width: 45%;
-  height: 150%;
-  top: -40%;
-  right: 14%;
-}
-.hills {
+/* small decorative dots layer */
+.scene > .dots {
   position: absolute;
-  bottom: 60px;
-  left: -5%;
-  width: 110%;
-  height: 220px;
-  background: radial-gradient(120% 100% at 50% 100%, #7ed957 0%, #5cc23f 70%);
-  border-radius: 50% 50% 0 0 / 100% 100% 0 0;
-  opacity: 0.85;
+  inset: 0;
+  background-image: radial-gradient(rgba(109, 92, 255, 0.08) 1.5px, transparent 1.5px);
+  background-size: 28px 28px;
+  mask-image: radial-gradient(circle at 50% 40%, #000 30%, transparent 75%);
 }
-.grass {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 80px;
-  background: linear-gradient(180deg, #6fce4a, #4faf33);
-}
-@keyframes clouds {
-  to {
-    transform: translateX(120vw);
-  }
+@keyframes drift {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(4vmax, 3vmax) scale(1.08); }
 }
 
-/* ---------- Surfaces ---------- */
+/* ---------- Surfaces (premium, soft) ---------- */
 .card {
   background: var(--paper);
-  border-radius: 26px;
-  border: 3px solid #ffffff;
-  box-shadow: 0 10px 0 rgba(120, 150, 190, 0.22), 0 14px 30px rgba(60, 80, 130, 0.18);
+  border-radius: 20px;
+  border: 1px solid #eceefb;
+  box-shadow: 0 1px 2px rgba(35, 42, 61, 0.04), 0 14px 34px rgba(50, 60, 110, 0.08);
   color: var(--ink);
 }
 .panel {
-  background: rgba(255, 255, 255, 0.82);
-  backdrop-filter: blur(8px);
-  border-radius: 22px;
-  border: 2px solid #fff;
-  box-shadow: 0 8px 22px rgba(60, 80, 130, 0.18);
+  background: rgba(255, 255, 255, 0.86);
+  backdrop-filter: blur(12px);
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 8px 26px rgba(50, 60, 110, 0.12);
   color: var(--ink);
 }
-.sticker {
-  transform: rotate(-1.4deg);
-}
+/* sticker tilt removed for a clean, professional look */
+.sticker,
 .sticker-r {
-  transform: rotate(1.6deg);
+  transform: none;
 }
 
-/* ---------- Chunky 3D buttons ---------- */
+/* ---------- Buttons (tactile but refined) ---------- */
 .btn {
-  min-height: 52px;
+  min-height: 50px;
   cursor: pointer;
   border: none;
   font-weight: 800;
   color: var(--ink);
   background: #fff;
-  border-radius: 20px;
-  box-shadow: 0 6px 0 rgba(120, 150, 190, 0.4);
+  border-radius: 16px;
+  box-shadow: 0 3px 0 #e3e6f3, 0 8px 18px rgba(50, 60, 110, 0.08);
   transition: transform 0.06s ease, box-shadow 0.06s ease, filter 0.15s ease;
   touch-action: manipulation;
 }
 .btn:active {
-  transform: translateY(5px);
-  box-shadow: 0 1px 0 rgba(120, 150, 190, 0.4);
+  transform: translateY(3px);
+  box-shadow: 0 0 0 #e3e6f3, 0 4px 10px rgba(50, 60, 110, 0.08);
 }
 .btn:hover {
-  filter: brightness(1.03);
+  filter: brightness(1.02);
 }
 .btn:disabled {
   cursor: default;
+  opacity: 0.65;
 }
 .btn-primary {
   color: #fff;
-  background: linear-gradient(180deg, #ffb43d, #ff9a1f);
-  box-shadow: 0 6px 0 #d9760c;
+  background: linear-gradient(135deg, #7c5cff, #5b8cff 60%, #18b6e8);
+  box-shadow: 0 4px 0 #4b46c7, 0 10px 22px rgba(109, 92, 255, 0.35);
 }
 .btn-primary:active {
-  box-shadow: 0 1px 0 #d9760c;
+  box-shadow: 0 0 0 #4b46c7, 0 5px 12px rgba(109, 92, 255, 0.3);
 }
 .btn-go {
   color: #fff;
-  background: linear-gradient(180deg, #5ad06a, #36b14f);
-  box-shadow: 0 6px 0 #1f8a3a;
+  background: linear-gradient(135deg, #2fd17a, #16b45b);
+  box-shadow: 0 4px 0 #0f8a45, 0 10px 22px rgba(22, 180, 91, 0.32);
 }
 .btn-go:active {
-  box-shadow: 0 1px 0 #1f8a3a;
+  box-shadow: 0 0 0 #0f8a45, 0 5px 12px rgba(22, 180, 91, 0.3);
 }
 .btn-sky {
   color: #fff;
-  background: linear-gradient(180deg, #58b6ff, #2f8fea);
-  box-shadow: 0 6px 0 #1f6cc4;
+  background: linear-gradient(135deg, #38b6ff, #2f8fea);
+  box-shadow: 0 4px 0 #1f6cc4, 0 10px 22px rgba(47, 143, 234, 0.3);
 }
 .btn-sky:active {
-  box-shadow: 0 1px 0 #1f6cc4;
+  box-shadow: 0 0 0 #1f6cc4, 0 5px 12px rgba(47, 143, 234, 0.3);
 }
 
 .chip {
@@ -196,7 +154,8 @@ body {
   font-weight: 800;
   background: #fff;
   color: var(--ink);
-  box-shadow: 0 3px 0 rgba(120, 150, 190, 0.3);
+  border: 1px solid #eceefb;
+  box-shadow: 0 2px 8px rgba(50, 60, 110, 0.06);
 }
 .text-soft {
   color: var(--ink-soft);
@@ -204,128 +163,52 @@ body {
 
 /* ---------- Animations ---------- */
 @keyframes pop {
-  0% {
-    transform: scale(0.7);
-    opacity: 0;
-  }
-  60% {
-    transform: scale(1.07);
-    opacity: 1;
-  }
-  100% {
-    transform: scale(1);
-    opacity: 1;
-  }
+  0% { transform: scale(0.7); opacity: 0; }
+  60% { transform: scale(1.06); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
 }
 @keyframes floaty {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
 }
 @keyframes wiggle {
-  0%,
-  100% {
-    transform: rotate(-3deg);
-  }
-  50% {
-    transform: rotate(3deg);
-  }
+  0%, 100% { transform: rotate(-3deg); }
+  50% { transform: rotate(3deg); }
 }
 @keyframes bobble {
-  0%,
-  100% {
-    transform: translateY(0) scale(1);
-  }
-  50% {
-    transform: translateY(-6px) scale(1.04);
-  }
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-6px) scale(1.04); }
 }
 @keyframes slideUp {
-  from {
-    transform: translateY(22px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
+  from { transform: translateY(22px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
 }
 @keyframes rise {
-  from {
-    top: 100%;
-  }
-  to {
-    top: -25%;
-  }
+  from { top: 100%; }
+  to { top: -25%; }
 }
 @keyframes popout {
-  to {
-    transform: scale(1.7);
-    opacity: 0;
-  }
+  to { transform: scale(1.7); opacity: 0; }
 }
-.animate-pop {
-  animation: pop 0.4s ease-out;
-}
-.animate-floaty {
-  animation: floaty 3.2s ease-in-out infinite;
-}
-.animate-wiggle {
-  animation: wiggle 1.4s ease-in-out infinite;
-}
-.animate-bobble {
-  animation: bobble 1.6s ease-in-out infinite;
-}
-.animate-slideUp {
-  animation: slideUp 0.45s ease-out both;
-}
-.bubble-pop {
-  animation: popout 0.3s ease-out forwards !important;
-}
+.animate-pop { animation: pop 0.4s ease-out; }
+.animate-floaty { animation: floaty 3.2s ease-in-out infinite; }
+.animate-wiggle { animation: wiggle 1.4s ease-in-out infinite; }
+.animate-bobble { animation: bobble 1.6s ease-in-out infinite; }
+.animate-slideUp { animation: slideUp 0.45s ease-out both; }
+.bubble-pop { animation: popout 0.3s ease-out forwards !important; }
 
-/* Social-proof toast in/out */
-@keyframes spIn {
-  from {
-    transform: translateY(24px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-@keyframes spOut {
-  to {
-    transform: translateY(16px);
-    opacity: 0;
-  }
-}
-.sp-in {
-  animation: spIn 0.4s cubic-bezier(0.2, 0.8, 0.3, 1) both;
-}
-.sp-out {
-  animation: spOut 0.4s ease-in both;
-}
+/* Social-proof toast */
+@keyframes spIn { from { transform: translateY(24px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+@keyframes spOut { to { transform: translateY(16px); opacity: 0; } }
+.sp-in { animation: spIn 0.4s cubic-bezier(0.2, 0.8, 0.3, 1) both; }
+.sp-out { animation: spOut 0.4s ease-in both; }
+
 @media (prefers-reduced-motion: reduce) {
-  .sp-in,
-  .sp-out,
-  .animate-pop,
-  .animate-floaty,
-  .animate-bobble,
-  .animate-wiggle,
-  .animate-slideUp {
+  .sp-in, .sp-out, .animate-pop, .animate-floaty, .animate-bobble, .animate-wiggle, .animate-slideUp,
+  .scene::before, .scene::after {
     animation: none !important;
   }
 }
 
-::-webkit-scrollbar {
-  width: 10px;
-}
-::-webkit-scrollbar-thumb {
-  background: rgba(120, 150, 190, 0.4);
-  border-radius: 8px;
-}
+::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar-thumb { background: rgba(109, 92, 255, 0.25); border-radius: 8px; }

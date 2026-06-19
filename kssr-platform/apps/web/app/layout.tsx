@@ -28,12 +28,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" className={`${display.variable} ${body.variable}`}>
       <body>
         <div className="scene" aria-hidden>
-          <span className="sun" />
-          <span className="cloud cloud-1" />
-          <span className="cloud cloud-2" />
-          <span className="cloud cloud-3" />
-          <span className="hills" />
-          <span className="grass" />
+          <span className="dots" />
         </div>
         {children}
       </body>
