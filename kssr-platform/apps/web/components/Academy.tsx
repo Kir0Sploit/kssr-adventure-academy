@@ -12,11 +12,14 @@ import LearnMode from "./LearnMode";
 import GameSelect from "./GameSelect";
 import ParentDashboard from "./ParentDashboard";
 import SocialProofToaster from "./SocialProofToaster";
+import ParentAuth from "./ParentAuth";
+import ProfileSelect from "./ProfileSelect";
 import { getMode } from "@/lib/games";
 import type { GameSummary } from "@/lib/gameUtils";
+import { getMe, logout as apiLogout, saveChildProgress, type AccountDTO, type ChildDTO } from "@/lib/account";
 
 const AVATARS = ["🦸", "🦸‍♀️", "🧒", "👧", "🧑‍🚀", "🥷", "🧝", "🦹"];
-type Screen = "home" | "onboard" | "select" | "choose" | "learn" | "play" | "summary";
+type Screen = "home" | "auth" | "profiles" | "onboard" | "select" | "choose" | "learn" | "play" | "summary";
 
 function Mascot({ size = 84 }: { size?: number }) {
   return (
@@ -35,11 +38,21 @@ export default function Academy({ catalog }: { catalog: Catalog }) {
   const [modeId, setModeId] = useState<string>("quiz");
   const [parentOpen, setParentOpen] = useState(false);
   const [summary, setSummary] = useState<GameSummary | null>(null);
+  const [account, setAccount] = useState<AccountDTO | null>(null);
+  const [children, setChildren] = useState<ChildDTO[]>([]);
+  const [activeChildId, setActiveChildId] = useState<string | null>(null);
   const playStart = useRef(0);
 
   useEffect(() => {
     setMounted(true);
     setSocialEndpoint("/api/social-proof");
+    // Restore any existing parent session (does not force login — guest play stays).
+    void getMe().then((me) => {
+      if (me.account) {
+        setAccount(me.account);
+        setChildren(me.children ?? []);
+      }
+    });
     const unlock = () => {
       audio.unlock();
       if (useProgress.getState().audioOn) audio.startMusic();
@@ -66,7 +79,43 @@ export default function Academy({ catalog }: { catalog: Catalog }) {
 
   /* ---------- Landing ---------- */
   if (screen === "home") {
-    return <Landing onStart={() => setScreen(useProgress.getState().name === "Hero" ? "onboard" : "select")} />;
+    return (
+      <Landing
+        onStart={() => setScreen(useProgress.getState().name === "Hero" ? "onboard" : "select")}
+        onParent={() => setScreen(account ? "profiles" : "auth")}
+      />
+    );
+  }
+
+  /* ---------- Parent auth ---------- */
+  if (screen === "auth") {
+    return (
+      <ParentAuth
+        onAuthed={(acc, kids) => { setAccount(acc); setChildren(kids); setScreen("profiles"); }}
+        onBack={() => setScreen("home")}
+      />
+    );
+  }
+
+  /* ---------- Child profile select ---------- */
+  if (screen === "profiles" && account) {
+    return (
+      <ProfileSelect
+        accountName={account.name}
+        children={children}
+        onSelect={(child) => {
+          try {
+            const snap = JSON.parse(child.progress || "{}");
+            useProgress.getState().importProgress(snap);
+          } catch { /* ignore bad json */ }
+          s.setProfile({ name: child.name, avatar: child.avatar, year: child.year as Year });
+          setActiveChildId(child.id);
+          setScreen("select");
+        }}
+        onChildAdded={(child) => setChildren((c) => [...c, child])}
+        onLogout={async () => { await apiLogout(); setAccount(null); setChildren([]); setActiveChildId(null); setScreen("home"); }}
+      />
+    );
   }
 
   /* ---------- Onboarding ---------- */
@@ -154,6 +203,10 @@ export default function Academy({ catalog }: { catalog: Catalog }) {
       });
     setSummary(sum);
     setScreen("summary");
+    // Sync to the child's cloud profile when logged in.
+    if (activeChildId) {
+      saveChildProgress(activeChildId, useProgress.getState().exportProgress(), useProgress.getState().year);
+    }
   };
 
   return (

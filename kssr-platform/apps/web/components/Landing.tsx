@@ -12,10 +12,11 @@ function subjectTopicCount(subject: string): number {
 }
 
 /** Marketing-style landing page (the app lives behind "Main Sekarang"). */
-export default function Landing({ onStart }: { onStart: () => void }) {
+export default function Landing({ onStart, onParent }: { onStart: () => void; onParent: () => void }) {
   const s = useProgress();
   const isMs = s.locale === "ms";
   const go = () => { audio.unlock(); audio.click(); if (s.audioOn) audio.startMusic(); onStart(); };
+  const parent = () => { audio.click(); onParent(); };
 
   const chips = isMs
     ? ["✅ Percuma", "🚫 Tanpa iklan", "🎓 KSSR Darjah 1–6", "📲 Boleh offline", "🔒 Selamat untuk anak"]
@@ -73,6 +74,9 @@ export default function Landing({ onStart }: { onStart: () => void }) {
           </button>
           <button className="btn !min-h-0 rounded-2xl px-4 py-2 btn-primary font-display" onClick={go}>
             {isMs ? "Main" : "Play"}
+          </button>
+          <button className="btn !min-h-0 rounded-2xl px-3 py-2 font-display" onClick={parent} title={isMs ? "Akaun Ibu Bapa" : "Parent Account"}>
+            👨‍👩‍👧
           </button>
         </div>
       </header>

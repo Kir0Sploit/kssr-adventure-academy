@@ -52,6 +52,24 @@ export interface ProgressState {
   unlock: (id: string) => void;
   grantCertificate: (subject: SubjectId, year: Year, level: "Bronze" | "Silver" | "Gold") => void;
   rank: () => string;
+  exportProgress: () => ProgressSnapshot;
+  importProgress: (snap: Partial<ProgressSnapshot>) => void;
+}
+
+export interface ProgressSnapshot {
+  level: number;
+  xp: number;
+  coins: number;
+  stars: number;
+  knowledgePoints: number;
+  timePlayedSec: number;
+  streak: number;
+  bestStreak: number;
+  lastActiveDate: string | null;
+  stats: Record<SubjectId, SubjectStat>;
+  mastery: Record<string, number>;
+  achievements: string[];
+  certificates: CertificateRecord[];
 }
 
 const emptyStats = (): Record<SubjectId, SubjectStat> => ({
@@ -140,6 +158,32 @@ export const useProgress = create<ProgressState>()(
         }),
 
       rank: () => rankForYear(get().year) ?? RANKS[0],
+
+      exportProgress: () => {
+        const s = get();
+        return {
+          level: s.level, xp: s.xp, coins: s.coins, stars: s.stars, knowledgePoints: s.knowledgePoints,
+          timePlayedSec: s.timePlayedSec, streak: s.streak, bestStreak: s.bestStreak, lastActiveDate: s.lastActiveDate,
+          stats: s.stats, mastery: s.mastery, achievements: s.achievements, certificates: s.certificates,
+        };
+      },
+
+      importProgress: (snap) =>
+        set((s) => ({
+          level: snap.level ?? s.level,
+          xp: snap.xp ?? s.xp,
+          coins: snap.coins ?? s.coins,
+          stars: snap.stars ?? s.stars,
+          knowledgePoints: snap.knowledgePoints ?? s.knowledgePoints,
+          timePlayedSec: snap.timePlayedSec ?? s.timePlayedSec,
+          streak: snap.streak ?? s.streak,
+          bestStreak: snap.bestStreak ?? s.bestStreak,
+          lastActiveDate: snap.lastActiveDate ?? s.lastActiveDate,
+          stats: snap.stats ?? s.stats,
+          mastery: snap.mastery ?? s.mastery,
+          achievements: snap.achievements ?? s.achievements,
+          certificates: snap.certificates ?? s.certificates,
+        })),
     }),
     { name: "kssr-progress-v1" },
   ),
