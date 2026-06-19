@@ -11,7 +11,7 @@
 export type Year = 1 | 2 | 3 | 4 | 5 | 6;
 
 /** Supported subjects. */
-export type SubjectId = "math" | "bm" | "english";
+export type SubjectId = "math" | "bm" | "english" | "sains" | "jawi" | "pi" | "sejarah";
 
 /** Bilingual string. The UI renders one based on the active locale. */
 export interface Localized {
@@ -124,6 +124,10 @@ export const SUBJECTS: readonly SubjectMeta[] = [
   { id: "math", name: { en: "Mathematics", ms: "Matematik" }, icon: "📕", color: "#2563eb" },
   { id: "bm", name: { en: "Bahasa Melayu", ms: "Bahasa Melayu" }, icon: "📘", color: "#16a34a" },
   { id: "english", name: { en: "English", ms: "Bahasa Inggeris" }, icon: "📗", color: "#f59e0b" },
+  { id: "sains", name: { en: "Science", ms: "Sains" }, icon: "🔬", color: "#14b8a6" },
+  { id: "jawi", name: { en: "Jawi", ms: "Jawi" }, icon: "✍️", color: "#9333ea" },
+  { id: "pi", name: { en: "Islamic Studies", ms: "Pendidikan Islam" }, icon: "🕌", color: "#d97706" },
+  { id: "sejarah", name: { en: "History", ms: "Sejarah" }, icon: "📜", color: "#b45309" },
 ] as const;
 
 export const YEARS: readonly Year[] = [1, 2, 3, 4, 5, 6] as const;

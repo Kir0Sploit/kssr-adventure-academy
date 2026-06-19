@@ -85,7 +85,7 @@ export default function ParentDashboard({ onClose }: { onClose: () => void }) {
         <div className="panel rounded-2xl p-4 mb-4">
           <h3 className="font-display mb-2">{isMs ? "Kemajuan Mengikut Subjek" : "Progress by Subject"}</h3>
           {SUBJECTS.map((subj) => {
-            const st = s.stats[subj.id];
+            const st = s.stats[subj.id] ?? { attempts: 0, correct: 0 };
             const a = acc(st);
             return (
               <div key={subj.id} className="mb-2">

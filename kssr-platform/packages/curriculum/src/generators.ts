@@ -51,7 +51,15 @@ function mc(
   hintEn: string,
   hintMs: string,
 ): GenQ {
-  const opts = shuffle([correct, ...distractors.slice(0, 2)]);
+  const seen = new Set<string>([correct]);
+  const cleanD: string[] = [];
+  for (const d of distractors) {
+    if (!seen.has(d)) {
+      seen.add(d);
+      cleanD.push(d);
+    }
+  }
+  const opts = shuffle([correct, ...cleanD.slice(0, 2)]);
   return {
     subject,
     year,
@@ -121,10 +129,10 @@ function genMath(skill: string, year: Year): GenQ {
       return mc("math", year, skill, m, d, `${a} ÷ ${b} = ?`, `${a} ÷ ${b} = ?`, String(q), wrongs(q, 4), `Which × ${b} = ${a}?`, `Mana × ${b} = ${a}?`);
     }
     case "compare": {
-      const a = ri(1, 99), b = ri(1, 99) + (Math.random() < .5 ? 0 : 0);
+      let a = ri(1, 99), b = ri(1, 99);
+      if (a === b) b = a + 1;
       const bigger = Math.max(a, b), smaller = Math.min(a, b);
-      const ans = String(bigger);
-      return mc("math", year, skill, "lane-select", "intro", `Which is bigger: ${a} or ${b}?`, `Mana lebih besar: ${a} atau ${b}?`, ans, [String(smaller), String(bigger + 1)], "More is bigger.", "Banyak lebih besar.");
+      return mc("math", year, skill, "lane-select", "intro", `Which is bigger: ${a} or ${b}?`, `Mana lebih besar: ${a} atau ${b}?`, String(bigger), [String(smaller), String(bigger + 1), String(Math.max(0, smaller - 1))], "More is bigger.", "Banyak lebih besar.");
     }
     case "skip-counting": {
       const step = pick([2, 5, 10]); const start = step * ri(1, 4);
@@ -313,6 +321,113 @@ const BANKS: Record<string, Item[]> = {
     { en: "The elephant is very ___.", ms: "The elephant is very ___.", a: "big", d: ["run", "eat", "jump"] },
     { en: "Pick the adjective.", ms: "Pilih kata adjektif.", a: "happy", d: ["jump", "chair", "slowly"] },
   ],
+
+  // ---------------- SAINS (Science) ----------------
+  "sains:living": [
+    { en: "Which is a living thing?", ms: "Manakah benda hidup?", a: "Pokok", d: ["Batu", "Kerusi", "Meja"] },
+    { en: "Which is NOT living?", ms: "Manakah benda bukan hidup?", a: "Batu", d: ["Kucing", "Pokok", "Burung"] },
+    { en: "A fish's habitat is?", ms: "Habitat ikan ialah?", a: "Air", d: ["Pokok", "Gua", "Padang"] },
+    { en: "Birds usually live in a?", ms: "Burung biasanya tinggal di?", a: "Sarang", d: ["Air", "Bawah tanah", "Gua"] },
+    { en: "Living things need to?", ms: "Benda hidup perlu?", a: "Bernafas", d: ["Berkarat", "Pecah", "Cair"] },
+  ],
+  "sains:body": [
+    { en: "We see using our?", ms: "Kita melihat menggunakan?", a: "Mata", d: ["Telinga", "Hidung", "Tangan"] },
+    { en: "We hear using our?", ms: "Kita mendengar menggunakan?", a: "Telinga", d: ["Mata", "Hidung", "Kaki"] },
+    { en: "We smell using our?", ms: "Kita menghidu menggunakan?", a: "Hidung", d: ["Mata", "Tangan", "Telinga"] },
+    { en: "How many senses do we have?", ms: "Berapa deria manusia?", a: "5", d: ["3", "4", "6"] },
+    { en: "We taste using our?", ms: "Kita merasa menggunakan?", a: "Lidah", d: ["Mata", "Telinga", "Hidung"] },
+  ],
+  "sains:plants": [
+    { en: "Which part absorbs water?", ms: "Bahagian yang menyerap air?", a: "Akar", d: ["Daun", "Bunga", "Buah"] },
+    { en: "Plants make food in the?", ms: "Tumbuhan membuat makanan di?", a: "Daun", d: ["Akar", "Batang", "Bunga"] },
+    { en: "Plants need ___ to grow.", ms: "Tumbuhan perlukan ___ untuk hidup.", a: "Cahaya matahari", d: ["Kegelapan", "Gula", "Garam"] },
+    { en: "Which becomes a fruit?", ms: "Bahagian yang menjadi buah?", a: "Bunga", d: ["Akar", "Daun", "Batang"] },
+  ],
+  "sains:matter": [
+    { en: "Ice is a?", ms: "Ais ialah keadaan jirim?", a: "Pepejal", d: ["Cecair", "Gas", "Wap"] },
+    { en: "Water is a?", ms: "Air ialah?", a: "Cecair", d: ["Pepejal", "Gas", "Wap"] },
+    { en: "Air is a?", ms: "Udara ialah?", a: "Gas", d: ["Pepejal", "Cecair", "Ais"] },
+    { en: "What forms when water is heated?", ms: "Apa terhasil bila air dipanaskan?", a: "Wap", d: ["Ais", "Batu", "Kayu"] },
+  ],
+  "sains:earth": [
+    { en: "Our planet is?", ms: "Planet kita ialah?", a: "Bumi", d: ["Marikh", "Zuhrah", "Musytari"] },
+    { en: "Daytime is caused by the?", ms: "Waktu siang disebabkan oleh?", a: "Matahari", d: ["Bulan", "Bintang", "Awan"] },
+    { en: "Earth orbits the Sun in about?", ms: "Bumi mengelilingi Matahari dalam masa?", a: "Setahun", d: ["Sehari", "Sebulan", "Seminggu"] },
+    { en: "We see the Moon mostly at?", ms: "Kita lihat Bulan kebanyakannya pada waktu?", a: "Malam", d: ["Tengah hari", "Pagi", "Petang"] },
+  ],
+
+  // ---------------- JAWI (letter recognition — review-ready) ----------------
+  "jawi:huruf": [
+    { en: "Jawi letter ب is?", ms: "Huruf Jawi ب ialah?", a: "ba", d: ["ta", "sa", "nun"] },
+    { en: "Jawi letter ت is?", ms: "Huruf Jawi ت ialah?", a: "ta", d: ["ba", "sa", "mim"] },
+    { en: "Jawi letter ج is?", ms: "Huruf Jawi ج ialah?", a: "jim", d: ["ca", "ha", "kha"] },
+    { en: "Jawi letter د is?", ms: "Huruf Jawi د ialah?", a: "dal", d: ["zal", "ra", "zai"] },
+    { en: "Jawi letter ر is?", ms: "Huruf Jawi ر ialah?", a: "ra", d: ["zai", "dal", "wau"] },
+    { en: "Jawi letter س is?", ms: "Huruf Jawi س ialah?", a: "sin", d: ["syin", "sa", "sad"] },
+    { en: "Jawi letter م is?", ms: "Huruf Jawi م ialah?", a: "mim", d: ["nun", "lam", "ba"] },
+    { en: "Jawi letter ن is?", ms: "Huruf Jawi ن ialah?", a: "nun", d: ["mim", "lam", "ta"] },
+    { en: "Jawi letter و is?", ms: "Huruf Jawi و ialah?", a: "wau", d: ["ya", "va", "ra"] },
+    { en: "Jawi letter ي is?", ms: "Huruf Jawi ي ialah?", a: "ya", d: ["wau", "alif", "ba"] },
+    { en: "Jawi letter ل is?", ms: "Huruf Jawi ل ialah?", a: "lam", d: ["kaf", "mim", "alif"] },
+    { en: "Jawi letter ک is?", ms: "Huruf Jawi ک ialah?", a: "kaf", d: ["ga", "lam", "qaf"] },
+    { en: "Jawi letter چ is?", ms: "Huruf Jawi چ ialah?", a: "ca", d: ["jim", "ha", "kha"] },
+    { en: "Jawi letter ا is?", ms: "Huruf Jawi ا ialah?", a: "alif", d: ["lam", "hamzah", "ba"] },
+  ],
+  "jawi:rumi": [
+    { en: "'ba' in Jawi is?", ms: "Huruf 'ba' dalam Jawi?", a: "ب", d: ["ت", "ن", "م"] },
+    { en: "'ta' in Jawi is?", ms: "Huruf 'ta' dalam Jawi?", a: "ت", d: ["ب", "ن", "ث"] },
+    { en: "'mim' in Jawi is?", ms: "Huruf 'mim' dalam Jawi?", a: "م", d: ["ن", "ل", "و"] },
+    { en: "'nun' in Jawi is?", ms: "Huruf 'nun' dalam Jawi?", a: "ن", d: ["م", "ت", "ب"] },
+    { en: "'lam' in Jawi is?", ms: "Huruf 'lam' dalam Jawi?", a: "ل", d: ["ک", "م", "ا"] },
+    { en: "'sin' in Jawi is?", ms: "Huruf 'sin' dalam Jawi?", a: "س", d: ["ش", "ص", "ر"] },
+    { en: "'ra' in Jawi is?", ms: "Huruf 'ra' dalam Jawi?", a: "ر", d: ["ز", "د", "و"] },
+    { en: "'wau' in Jawi is?", ms: "Huruf 'wau' dalam Jawi?", a: "و", d: ["ي", "ر", "ن"] },
+    { en: "'ya' in Jawi is?", ms: "Huruf 'ya' dalam Jawi?", a: "ي", d: ["و", "ا", "ب"] },
+    { en: "'jim' in Jawi is?", ms: "Huruf 'jim' dalam Jawi?", a: "ج", d: ["چ", "ح", "خ"] },
+  ],
+
+  // ---------------- PENDIDIKAN ISLAM (basics — review-ready) ----------------
+  "pi:rukun": [
+    { en: "How many Rukun Islam?", ms: "Rukun Islam ada berapa?", a: "5", d: ["4", "6", "3"] },
+    { en: "How many Rukun Iman?", ms: "Rukun Iman ada berapa?", a: "6", d: ["5", "7", "4"] },
+    { en: "Daily fardu prayers?", ms: "Berapa waktu solat fardu sehari semalam?", a: "5", d: ["3", "6", "4"] },
+    { en: "First Rukun Islam is?", ms: "Rukun Islam pertama ialah?", a: "Mengucap dua kalimah syahadah", d: ["Puasa", "Zakat", "Haji"] },
+  ],
+  "pi:asas": [
+    { en: "The holy book of Muslims is?", ms: "Kitab suci umat Islam ialah?", a: "Al-Quran", d: ["Buku cerita", "Kamus", "Majalah"] },
+    { en: "Place of worship for Muslims?", ms: "Tempat ibadah umat Islam ialah?", a: "Masjid", d: ["Sekolah", "Pasar", "Stadium"] },
+    { en: "Muslims fast in the month of?", ms: "Umat Islam berpuasa pada bulan?", a: "Ramadan", d: ["Syawal", "Muharam", "Rejab"] },
+    { en: "The last prophet is?", ms: "Nabi terakhir ialah?", a: "Nabi Muhammad SAW", d: ["Nabi Adam AS", "Nabi Musa AS", "Nabi Isa AS"] },
+    { en: "Muslims face the ___ in prayer.", ms: "Umat Islam mengadap ___ semasa solat.", a: "Kiblat", d: ["Utara", "Timur", "Barat"] },
+  ],
+  "pi:akhlak": [
+    { en: "When meeting a friend, we give?", ms: "Apabila bertemu rakan, kita memberi?", a: "Salam", d: ["Duit", "Buku", "Bola"] },
+    { en: "We must ___ our parents.", ms: "Kita mesti ___ kepada ibu bapa.", a: "Hormat", d: ["Marah", "Lawan", "Lupa"] },
+    { en: "Before eating, we should?", ms: "Sebelum makan, kita patut?", a: "Membaca doa", d: ["Menangis", "Tidur", "Berlari"] },
+    { en: "We say ___ after receiving help.", ms: "Kita ucap ___ selepas dibantu.", a: "Terima kasih", d: ["Diam", "Pergi", "Tidak"] },
+    { en: "We throw rubbish into the?", ms: "Kita membuang sampah ke dalam?", a: "Tong sampah", d: ["Laut", "Jalan", "Longkang"] },
+  ],
+
+  // ---------------- SEJARAH (History, Year 4–6 — factual) ----------------
+  "sejarah:tokoh": [
+    { en: "First Prime Minister of Malaysia?", ms: "Perdana Menteri pertama Malaysia?", a: "Tunku Abdul Rahman", d: ["Tun Razak", "Tun Mahathir", "Tun Hussein"] },
+    { en: "Founder of the Melaka Sultanate?", ms: "Pengasas Kesultanan Melayu Melaka?", a: "Parameswara", d: ["Hang Tuah", "Tun Perak", "Sultan Mansur"] },
+    { en: "Who shouted 'Merdeka' 7 times?", ms: "Siapa melaungkan 'Merdeka' 7 kali?", a: "Tunku Abdul Rahman", d: ["Tun Razak", "Dato Onn", "Tun Tan"] },
+  ],
+  "sejarah:fakta": [
+    { en: "Year Malaya gained independence?", ms: "Tahun Tanah Melayu merdeka?", a: "1957", d: ["1963", "1969", "1945"] },
+    { en: "Year Malaysia was formed?", ms: "Tahun Malaysia ditubuhkan?", a: "1963", d: ["1957", "1965", "1970"] },
+    { en: "National anthem of Malaysia?", ms: "Lagu kebangsaan Malaysia?", a: "Negaraku", d: ["Jalur Gemilang", "Rukun Negara", "Tanggal 31"] },
+    { en: "Malaysia's flag is called?", ms: "Bendera Malaysia dikenali sebagai?", a: "Jalur Gemilang", d: ["Negaraku", "Bunga Raya", "Tunas"] },
+    { en: "National flower of Malaysia?", ms: "Bunga kebangsaan Malaysia?", a: "Bunga Raya", d: ["Melur", "Orkid", "Mawar"] },
+    { en: "Independence Day is on?", ms: "Hari Kemerdekaan disambut pada?", a: "31 Ogos", d: ["16 September", "1 Januari", "31 Disember"] },
+    { en: "Malaysia Day is on?", ms: "Hari Malaysia disambut pada?", a: "16 September", d: ["31 Ogos", "1 Mei", "31 Disember"] },
+  ],
+  "sejarah:tamadun": [
+    { en: "The Melaka Sultanate was in which state?", ms: "Kesultanan Melayu Melaka di negeri?", a: "Melaka", d: ["Johor", "Kedah", "Perak"] },
+    { en: "A UNESCO World Heritage city in Malaysia?", ms: "Bandar Tapak Warisan Dunia UNESCO di Malaysia?", a: "Melaka", d: ["Putrajaya", "Cyberjaya", "Shah Alam"] },
+    { en: "Old Melaka was famous as a ___ port.", ms: "Melaka lama terkenal sebagai pelabuhan ___.", a: "Perdagangan", d: ["Tentera", "Nelayan", "Sukan"] },
+  ],
 };
 
 const MECH_BY_SKILL: Record<string, ChallengeMechanic> = {
@@ -325,8 +440,12 @@ const MECH_BY_SKILL: Record<string, ChallengeMechanic> = {
   "en:adjective": "lane-select",
 };
 
-function genLanguage(subject: SubjectId, skill: string, year: Year): GenQ | null {
-  const bankKey = `${subject === "bm" ? "bm" : "en"}:${skill}`;
+function bankPrefix(subject: SubjectId): string {
+  return subject === "english" ? "en" : subject;
+}
+
+function genBank(subject: SubjectId, skill: string, year: Year): GenQ | null {
+  const bankKey = `${bankPrefix(subject)}:${skill}`;
   const bank = BANKS[bankKey];
   if (!bank || bank.length === 0) return null;
   const it = pick(bank);
@@ -342,8 +461,7 @@ const MATH_SKILLS = new Set([
 
 export function isGeneratable(subject: SubjectId, skill: string): boolean {
   if (subject === "math") return MATH_SKILLS.has(skill);
-  const key = `${subject === "bm" ? "bm" : "en"}:${skill}`;
-  return !!BANKS[key];
+  return !!BANKS[`${bankPrefix(subject)}:${skill}`];
 }
 
 /**
@@ -356,7 +474,7 @@ export function generate(topicId: string, subject: SubjectId, skill: string, yea
   let guard = 0;
   while (out.length < count && guard < count * 8) {
     guard++;
-    const q = subject === "math" ? genMath(skill, year) : genLanguage(subject, skill, year);
+    const q = subject === "math" ? genMath(skill, year) : genBank(subject, skill, year);
     if (!q) break;
     const key = q.prompt.en + "|" + q.options.map((o) => o.label).join(",");
     if (seen.has(key)) continue;

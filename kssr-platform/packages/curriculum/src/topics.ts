@@ -51,6 +51,27 @@ const T: Template[] = [
   { key: "prep", subject: "english", skill: "preposition", icon: "📍", title: { en: "Where Things Are", ms: "Kedudukan Benda" }, desc: { en: "in, on, under, next to.", ms: "in, on, under, next to." }, years: [2, 3, 4] },
   { key: "grammar", subject: "english", skill: "grammar", icon: "✏️", title: { en: "Grammar", ms: "Tatabahasa" }, desc: { en: "Correct sentences.", ms: "Ayat yang betul." }, years: [4, 5, 6] },
   { key: "adj", subject: "english", skill: "adjective", icon: "🌈", title: { en: "Adjectives", ms: "Kata Adjektif" }, desc: { en: "Describing words.", ms: "Perkataan penerang." }, years: [2, 3, 4] },
+
+  // ---------------- SAINS (Science) ----------------
+  { key: "living", subject: "sains", skill: "living", icon: "🌱", title: { en: "Living Things", ms: "Benda Hidup" }, desc: { en: "Living vs non-living & habitats.", ms: "Benda hidup, bukan hidup & habitat." }, years: [1, 2, 3] },
+  { key: "body", subject: "sains", skill: "body", icon: "🧍", title: { en: "My Body & Senses", ms: "Tubuh & Deria" }, desc: { en: "Body parts and the five senses.", ms: "Anggota badan dan lima deria." }, years: [1, 2, 3] },
+  { key: "plants", subject: "sains", skill: "plants", icon: "🌷", title: { en: "Plants", ms: "Tumbuhan" }, desc: { en: "Parts of a plant and their needs.", ms: "Bahagian tumbuhan dan keperluannya." }, years: [2, 3, 4] },
+  { key: "matter", subject: "sains", skill: "matter", icon: "🧊", title: { en: "States of Matter", ms: "Keadaan Jirim" }, desc: { en: "Solid, liquid and gas.", ms: "Pepejal, cecair dan gas." }, years: [3, 4, 5] },
+  { key: "earth", subject: "sains", skill: "earth", icon: "🌍", title: { en: "Earth & Space", ms: "Bumi & Angkasa" }, desc: { en: "Sun, Moon, Earth and day/night.", ms: "Matahari, Bulan, Bumi dan siang/malam." }, years: [4, 5, 6] },
+
+  // ---------------- JAWI ----------------
+  { key: "jhuruf", subject: "jawi", skill: "huruf", icon: "✍️", title: { en: "Jawi Letters", ms: "Huruf Jawi" }, desc: { en: "Recognise Jawi letters.", ms: "Mengenal huruf Jawi." }, years: [1, 2, 3, 4] },
+  { key: "jrumi", subject: "jawi", skill: "rumi", icon: "🔡", title: { en: "Rumi to Jawi", ms: "Rumi ke Jawi" }, desc: { en: "Match Rumi names to Jawi letters.", ms: "Padan nama Rumi dengan huruf Jawi." }, years: [2, 3, 4, 5] },
+
+  // ---------------- PENDIDIKAN ISLAM ----------------
+  { key: "pirukun", subject: "pi", skill: "rukun", icon: "🕌", title: { en: "Rukun Islam & Iman", ms: "Rukun Islam & Iman" }, desc: { en: "The pillars, simply explained.", ms: "Rukun asas, diterangkan ringkas." }, years: [1, 2, 3, 4, 5, 6] },
+  { key: "piasas", subject: "pi", skill: "asas", icon: "📿", title: { en: "Islamic Basics", ms: "Asas Islam" }, desc: { en: "Key facts every pupil learns.", ms: "Fakta asas yang dipelajari." }, years: [1, 2, 3, 4, 5, 6] },
+  { key: "piakhlak", subject: "pi", skill: "akhlak", icon: "🤲", title: { en: "Good Manners", ms: "Akhlak Mulia" }, desc: { en: "Kind, polite behaviour.", ms: "Adab dan budi bahasa." }, years: [1, 2, 3, 4] },
+
+  // ---------------- SEJARAH (History, Year 4–6) ----------------
+  { key: "sjtokoh", subject: "sejarah", skill: "tokoh", icon: "👤", title: { en: "Historical Figures", ms: "Tokoh Sejarah" }, desc: { en: "People who shaped Malaysia.", ms: "Tokoh yang membentuk Malaysia." }, years: [4, 5, 6] },
+  { key: "sjfakta", subject: "sejarah", skill: "fakta", icon: "🇲🇾", title: { en: "Malaysia Facts", ms: "Fakta Malaysia" }, desc: { en: "Independence, symbols & dates.", ms: "Kemerdekaan, simbol & tarikh." }, years: [4, 5, 6] },
+  { key: "sjtamadun", subject: "sejarah", skill: "tamadun", icon: "🏯", title: { en: "Melaka & Heritage", ms: "Melaka & Warisan" }, desc: { en: "The Melaka Sultanate & heritage.", ms: "Kesultanan Melaka & warisan." }, years: [5, 6] },
 ];
 
 export interface TopicMeta {

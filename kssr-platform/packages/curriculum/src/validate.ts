@@ -13,7 +13,7 @@ import type {
   Year,
 } from "@kssr/shared";
 
-const SUBJECT_IDS: SubjectId[] = ["math", "bm", "english"];
+const SUBJECT_IDS: SubjectId[] = ["math", "bm", "english", "sains", "jawi", "pi", "sejarah"];
 const MECHANICS = ["lane-select", "gate-pass", "collect", "build", "sequence", "true-false"];
 
 export class CurriculumValidationError extends Error {

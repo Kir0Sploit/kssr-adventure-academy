@@ -76,6 +76,10 @@ const emptyStats = (): Record<SubjectId, SubjectStat> => ({
   math: { attempts: 0, correct: 0 },
   bm: { attempts: 0, correct: 0 },
   english: { attempts: 0, correct: 0 },
+  sains: { attempts: 0, correct: 0 },
+  jawi: { attempts: 0, correct: 0 },
+  pi: { attempts: 0, correct: 0 },
+  sejarah: { attempts: 0, correct: 0 },
 });
 
 export const useProgress = create<ProgressState>()(
@@ -123,7 +127,7 @@ export const useProgress = create<ProgressState>()(
 
       recordAnswer: (subject, topicId, correct) =>
         set((s) => {
-          const stat = s.stats[subject];
+          const stat = s.stats[subject] ?? { attempts: 0, correct: 0 };
           const stats = { ...s.stats, [subject]: { attempts: stat.attempts + 1, correct: stat.correct + (correct ? 1 : 0) } };
           const prev = s.mastery[topicId] ?? 0;
           const alpha = 0.3;
