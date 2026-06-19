@@ -26,8 +26,8 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${display.variable} ${body.variable}`}>
-      <body>
+    <html lang="en" className={`${display.variable} ${body.variable}`} suppressHydrationWarning>
+      <body suppressHydrationWarning>
         <div className="scene" aria-hidden>
           <span className="dots" />
           <span className="shape s1" />
