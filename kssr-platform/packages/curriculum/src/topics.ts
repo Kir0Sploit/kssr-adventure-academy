@@ -60,8 +60,9 @@ const T: Template[] = [
   { key: "earth", subject: "sains", skill: "earth", icon: "🌍", title: { en: "Earth & Space", ms: "Bumi & Angkasa" }, desc: { en: "Sun, Moon, Earth and day/night.", ms: "Matahari, Bulan, Bumi dan siang/malam." }, years: [4, 5, 6] },
 
   // ---------------- JAWI ----------------
-  { key: "jhuruf", subject: "jawi", skill: "huruf", icon: "✍️", title: { en: "Jawi Letters", ms: "Huruf Jawi" }, desc: { en: "Recognise Jawi letters.", ms: "Mengenal huruf Jawi." }, years: [1, 2, 3, 4] },
-  { key: "jrumi", subject: "jawi", skill: "rumi", icon: "🔡", title: { en: "Rumi to Jawi", ms: "Rumi ke Jawi" }, desc: { en: "Match Rumi names to Jawi letters.", ms: "Padan nama Rumi dengan huruf Jawi." }, years: [2, 3, 4, 5] },
+  { key: "jhuruf", subject: "jawi", skill: "huruf", icon: "✍️", title: { en: "Jawi Letters", ms: "Huruf Jawi" }, desc: { en: "Recognise Jawi letters.", ms: "Mengenal huruf Jawi." }, years: [1, 2, 3, 4, 5, 6] },
+  { key: "jrumi", subject: "jawi", skill: "rumi", icon: "🔡", title: { en: "Rumi to Jawi", ms: "Rumi ke Jawi" }, desc: { en: "Match Rumi names to Jawi letters.", ms: "Padan nama Rumi dengan huruf Jawi." }, years: [1, 2, 3, 4, 5, 6] },
+  { key: "jangka", subject: "jawi", skill: "angka", icon: "🔢", title: { en: "Jawi Numerals", ms: "Angka Jawi" }, desc: { en: "Recognise Jawi numerals.", ms: "Mengenal angka Jawi." }, years: [1, 2, 3, 4, 5, 6] },
 
   // ---------------- PENDIDIKAN ISLAM ----------------
   { key: "pirukun", subject: "pi", skill: "rukun", icon: "🕌", title: { en: "Rukun Islam & Iman", ms: "Rukun Islam & Iman" }, desc: { en: "The pillars, simply explained.", ms: "Rukun asas, diterangkan ringkas." }, years: [1, 2, 3, 4, 5, 6] },
@@ -71,7 +72,25 @@ const T: Template[] = [
   // ---------------- SEJARAH (History, Year 4–6) ----------------
   { key: "sjtokoh", subject: "sejarah", skill: "tokoh", icon: "👤", title: { en: "Historical Figures", ms: "Tokoh Sejarah" }, desc: { en: "People who shaped Malaysia.", ms: "Tokoh yang membentuk Malaysia." }, years: [4, 5, 6] },
   { key: "sjfakta", subject: "sejarah", skill: "fakta", icon: "🇲🇾", title: { en: "Malaysia Facts", ms: "Fakta Malaysia" }, desc: { en: "Independence, symbols & dates.", ms: "Kemerdekaan, simbol & tarikh." }, years: [4, 5, 6] },
-  { key: "sjtamadun", subject: "sejarah", skill: "tamadun", icon: "🏯", title: { en: "Melaka & Heritage", ms: "Melaka & Warisan" }, desc: { en: "The Melaka Sultanate & heritage.", ms: "Kesultanan Melaka & warisan." }, years: [5, 6] },
+  { key: "sjtamadun", subject: "sejarah", skill: "tamadun", icon: "🏯", title: { en: "Melaka & Heritage", ms: "Melaka & Warisan" }, desc: { en: "The Melaka Sultanate & heritage.", ms: "Kesultanan Melaka & warisan." }, years: [4, 5, 6] },
+  { key: "sjnegeri", subject: "sejarah", skill: "negeri", icon: "🗺️", title: { en: "States & Capitals", ms: "Negeri & Ibu Negeri" }, desc: { en: "Malaysian states and capitals.", ms: "Negeri Malaysia dan ibu negerinya." }, years: [4, 5, 6] },
+  { key: "sjmerdeka", subject: "sejarah", skill: "kemerdekaan", icon: "🎆", title: { en: "Independence", ms: "Kemerdekaan" }, desc: { en: "How Malaysia became independent.", ms: "Sejarah kemerdekaan Malaysia." }, years: [4, 5, 6] },
+
+  // ---------------- Extra MATH topics ----------------
+  { key: "geometry", subject: "math", skill: "geometry", icon: "🔺", title: { en: "Shapes & Geometry", ms: "Bentuk & Geometri" }, desc: { en: "Sides, corners and shapes.", ms: "Sisi, bucu dan bentuk." }, years: [1, 2, 3, 4] },
+  { key: "place", subject: "math", skill: "place-value", icon: "🔢", title: { en: "Place Value", ms: "Nilai Tempat" }, desc: { en: "Ones, tens and hundreds.", ms: "Sa, puluh dan ratus." }, years: [2, 3, 4] },
+  { key: "patterns", subject: "math", skill: "patterns", icon: "🔁", title: { en: "Number Patterns", ms: "Pola Nombor" }, desc: { en: "Find the next number.", ms: "Cari nombor seterusnya." }, years: [1, 2, 3] },
+  { key: "time", subject: "math", skill: "time", icon: "⏰", title: { en: "Time", ms: "Masa" }, desc: { en: "Minutes, hours, days.", ms: "Minit, jam, hari." }, years: [2, 3, 4, 5] },
+  { key: "measure", subject: "math", skill: "measure", icon: "📏", title: { en: "Measurement", ms: "Ukuran" }, desc: { en: "Length, mass and volume.", ms: "Panjang, jisim dan isi padu." }, years: [3, 4, 5, 6] },
+
+  // ---------------- Extra SAINS topics ----------------
+  { key: "animals", subject: "sains", skill: "animals", icon: "🐾", title: { en: "Animals", ms: "Haiwan" }, desc: { en: "Animal groups & life cycles.", ms: "Kumpulan haiwan & kitaran hidup." }, years: [1, 2, 3] },
+  { key: "weather", subject: "sains", skill: "weather", icon: "🌦️", title: { en: "Weather", ms: "Cuaca" }, desc: { en: "Sun, rain and the sky.", ms: "Matahari, hujan dan langit." }, years: [1, 2, 3] },
+  { key: "energy", subject: "sains", skill: "energy", icon: "⚡", title: { en: "Energy & Light", ms: "Tenaga & Cahaya" }, desc: { en: "Sources of light and energy.", ms: "Sumber cahaya dan tenaga." }, years: [3, 4, 5] },
+
+  // ---------------- Extra language topics ----------------
+  { key: "ejaan", subject: "bm", skill: "ejaan", icon: "🔤", title: { en: "Spelling (Ejaan)", ms: "Ejaan" }, desc: { en: "Spell Malay words correctly.", ms: "Eja perkataan dengan betul." }, years: [1, 2, 3, 4] },
+  { key: "enspell", subject: "english", skill: "spelling", icon: "🔡", title: { en: "Spelling", ms: "Ejaan Inggeris" }, desc: { en: "Spell English words correctly.", ms: "Eja perkataan Inggeris." }, years: [3, 4, 5, 6] },
 ];
 
 export interface TopicMeta {

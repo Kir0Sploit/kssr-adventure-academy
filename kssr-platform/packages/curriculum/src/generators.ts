@@ -163,6 +163,53 @@ function genMath(skill: string, year: Year): GenQ {
       const n = ri(11, 89); const ans = Math.round(n / 10) * 10;
       return mc("math", year, skill, "lane-select", "core", `Round ${n} to the nearest 10.`, `Bundarkan ${n} ke puluh terdekat.`, String(ans), [String(ans + 10), String(ans - 10), String(n)], "Look at the ones digit.", "Lihat digit sa.");
     }
+    case "geometry": {
+      const shapes = [
+        { en: "triangle", ms: "segi tiga", sides: 3 },
+        { en: "square", ms: "segi empat sama", sides: 4 },
+        { en: "rectangle", ms: "segi empat tepat", sides: 4 },
+        { en: "pentagon", ms: "pentagon", sides: 5 },
+        { en: "hexagon", ms: "heksagon", sides: 6 },
+      ];
+      const sh = pick(shapes);
+      if (Math.random() < 0.5) {
+        return mc("math", year, skill, "lane-select", d, `How many sides does a ${sh.en} have?`, `Berapa sisi ${sh.ms}?`, String(sh.sides), wrongs(sh.sides, 2), "Count the straight edges.", "Kira sisi lurus.");
+      }
+      const target = pick(shapes.filter((x) => x.sides === sh.sides ? true : true));
+      return mc("math", year, skill, "lane-select", d, `Which shape has ${target.sides} sides?`, `Bentuk manakah ada ${target.sides} sisi?`, target.en === "rectangle" ? "rectangle" : target.en, shapes.filter((x) => x.sides !== target.sides).map((x) => x.en), "Think of the shape.", "Fikirkan bentuknya.");
+    }
+    case "place-value": {
+      const n = ri(11, 999); const str = String(n);
+      const idx = ri(0, str.length - 1); const digit = str[str.length - 1 - idx]!;
+      const places = ["ones", "tens", "hundreds"]; const placesMs = ["sa", "puluh", "ratus"];
+      return mc("math", year, skill, "lane-select", d, `In ${n}, digit ${digit} is in the ___ place.`, `Dalam ${n}, digit ${digit} berada di tempat ___.`, isFinite(idx) ? placesMs[idx]! : "sa", placesMs.filter((_, i) => i !== idx), "Count from the right.", "Kira dari kanan.");
+    }
+    case "patterns": {
+      const start = ri(1, 9); const step = pick([2, 3, 5, 10]); const seq = [start, start + step, start + 2 * step]; const ans = start + 3 * step;
+      return mc("math", year, skill, "lane-select", d, `Next: ${seq.join(", ")}, ?`, `Seterusnya: ${seq.join(", ")}, ?`, String(ans), wrongs(ans, step + 2), `Add ${step} each time.`, `Tambah ${step} setiap kali.`);
+    }
+    case "time": {
+      const facts = [
+        { en: "How many minutes in an hour?", ms: "Berapa minit dalam sejam?", a: "60", d: ["30", "100", "24"] },
+        { en: "How many hours in a day?", ms: "Berapa jam dalam sehari?", a: "24", d: ["12", "60", "30"] },
+        { en: "How many days in a week?", ms: "Berapa hari dalam seminggu?", a: "7", d: ["5", "30", "12"] },
+        { en: "How many months in a year?", ms: "Berapa bulan dalam setahun?", a: "12", d: ["10", "7", "24"] },
+        { en: "Which is longer?", ms: "Mana lebih lama?", a: "1 jam", d: ["1 minit", "1 saat", "30 saat"] },
+      ];
+      const f = pick(facts);
+      return mc("math", year, skill, "lane-select", d, f.en, f.ms, f.a, f.d, "Think about time.", "Fikir tentang masa.");
+    }
+    case "measure": {
+      const facts = [
+        { en: "How many cm in 1 metre?", ms: "Berapa cm dalam 1 meter?", a: "100", d: ["10", "1000", "60"] },
+        { en: "How many grams in 1 kg?", ms: "Berapa gram dalam 1 kg?", a: "1000", d: ["100", "10", "500"] },
+        { en: "Which is heavier?", ms: "Mana lebih berat?", a: "1 kg", d: ["1 g", "100 g", "500 g"] },
+        { en: "How many ml in 1 litre?", ms: "Berapa ml dalam 1 liter?", a: "1000", d: ["100", "10", "500"] },
+        { en: "Which is longer?", ms: "Mana lebih panjang?", a: "1 m", d: ["1 cm", "10 cm", "50 cm"] },
+      ];
+      const f = pick(facts);
+      return mc("math", year, skill, "lane-select", d, f.en, f.ms, f.a, f.d, "Think about units.", "Fikir tentang unit.");
+    }
     default: {
       const a = ri(1, 20), b = ri(1, 20), ans = a + b;
       return mc("math", year, "addition", m, d, `${a} + ${b} = ?`, `${a} + ${b} = ?`, String(ans), wrongs(ans), "Add carefully.", "Tambah teliti.");
@@ -385,6 +432,18 @@ const BANKS: Record<string, Item[]> = {
     { en: "'ya' in Jawi is?", ms: "Huruf 'ya' dalam Jawi?", a: "ي", d: ["و", "ا", "ب"] },
     { en: "'jim' in Jawi is?", ms: "Huruf 'jim' dalam Jawi?", a: "ج", d: ["چ", "ح", "خ"] },
   ],
+  "jawi:angka": [
+    { en: "Jawi numeral ١ is?", ms: "Angka Jawi ١ ialah?", a: "1", d: ["2", "7", "0"] },
+    { en: "Jawi numeral ٢ is?", ms: "Angka Jawi ٢ ialah?", a: "2", d: ["3", "1", "6"] },
+    { en: "Jawi numeral ٣ is?", ms: "Angka Jawi ٣ ialah?", a: "3", d: ["2", "4", "8"] },
+    { en: "Jawi numeral ٤ is?", ms: "Angka Jawi ٤ ialah?", a: "4", d: ["3", "5", "1"] },
+    { en: "Jawi numeral ٥ is?", ms: "Angka Jawi ٥ ialah?", a: "5", d: ["6", "4", "0"] },
+    { en: "Jawi numeral ٦ is?", ms: "Angka Jawi ٦ ialah?", a: "6", d: ["7", "5", "9"] },
+    { en: "Jawi numeral ٧ is?", ms: "Angka Jawi ٧ ialah?", a: "7", d: ["8", "1", "6"] },
+    { en: "Jawi numeral ٨ is?", ms: "Angka Jawi ٨ ialah?", a: "8", d: ["9", "3", "6"] },
+    { en: "Jawi numeral ٩ is?", ms: "Angka Jawi ٩ ialah?", a: "9", d: ["7", "6", "0"] },
+    { en: "Jawi numeral ٠ is?", ms: "Angka Jawi ٠ ialah?", a: "0", d: ["1", "5", "8"] },
+  ],
 
   // ---------------- PENDIDIKAN ISLAM (basics — review-ready) ----------------
   "pi:rukun": [
@@ -428,6 +487,63 @@ const BANKS: Record<string, Item[]> = {
     { en: "A UNESCO World Heritage city in Malaysia?", ms: "Bandar Tapak Warisan Dunia UNESCO di Malaysia?", a: "Melaka", d: ["Putrajaya", "Cyberjaya", "Shah Alam"] },
     { en: "Old Melaka was famous as a ___ port.", ms: "Melaka lama terkenal sebagai pelabuhan ___.", a: "Perdagangan", d: ["Tentera", "Nelayan", "Sukan"] },
   ],
+  "sejarah:negeri": [
+    { en: "Capital of Selangor?", ms: "Ibu negeri Selangor?", a: "Shah Alam", d: ["Klang", "Kajang", "Petaling Jaya"] },
+    { en: "Capital of Johor?", ms: "Ibu negeri Johor?", a: "Johor Bahru", d: ["Muar", "Batu Pahat", "Kluang"] },
+    { en: "Capital of Perak?", ms: "Ibu negeri Perak?", a: "Ipoh", d: ["Taiping", "Teluk Intan", "Manjung"] },
+    { en: "Capital of Penang?", ms: "Ibu negeri Pulau Pinang?", a: "George Town", d: ["Butterworth", "Bayan Lepas", "Bukit Mertajam"] },
+    { en: "Capital of Kedah?", ms: "Ibu negeri Kedah?", a: "Alor Setar", d: ["Sungai Petani", "Kulim", "Langkawi"] },
+    { en: "Capital of Kelantan?", ms: "Ibu negeri Kelantan?", a: "Kota Bharu", d: ["Pasir Mas", "Tumpat", "Machang"] },
+    { en: "Capital of Pahang?", ms: "Ibu negeri Pahang?", a: "Kuantan", d: ["Temerloh", "Bentong", "Raub"] },
+    { en: "Capital of Sabah?", ms: "Ibu negeri Sabah?", a: "Kota Kinabalu", d: ["Sandakan", "Tawau", "Lahad Datu"] },
+    { en: "Capital of Sarawak?", ms: "Ibu negeri Sarawak?", a: "Kuching", d: ["Miri", "Sibu", "Bintulu"] },
+    { en: "Largest state in Malaysia?", ms: "Negeri terbesar di Malaysia?", a: "Sarawak", d: ["Sabah", "Pahang", "Johor"] },
+    { en: "Capital city of Malaysia?", ms: "Ibu negara Malaysia?", a: "Kuala Lumpur", d: ["Putrajaya", "Shah Alam", "Johor Bahru"] },
+    { en: "Federal administrative centre?", ms: "Pusat pentadbiran persekutuan?", a: "Putrajaya", d: ["Kuala Lumpur", "Cyberjaya", "Shah Alam"] },
+  ],
+  "sejarah:kemerdekaan": [
+    { en: "Independence date of Malaya?", ms: "Tarikh kemerdekaan Tanah Melayu?", a: "31 Ogos 1957", d: ["16 September 1963", "1 Januari 1957", "31 Disember 1957"] },
+    { en: "Where was 'Merdeka' proclaimed?", ms: "Di mana 'Merdeka' dilaungkan?", a: "Stadium Merdeka", d: ["Dataran Merdeka", "Istana Negara", "Stadium Negara"] },
+    { en: "Father of Independence?", ms: "Bapa Kemerdekaan?", a: "Tunku Abdul Rahman", d: ["Tun Razak", "Dato Onn", "Tun Tan"] },
+    { en: "Malaysia was formed on?", ms: "Malaysia ditubuhkan pada?", a: "16 September 1963", d: ["31 Ogos 1957", "1 Januari 1963", "31 Ogos 1963"] },
+    { en: "Which joined to form Malaysia in 1963?", ms: "Yang menyertai pembentukan Malaysia 1963?", a: "Sabah & Sarawak", d: ["Thailand", "Brunei sahaja", "Indonesia"] },
+    { en: "How many times was 'Merdeka' shouted?", ms: "Berapa kali 'Merdeka' dilaungkan?", a: "7", d: ["3", "5", "10"] },
+  ],
+  "sains:animals": [
+    { en: "Which animal lays eggs?", ms: "Haiwan manakah bertelur?", a: "Ayam", d: ["Kucing", "Lembu", "Kambing"] },
+    { en: "A young frog is called a?", ms: "Anak katak dipanggil?", a: "Berudu", d: ["Anak ayam", "Ulat", "Kupu-kupu"] },
+    { en: "Which animal has a shell?", ms: "Haiwan manakah ada cengkerang?", a: "Siput", d: ["Arnab", "Rusa", "Harimau"] },
+    { en: "Which is a mammal?", ms: "Manakah mamalia?", a: "Lembu", d: ["Ikan", "Ular", "Katak"] },
+    { en: "Bees make?", ms: "Lebah menghasilkan?", a: "Madu", d: ["Susu", "Telur", "Sutera"] },
+  ],
+  "sains:weather": [
+    { en: "Rain comes from?", ms: "Hujan datang dari?", a: "Awan", d: ["Tanah", "Pokok", "Batu"] },
+    { en: "We use an umbrella when it is?", ms: "Kita guna payung apabila?", a: "Hujan", d: ["Cerah", "Berangin", "Sejuk"] },
+    { en: "The sky is bright during?", ms: "Langit cerah pada waktu?", a: "Siang", d: ["Malam", "Tengah malam", "Subuh"] },
+    { en: "A rainbow appears after?", ms: "Pelangi muncul selepas?", a: "Hujan", d: ["Salji", "Ribut petir", "Gerhana"] },
+  ],
+  "sains:energy": [
+    { en: "The Sun gives us light and?", ms: "Matahari memberi cahaya dan?", a: "Haba", d: ["Hujan", "Angin", "Bunyi"] },
+    { en: "A torchlight uses?", ms: "Lampu suluh menggunakan?", a: "Bateri", d: ["Air", "Angin", "Api"] },
+    { en: "Which gives light?", ms: "Manakah memberi cahaya?", a: "Lampu", d: ["Kerusi", "Buku", "Cawan"] },
+    { en: "Plants get energy from the?", ms: "Tumbuhan dapat tenaga dari?", a: "Matahari", d: ["Bulan", "Bintang", "Awan"] },
+  ],
+  "bm:ejaan": [
+    { en: "Correct spelling?", ms: "Ejaan yang betul?", a: "sekolah", d: ["skolah", "sekola", "sekolaa"] },
+    { en: "Correct spelling?", ms: "Ejaan yang betul?", a: "kawan", d: ["kawn", "kawann", "kaman"] },
+    { en: "Correct spelling?", ms: "Ejaan yang betul?", a: "rumah", d: ["ruma", "rumahh", "romah"] },
+    { en: "Correct spelling?", ms: "Ejaan yang betul?", a: "makanan", d: ["makan-an", "maknan", "makanann"] },
+    { en: "Correct spelling?", ms: "Ejaan yang betul?", a: "cantik", d: ["cantek", "cantix", "cantikk"] },
+    { en: "Correct spelling?", ms: "Ejaan yang betul?", a: "pelajar", d: ["plajar", "pelajor", "pelajarr"] },
+  ],
+  "en:spelling": [
+    { en: "Correct spelling?", ms: "Ejaan betul?", a: "because", d: ["becuase", "becase", "becouse"] },
+    { en: "Correct spelling?", ms: "Ejaan betul?", a: "friend", d: ["freind", "frend", "frien"] },
+    { en: "Correct spelling?", ms: "Ejaan betul?", a: "school", d: ["skool", "schoool", "scool"] },
+    { en: "Correct spelling?", ms: "Ejaan betul?", a: "beautiful", d: ["beautifull", "beutiful", "beatiful"] },
+    { en: "Correct spelling?", ms: "Ejaan betul?", a: "tomorrow", d: ["tommorow", "tomorow", "tomoro"] },
+    { en: "Correct spelling?", ms: "Ejaan betul?", a: "received", d: ["recieved", "receved", "receivd"] },
+  ],
 };
 
 const MECH_BY_SKILL: Record<string, ChallengeMechanic> = {
@@ -457,6 +573,7 @@ function genBank(subject: SubjectId, skill: string, year: Year): GenQ | null {
 const MATH_SKILLS = new Set([
   "counting", "addition", "subtraction", "multiplication", "division", "compare",
   "skip-counting", "money", "fraction-of", "percentage", "decimals", "word-problem", "rounding",
+  "geometry", "place-value", "patterns", "time", "measure",
 ]);
 
 export function isGeneratable(subject: SubjectId, skill: string): boolean {

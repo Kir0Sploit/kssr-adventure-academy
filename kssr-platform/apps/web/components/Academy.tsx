@@ -78,13 +78,10 @@ export default function Academy({ catalog }: { catalog: Catalog }) {
   }
 
   /* ---------- Landing ---------- */
+  // Security: playing requires a logged-in parent + a selected child profile.
+  const enterApp = () => setScreen(account ? "profiles" : "auth");
   if (screen === "home") {
-    return (
-      <Landing
-        onStart={() => setScreen(useProgress.getState().name === "Hero" ? "onboard" : "select")}
-        onParent={() => setScreen(account ? "profiles" : "auth")}
-      />
-    );
+    return <Landing onStart={enterApp} onParent={enterApp} />;
   }
 
   /* ---------- Parent auth ---------- */
@@ -118,54 +115,9 @@ export default function Academy({ catalog }: { catalog: Catalog }) {
     );
   }
 
-  /* ---------- Onboarding ---------- */
-  if (screen === "onboard") {
-    return (
-      <main className="min-h-screen grid place-items-center p-4">
-        <div className="card p-6 sm:p-8 w-full max-w-md text-center animate-pop">
-          <Mascot size={92} />
-          <h1 className="font-display text-3xl mt-2 text-violet-700">KSSR Adventure Academy</h1>
-          <p className="text-soft mb-5">{isMs ? "Jom belajar sambil bermain!" : "Let's learn while we play!"}</p>
-
-          <p className="font-display text-lg mb-2">{isMs ? "Pilih wira anda" : "Choose your hero"}</p>
-          <div className="flex flex-wrap justify-center gap-2 mb-5">
-            {AVATARS.map((a) => (
-              <button
-                key={a}
-                className={`btn !min-h-0 text-3xl w-14 h-14 rounded-2xl grid place-items-center ${s.avatar === a ? "btn-primary scale-110" : ""}`}
-                onClick={() => { click(); s.setProfile({ avatar: a }); }}
-              >
-                {a}
-              </button>
-            ))}
-          </div>
-
-          <input
-            className="w-full rounded-2xl px-4 py-3 bg-amber-50 border-[3px] border-amber-200 font-bold text-center text-violet-800 mb-5 outline-none focus:border-amber-400"
-            placeholder={isMs ? "Nama anda" : "Your name"}
-            maxLength={14}
-            onChange={(e) => s.setProfile({ name: e.target.value || "Hero" })}
-          />
-
-          <p className="font-display text-lg mb-2">{isMs ? "Tahun berapa?" : "Which year?"}</p>
-          <div className="flex flex-wrap justify-center gap-2 mb-6">
-            {catalog.years.map((y) => (
-              <button
-                key={y}
-                className={`btn !min-h-0 rounded-full px-4 py-2 ${s.year === y ? "btn-go" : ""}`}
-                onClick={() => { click(); s.setProfile({ year: y as Year }); }}
-              >
-                {isMs ? "Tahun" : "Year"} {y}
-              </button>
-            ))}
-          </div>
-
-          <button className="btn btn-primary rounded-2xl px-8 py-4 font-display text-xl w-full" onClick={() => { click(); setScreen("select"); }}>
-            🚀 {isMs ? "Mula!" : "Start!"}
-          </button>
-        </div>
-      </main>
-    );
+  /* ---------- Guard: in-app screens require auth + a selected child ---------- */
+  if (!account || !activeChildId) {
+    return <Landing onStart={enterApp} onParent={enterApp} />;
   }
 
   const startTopic = (t: Topic) => { click(); setTopicId(t.id); setScreen("choose"); };
