@@ -48,6 +48,7 @@ export interface SessionAccount {
   email: string;
   name: string;
   plan: string;
+  role: string;
 }
 
 /** Resolve the logged-in account from the request's session cookie, or null. */
@@ -56,7 +57,14 @@ export async function accountFromRequest(req: NextRequest): Promise<SessionAccou
   if (!token) return null;
   const session = await prisma.session.findUnique({ where: { token }, include: { account: true } });
   if (!session || session.expiresAt < new Date()) return null;
-  return { id: session.account.id, email: session.account.email, name: session.account.name, plan: session.account.plan };
+  const a = session.account;
+  return { id: a.id, email: a.email, name: a.name, plan: a.plan, role: a.role };
+}
+
+/** Returns the account only if it is an admin, else null. */
+export async function adminFromRequest(req: NextRequest): Promise<SessionAccount | null> {
+  const a = await accountFromRequest(req);
+  return a && a.role === "admin" ? a : null;
 }
 
 export function isValidEmail(email: string): boolean {

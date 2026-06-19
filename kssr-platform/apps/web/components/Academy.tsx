@@ -16,6 +16,7 @@ import ParentAuth from "./ParentAuth";
 import ProfileSelect from "./ProfileSelect";
 import { getMode } from "@/lib/games";
 import type { GameSummary } from "@/lib/gameUtils";
+import { setCustomChallenges } from "@/lib/gameUtils";
 import { getMe, logout as apiLogout, saveChildProgress, type AccountDTO, type ChildDTO } from "@/lib/account";
 
 const AVATARS = ["🦸", "🦸‍♀️", "🧒", "👧", "🧑‍🚀", "🥷", "🧝", "🦹"];
@@ -46,6 +47,8 @@ export default function Academy({ catalog }: { catalog: Catalog }) {
   useEffect(() => {
     setMounted(true);
     setSocialEndpoint("/api/social-proof");
+    // Load admin-authored (CMS) questions to merge into games.
+    fetch("/api/challenges").then((r) => r.json()).then((d) => { if (Array.isArray(d.items)) setCustomChallenges(d.items); }).catch(() => {});
     // Restore any existing parent session (does not force login — guest play stays).
     void getMe().then((me) => {
       if (me.account) {

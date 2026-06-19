@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useProgress } from "@/lib/store";
 import { audio } from "@/lib/audio";
 import { GAME_MODES } from "@/lib/games";
@@ -22,30 +22,30 @@ function subjectGames(subject: string): number {
  */
 interface Review { name: string; place: string; text_ms: string; text_en: string; initial: string; color: string }
 const SAMPLE_REVIEWS: Review[] = [
-  { name: "Encik Farhan", place: "Shah Alam, Selangor", initial: "F", color: "#7c5cff", text_ms: "Anak saya darjah 2 kini minta sendiri nak main setiap petang. Sifirnya makin laju!", text_en: "My Year 2 child now asks to play every evening. Times tables improved fast!" },
-  { name: "Puan Aishah", place: "Johor Bahru, Johor", initial: "A", color: "#18b6e8", text_ms: "Suka sangat susunan ikut KSSR. Soalan pendek, anak tak rasa terbeban.", text_en: "Love the KSSR-aligned structure. Short questions, no pressure for my kid." },
-  { name: "Cikgu Roslan", place: "Alor Setar, Kedah", initial: "R", color: "#16b45b", text_ms: "Saya guna untuk kelas pemulihan. Suara BM & Jawi sangat membantu murid.", text_en: "I use it for remedial class. The Malay & Jawi voice really helps pupils." },
-  { name: "Puan Mei Ling", place: "Petaling Jaya, Selangor", initial: "M", color: "#f0883e", text_ms: "Dua anak guna satu akaun. Dashboard tunjuk siapa perlu lebih latihan.", text_en: "Two kids on one account. The dashboard shows who needs more practice." },
-  { name: "Encik Hafiz", place: "Kuantan, Pahang", initial: "H", color: "#e0567a", text_ms: "Sebelum ni anak main game je. Sekarang dia belajar Sains & Sejarah sambil main.", text_en: "He used to just play games. Now he learns Science & History while playing." },
-  { name: "Puan Nurul", place: "Kota Bharu, Kelantan", initial: "N", color: "#2fb39a", text_ms: "Boleh main offline masa dalam kereta. Sangat membantu untuk perjalanan jauh.", text_en: "Works offline in the car. A lifesaver for long journeys." },
+  { name: "Farhan A.", place: "Shah Alam", initial: "F", color: "#7c5cff", text_ms: "Jujur cakap, dulu nak suruh anak baca buku memang perang. Sekarang dia sendiri yang bukak app ni lepas balik sekolah. Sifir pun dah laju 😅", text_en: "Honestly, getting him to study used to be a battle. Now he opens the app himself after school. Times tables are way faster too." },
+  { name: "Aishah", place: "Johor Bahru", initial: "A", color: "#18b6e8", text_ms: "Yang saya suka, soalan dia ikut sekolah (KSSR). Pendek-pendek je, jadi anak tak rasa macam belajar pun. Berbaloi.", text_en: "What I like is it follows the school syllabus (KSSR). Short questions, so it doesn't feel like studying. Worth it." },
+  { name: "Cikgu Roslan", place: "Alor Setar", initial: "R", color: "#16b45b", text_ms: "Saya guna dalam kelas pemulihan. Bahagian Jawi & suara baca tu sangat membantu murid yang lemah membaca.", text_en: "I use it in my remedial class. The Jawi section and read-aloud voice really help weaker readers." },
+  { name: "Mei Ling", place: "Petaling Jaya", initial: "M", color: "#f0883e", text_ms: "Dua-dua anak guna satu akaun. Senang nak tengok siapa lemah subjek apa kat dashboard tu.", text_en: "Both my kids use one account. The dashboard makes it easy to see who's weak in which subject." },
+  { name: "Hafiz", place: "Kuantan", initial: "H", color: "#e0567a", text_ms: "Anak memang minat tablet. At least sekarang dia main sambil belajar Sains & Sejarah, bukan tengok video je.", text_en: "My boy loves his tablet. At least now he plays while learning Science & History instead of just watching videos." },
+  { name: "Nurul", place: "Kota Bharu", initial: "N", color: "#2fb39a", text_ms: "Boleh main offline masa balik kampung. Tak payah risau data, anak pun tak boring dalam kereta.", text_en: "Works offline on the drive back. No data worries and the kids aren't bored in the car." },
 ];
 
-function Stars() {
+function Stars({ n = 5 }: { n?: number }) {
   return (
-    <span className="inline-flex gap-0.5" aria-label="5 stars">
-      {Array.from({ length: 5 }).map((_, i) => <Icon key={i} name="star" size={16} color="#ffb300" />)}
+    <span className="inline-flex gap-0.5" aria-label={`${n} stars`}>
+      {Array.from({ length: n }).map((_, i) => <Icon key={i} name="star" size={16} color="#ffb300" />)}
     </span>
   );
 }
 
-/** Review avatar: shows a real photo from /reviews/N.jpg, else a colored initial. */
-function ReviewAvatar({ index, initial, color }: { index: number; initial: string; color: string }) {
+/** Review avatar: shows a real photo if available, else a colored initial. */
+function ReviewAvatar({ src, initial, color }: { src?: string; initial: string; color: string }) {
   const [failed, setFailed] = useState(false);
-  if (failed) {
+  if (!src || failed) {
     return <span className="w-11 h-11 rounded-full grid place-items-center font-display text-white shrink-0" style={{ background: color }}>{initial}</span>;
   }
   // eslint-disable-next-line @next/next/no-img-element
-  return <img src={`/reviews/${index}.jpg`} alt="" onError={() => setFailed(true)} className="w-11 h-11 rounded-full object-cover shrink-0" />;
+  return <img src={src} alt="" onError={() => setFailed(true)} className="w-11 h-11 rounded-full object-cover shrink-0" />;
 }
 
 function EmailCapture({ isMs }: { isMs: boolean }) {
@@ -87,6 +87,13 @@ export default function Landing({ onStart, onParent }: { onStart: () => void; on
   const go = () => { audio.unlock(); audio.click(); onStart(); };
   const parent = () => { audio.click(); onParent(); };
   const totalGames = TOPIC_COUNT * MODES;
+
+  // Pull real, published reviews from the CMS; fall back to sample copy.
+  const [realReviews, setRealReviews] = useState<{ id: string; name: string; place?: string; text: string; rating: number; photoUrl?: string }[]>([]);
+  useEffect(() => {
+    fetch("/api/reviews").then((r) => r.json()).then((d) => { if (Array.isArray(d.reviews)) setRealReviews(d.reviews); }).catch(() => {});
+  }, []);
+  const COLORS = ["#7c5cff", "#18b6e8", "#16b45b", "#f0883e", "#e0567a", "#2fb39a"];
 
   const features = [
     { icon: "play" as const, t: isMs ? "Belajar Sambil Main" : "Learn Through Play", d: isMs ? "Soalan pendek, ganjaran segera, anak kekal fokus." : "Short questions, instant rewards, kids stay focused." },
@@ -227,14 +234,19 @@ export default function Landing({ onStart, onParent }: { onStart: () => void; on
       {/* Testimonials */}
       <section className="px-4 py-6 max-w-5xl mx-auto">
         <h2 className="font-display text-3xl text-center text-slate-800 mb-1">{isMs ? "Apa Kata Ibu Bapa" : "What Parents Say"}</h2>
-        <p className="text-center text-soft text-xs mb-6">{isMs ? "Contoh paparan — akan digantikan dengan ulasan sebenar yang disahkan." : "Sample layout — to be replaced with real, verified reviews."}</p>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          {SAMPLE_REVIEWS.map((r, i) => (
-            <div key={r.name} className="card p-5">
-              <Stars />
-              <p className="text-sm mt-2 text-slate-700">“{isMs ? r.text_ms : r.text_en}”</p>
+        {realReviews.length === 0 && (
+          <p className="text-center text-soft text-xs mb-6">{isMs ? "Contoh paparan — akan digantikan dengan ulasan sebenar melalui panel admin." : "Sample layout — replaced by real reviews via the admin panel."}</p>
+        )}
+        <div className={`grid grid-cols-1 sm:grid-cols-3 gap-4 ${realReviews.length === 0 ? "" : "mt-6"}`}>
+          {(realReviews.length > 0
+            ? realReviews.map((r, i) => ({ key: r.id, name: r.name, place: r.place ?? "", text: r.text, rating: r.rating || 5, src: r.photoUrl, initial: (r.name[0] || "?").toUpperCase(), color: COLORS[i % COLORS.length]! }))
+            : SAMPLE_REVIEWS.map((r, i) => ({ key: r.name, name: r.name, place: r.place, text: isMs ? r.text_ms : r.text_en, rating: 5, src: `/reviews/${i + 1}.jpg`, initial: r.initial, color: r.color }))
+          ).map((r) => (
+            <div key={r.key} className="card p-5">
+              <Stars n={r.rating} />
+              <p className="text-sm mt-2 text-slate-700">“{r.text}”</p>
               <div className="flex items-center gap-3 mt-4">
-                <ReviewAvatar index={i + 1} initial={r.initial} color={r.color} />
+                <ReviewAvatar src={r.src} initial={r.initial} color={r.color} />
                 <div><div className="font-display text-sm text-slate-800">{r.name}</div><div className="text-[11px] text-soft">{r.place}</div></div>
               </div>
             </div>

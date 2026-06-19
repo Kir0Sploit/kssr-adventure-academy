@@ -51,6 +51,34 @@ model Subscriber {
   createdAt DateTime @default(now())
 }
 
+// Real customer reviews, managed in the Admin CMS and shown on the landing.
+model Review {
+  id        String   @id @default(cuid())
+  name      String
+  place     String?
+  text      String
+  rating    Int      @default(5)
+  photoUrl  String?
+  published Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  @@index([published, createdAt])
+}
+
+// Admin-authored questions merged into the games (the content CMS).
+model CustomChallenge {
+  id        String   @id @default(cuid())
+  subject   String
+  year      Int
+  topicId   String?
+  promptEn  String
+  promptMs  String
+  options   String // JSON: [{ "label": string, "correct": boolean }]
+  createdAt DateTime @default(now())
+
+  @@index([subject, year])
+}
+
 // ---------------------------------------------------------------------------
 // Accounts & profiles. A parent/guardian holds the login; each child is a
 // profile under that account (children never log in directly — safer for kids).
@@ -61,6 +89,7 @@ model Account {
   name         String
   passwordHash String
   plan         String         @default("free") // "free" | "bundle"
+  role         String         @default("parent") // "parent" | "admin"
   createdAt    DateTime       @default(now())
   children     ChildProfile[]
   sessions     Session[]

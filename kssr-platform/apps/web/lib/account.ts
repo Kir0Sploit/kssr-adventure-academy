@@ -6,6 +6,7 @@ export interface AccountDTO {
   email: string;
   name: string;
   plan: string; // "free" | "bundle"
+  role?: string; // "parent" | "admin"
 }
 export interface ChildDTO {
   id: string;

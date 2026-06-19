@@ -3,8 +3,27 @@
  * A "game mode" is just a React component that turns curriculum challenges
  * into a playable activity and reports answers/rewards/completion back.
  */
-import type { Challenge, ChallengeOption, Locale, Localized, Topic } from "@kssr/shared";
+import type { Challenge, ChallengeOption, Locale, Localized, Topic, SubjectId, Year } from "@kssr/shared";
 import { generate, isGeneratable } from "@kssr/curriculum";
+
+/** Admin-authored (CMS) questions, loaded once and merged into games. */
+let customPool: Challenge[] = [];
+export function setCustomChallenges(
+  raw: Array<{ id: string; subject: string; year: number; topicId?: string | null; prompt: Localized; options: { label: string; correct: boolean }[] }>,
+): void {
+  customPool = raw.map((r) => ({
+    id: `custom-${r.id}`,
+    topicId: r.topicId || "",
+    subject: r.subject as SubjectId,
+    year: r.year as Year,
+    difficulty: "core",
+    mechanic: "lane-select",
+    prompt: r.prompt,
+    options: r.options.slice(0, 4).map((o, i) => ({ id: `o${i}`, label: o.label, correct: o.correct })),
+    hint: { en: "Take your time — you can do it!", ms: "Ambil masa anda — anda boleh!" },
+    skills: ["custom"],
+  }));
+}
 
 export interface GameSummary {
   answered: number;
@@ -74,9 +93,17 @@ export function rewardFor(attempts: number): { coins: number; xp: number; stars:
  * back to the baked challenges. This is what makes play feel endless.
  */
 export function getQuestions(topic: Topic, n: number): Challenge[] {
+  // Admin-authored questions for this subject/year (and topic, if specified).
+  const extra = customPool.filter(
+    (c) => c.subject === topic.subject && c.year === topic.year && (!c.topicId || c.topicId === topic.id),
+  );
+  let base: Challenge[];
   if (topic.skill && isGeneratable(topic.subject, topic.skill)) {
-    const fresh = generate(topic.id, topic.subject, topic.skill, topic.year, n);
-    if (fresh.length > 0) return fresh;
+    base = generate(topic.id, topic.subject, topic.skill, topic.year, n);
+    if (base.length === 0) base = buildQuestionSet(topic, n);
+  } else {
+    base = buildQuestionSet(topic, n);
   }
-  return buildQuestionSet(topic, n);
+  if (extra.length === 0) return base;
+  return shuffle([...extra, ...base]).slice(0, n);
 }
