@@ -12,14 +12,17 @@ import LearnMode from "./LearnMode";
 import GameSelect from "./GameSelect";
 import ParentDashboard from "./ParentDashboard";
 import SocialProofToaster from "./SocialProofToaster";
-import ParentAuth from "./ParentAuth";
 import ProfileSelect from "./ProfileSelect";
 import { getMode } from "@/lib/games";
 import type { GameSummary } from "@/lib/gameUtils";
 import { setCustomChallenges } from "@/lib/gameUtils";
 import { getMe, logout as apiLogout, saveChildProgress, type AccountDTO, type ChildDTO } from "@/lib/account";
 
-type Screen = "auth" | "profiles" | "select" | "choose" | "learn" | "play" | "summary";
+type Screen = "profiles" | "select" | "choose" | "learn" | "play" | "summary";
+
+/** How much of the catalog a free account can reach before content is locked. */
+const FREE_TOPIC_LIMIT = 3; // first N topics per subject/year
+const FREE_ROUNDS = 5; // questions per game for free accounts
 
 function Mascot({ size = 84 }: { size?: number }) {
   return (
@@ -29,11 +32,10 @@ function Mascot({ size = 84 }: { size?: number }) {
   );
 }
 
-export default function Academy({ catalog }: { catalog: Catalog }) {
+export default function Academy({ catalog, tier }: { catalog: Catalog; tier: "free" | "premium" }) {
   const s = useProgress();
   const router = useRouter();
-  const [mounted, setMounted] = useState(false);
-  const [screen, setScreen] = useState<Screen>("auth");
+  const [screen, setScreen] = useState<Screen>("profiles");
   const [subject, setSubject] = useState<SubjectId>("math");
   const [topicId, setTopicId] = useState<string | null>(null);
   const [modeId, setModeId] = useState<string>("quiz");
@@ -45,17 +47,19 @@ export default function Academy({ catalog }: { catalog: Catalog }) {
   const playStart = useRef(0);
 
   useEffect(() => {
-    setMounted(true);
     setSocialEndpoint("/api/social-proof");
     // Load admin-authored (CMS) questions to merge into games.
     fetch("/api/challenges").then((r) => r.json()).then((d) => { if (Array.isArray(d.items)) setCustomChallenges(d.items); }).catch(() => {});
-    // Restore any existing parent session (does not force login — guest play stays).
+    // Require a parent session. Route each plan to its own page.
     void getMe().then((me) => {
-      if (me.account) {
-        setAccount(me.account);
-        setChildren(me.children ?? []);
-        setScreen("profiles");
-      }
+      if (!me.account) { router.replace("/main"); return; }
+      const acc = me.account;
+      const isBundle = acc.plan === "bundle";
+      if (isBundle && tier === "free") { router.replace("/main/premium"); return; }
+      if (!isBundle && tier === "premium") { router.replace("/main/normal"); return; }
+      setAccount(acc);
+      setChildren(me.children ?? []);
+      setScreen("profiles");
     });
     const unlock = () => {
       audio.unlock();
@@ -69,39 +73,23 @@ export default function Academy({ catalog }: { catalog: Catalog }) {
       window.removeEventListener("pointerdown", unlock);
       window.removeEventListener("keydown", unlock);
     };
-  }, []);
+  }, [router, tier]);
 
   const isMs = s.locale === "ms";
-
-  // Keep screen consistent with auth state (avoids setState-during-render).
-  useEffect(() => {
-    if (!account && screen !== "auth") setScreen("auth");
-    else if (account && !activeChildId && screen !== "auth" && screen !== "profiles") setScreen("profiles");
-  }, [account, activeChildId, screen]);
-
+  const isFree = tier === "free";
   const subjectMeta = useMemo(() => catalog.subjects.find((x) => x.id === subject)!, [catalog.subjects, subject]);
   const topics: Topic[] = catalog.topicsByKey[`${s.year}:${subject}`] ?? [];
   const topic = topics.find((t) => t.id === topicId) ?? null;
   const click = () => audio.click();
+  const goPremium = () => { click(); router.push("/#pricing"); };
 
-  if (!mounted) {
+  // Wait for the session check (and any redirect) before rendering the app.
+  if (!account) {
     return <div className="min-h-screen grid place-items-center text-2xl font-display animate-bobble">🦧 …</div>;
   }
 
-  const goHome = () => router.push("/");
-
-  /* ---------- Parent auth ---------- */
-  if (screen === "auth") {
-    return (
-      <ParentAuth
-        onAuthed={(acc, kids) => { setAccount(acc); setChildren(kids); setScreen("profiles"); }}
-        onBack={goHome}
-      />
-    );
-  }
-
   /* ---------- Child profile select ---------- */
-  if (screen === "profiles" && account) {
+  if (screen === "profiles") {
     return (
       <ProfileSelect
         accountName={account.name}
@@ -117,26 +105,30 @@ export default function Academy({ catalog }: { catalog: Catalog }) {
           setScreen("select");
         }}
         onChildAdded={(child) => setChildren((c) => [...c, child])}
-        onUpgraded={() => setAccount((a) => (a ? { ...a, plan: "bundle" } : a))}
-        onLogout={async () => { await apiLogout(); setAccount(null); setChildren([]); setActiveChildId(null); goHome(); }}
+        onLogout={async () => { await apiLogout(); setAccount(null); setChildren([]); setActiveChildId(null); router.push("/"); }}
       />
     );
   }
 
-  /* ---------- Guard: in-app screens require auth + a selected child ---------- */
-  if (!account || !activeChildId) {
+  if (!activeChildId) {
     return <div className="min-h-screen grid place-items-center text-2xl font-display animate-bobble">🦧 …</div>;
   }
 
-  const startTopic = (t: Topic) => { click(); setTopicId(t.id); setScreen("choose"); };
+  const startTopic = (t: Topic, locked: boolean) => {
+    if (locked) { goPremium(); return; }
+    click(); setTopicId(t.id); setScreen("choose");
+  };
   const beginPlay = () => { click(); playStart.current = Date.now(); setScreen("play"); };
   const handleComplete = (sum: GameSummary) => {
     s.addTime(Math.round((Date.now() - playStart.current) / 1000));
     const before = useProgress.getState().achievements.slice();
     s.unlock("first-play");
     s.touchStreak();
-    const level = sum.accuracy >= 0.9 ? "Gold" : sum.accuracy >= 0.7 ? "Silver" : "Bronze";
-    s.grantCertificate(subject, s.year, level);
+    // Certificates are a premium feature.
+    if (!isFree) {
+      const level = sum.accuracy >= 0.9 ? "Gold" : sum.accuracy >= 0.7 ? "Silver" : "Bronze";
+      s.grantCertificate(subject, s.year, level);
+    }
     if (subject === "math") s.unlock("math_hero");
     if (subject === "bm") s.unlock("bm_champion");
     if (subject === "english") s.unlock("english_master");
@@ -182,6 +174,7 @@ export default function Academy({ catalog }: { catalog: Catalog }) {
               <p className="font-display text-lg text-violet-700 leading-tight">
                 {isMs ? `Hai ${s.name}! Apa kita belajar hari ini?` : `Hi ${s.name}! What shall we learn today?`}
               </p>
+              {isFree && <p className="text-xs text-soft">{isMs ? "Versi Percuma — sebahagian permainan dikunci 🔒" : "Free version — some games are locked 🔒"}</p>}
             </div>
             <select
               className="chip px-3 py-2 font-display text-sm text-violet-700 outline-none"
@@ -193,6 +186,17 @@ export default function Academy({ catalog }: { catalog: Catalog }) {
               ))}
             </select>
           </div>
+
+          {isFree && (
+            <button onClick={goPremium} className="btn w-full card p-3 mb-4 text-left flex items-center gap-3" style={{ borderLeft: "6px solid #7c5cff" }}>
+              <span className="text-2xl">🌟</span>
+              <span className="flex-1">
+                <span className="block font-display text-sm text-violet-700">{isMs ? "Buka semua permainan & topik" : "Unlock all games & topics"}</span>
+                <span className="block text-xs text-soft">{isMs ? "Naik taraf ke Pakej Lengkap" : "Upgrade to the Complete Bundle"}</span>
+              </span>
+              <span className="chip px-2 py-1 text-xs">{isMs ? "Lihat" : "View"}</span>
+            </button>
+          )}
 
           <div className="grid grid-cols-3 gap-2 sm:gap-3 mb-5">
             {catalog.subjects.map((subj) => (
@@ -222,26 +226,35 @@ export default function Academy({ catalog }: { catalog: Catalog }) {
             <div className="grid gap-3 sm:grid-cols-2">
               {topics.map((t, i) => {
                 const m = s.mastery[t.id] ?? 0;
+                const locked = isFree && i >= FREE_TOPIC_LIMIT;
                 return (
                   <button
                     key={t.id}
-                    className={`btn card p-4 text-left animate-slideUp ${i % 2 ? "sticker-r" : "sticker"}`}
-                    style={{ borderTop: `8px solid ${subjectMeta.color}`, animationDelay: `${i * 60}ms` }}
-                    onClick={() => startTopic(t)}
+                    className={`btn card p-4 text-left animate-slideUp ${i % 2 ? "sticker-r" : "sticker"} ${locked ? "opacity-70" : ""}`}
+                    style={{ borderTop: `8px solid ${locked ? "#cbd5e1" : subjectMeta.color}`, animationDelay: `${i * 60}ms` }}
+                    onClick={() => startTopic(t, locked)}
                   >
                     <div className="flex items-center justify-between gap-2">
                       <div className="min-w-0">
-                        <div className="font-display text-lg truncate">{t.icon} {t.title[s.locale]}</div>
-                        <div className="text-xs text-soft line-clamp-2">{t.description[s.locale]}</div>
+                        <div className="font-display text-lg truncate">{locked ? "🔒 " : `${t.icon} `}{t.title[s.locale]}</div>
+                        <div className="text-xs text-soft line-clamp-2">{locked ? (isMs ? "Premium — naik taraf untuk membuka" : "Premium — upgrade to unlock") : t.description[s.locale]}</div>
                       </div>
                       <div className="text-right shrink-0">
-                        <div className="font-display text-xl" style={{ color: subjectMeta.color }}>{Math.round(m * 100)}%</div>
-                        <div className="text-xs text-soft">{t.challenges.length} ⚡</div>
+                        {locked ? (
+                          <div className="chip px-2 py-1 text-[10px] font-display text-violet-700">{isMs ? "Premium" : "Premium"}</div>
+                        ) : (
+                          <>
+                            <div className="font-display text-xl" style={{ color: subjectMeta.color }}>{Math.round(m * 100)}%</div>
+                            <div className="text-xs text-soft">{t.challenges.length} ⚡</div>
+                          </>
+                        )}
                       </div>
                     </div>
-                    <div className="h-2.5 rounded-full bg-black/10 overflow-hidden mt-2">
-                      <div className="h-full rounded-full" style={{ width: `${m * 100}%`, background: subjectMeta.color }} />
-                    </div>
+                    {!locked && (
+                      <div className="h-2.5 rounded-full bg-black/10 overflow-hidden mt-2">
+                        <div className="h-full rounded-full" style={{ width: `${m * 100}%`, background: subjectMeta.color }} />
+                      </div>
+                    )}
                   </button>
                 );
               })}
@@ -256,6 +269,8 @@ export default function Academy({ catalog }: { catalog: Catalog }) {
           topic={topic}
           locale={s.locale}
           accent={subjectMeta.color}
+          isFree={isFree}
+          onLocked={goPremium}
           onLearn={() => { click(); setScreen("learn"); }}
           onPickMode={(id) => { click(); setModeId(id); playStart.current = Date.now(); setScreen("play"); }}
           onBack={() => { click(); setScreen("select"); }}
@@ -287,7 +302,7 @@ export default function Academy({ catalog }: { catalog: Catalog }) {
               locale={s.locale}
               accent={subjectMeta.color}
               initialMastery={s.mastery[topic.id] ?? 0}
-              rounds={account?.plan === "bundle" ? undefined : 5}
+              rounds={isFree ? FREE_ROUNDS : undefined}
               onAnswer={(_c, correct) => s.recordAnswer(subject, topic.id, correct)}
               onReward={(r) => s.addReward(r)}
               onComplete={handleComplete}
@@ -314,6 +329,12 @@ export default function Academy({ catalog }: { catalog: Catalog }) {
                 <div className="text-xs text-soft">{isMs ? "Markah" : "Score"}</div>
               </div>
             </div>
+            {isFree && (
+              <button onClick={goPremium} className="btn card w-full p-3 mb-3 text-left flex items-center gap-2" style={{ borderLeft: "5px solid #7c5cff" }}>
+                <span className="text-xl">🌟</span>
+                <span className="text-sm font-display text-violet-700 flex-1">{isMs ? "Mahu lebih soalan & sijil? Naik taraf Premium" : "Want more questions & certificates? Go Premium"}</span>
+              </button>
+            )}
             <div className="flex gap-2">
               <button className="btn btn-go rounded-2xl px-5 py-3 font-display flex-1" onClick={beginPlay}>
                 🔁 {isMs ? "Main Lagi" : "Play Again"}
@@ -329,7 +350,7 @@ export default function Academy({ catalog }: { catalog: Catalog }) {
         </section>
       )}
 
-      {parentOpen && <ParentDashboard onClose={() => { click(); setParentOpen(false); }} plan={account?.plan ?? "free"} />}
+      {parentOpen && <ParentDashboard onClose={() => { click(); setParentOpen(false); }} plan={account.plan} />}
       <SocialProofToaster />
     </main>
   );

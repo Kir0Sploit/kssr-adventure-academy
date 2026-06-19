@@ -1,8 +1,7 @@
-import { getCatalog } from "@/lib/catalog";
-import Academy from "@/components/Academy";
+import MainGate from "@/components/MainGate";
 
-// The parent/child learning app (login → profiles → games → dashboard).
+// Login gate: authenticates the parent, then routes to /main/normal (free)
+// or /main/premium (bundle).
 export default function MainPage() {
-  const catalog = getCatalog();
-  return <Academy catalog={catalog} />;
+  return <MainGate />;
 }

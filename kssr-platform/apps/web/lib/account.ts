@@ -47,9 +47,6 @@ export function logout() {
 export function addChild(name: string, avatar: string, year: number) {
   return post<{ ok: boolean; child?: ChildDTO; error?: string }>("/api/children", { name, avatar, year });
 }
-export function upgradePlan(code: string) {
-  return post<{ ok: boolean; plan?: string; error?: string }>("/api/account/upgrade", { code });
-}
 export async function saveChildProgress(childId: string, progress: unknown, year: number): Promise<void> {
   try {
     await fetch(`/api/children/${childId}/progress`, {
